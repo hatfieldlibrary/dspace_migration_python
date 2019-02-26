@@ -1,0 +1,7 @@
+.swp
+.DS_Store
+*.pyc
+condm/saf
+exist-db/saf
+condm/data
+exist-db/data

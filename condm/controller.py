@@ -25,11 +25,11 @@ class ContentdmController:
 	def processRecords(self):
 		"""
 		This is the top-level method for processing Contentdm records.
-		It receives command line input, initializes the processing environment,
-		parses the xml input file, and iterates over records, maintaining state
-		for the current working directory (e.g. saf/archives_images/batch_1) and
-		current saf item directory (e.g. item_0010/).  Other processing tasks are
-		delegated to imported classes.
+		It initializes the processing environment, parses the xml input file,
+		and iterates over records, maintaining state for the current working
+		directory (e.g. saf/archives_images/batch_1) and current saf item
+		directory (e.g. item_0010/).  Other processing tasks are delegated
+		to imported classes.
 		"""
 		base_directory = os.getcwd()
 		# The input file.

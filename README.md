@@ -12,15 +12,16 @@ option.
 2. Metadata mapping between systems is incomplete and will change with more analysis.
 3. The local DSpace metadata fields assigned to administrative and application-specific metadata are provisional.
 
-## Project Structure and Status
 
-A top-level process.py script takes command line arguments.  The script is simple. 
+## Code Usage and Status
 
-All subsequent work is done by python classes that have been coded separately for CONTENTdm and eXist-db 
+A top-level process.py script takes command line arguments.  See the script for documentation.
+
+All subsequent work is done by python classes that have been coded separately for CONTENTdm and eXist-db repositories
 (work on the latter is incomplete).
 
 Output is written to **saf** sub-directories, each containing up to 1000 items. Data in **saf** subdirectories has been
- imported into DSpace 6.  Records include images, PDF, and compound objects, each with thumbnails and 
+ imported into DSpace.  Records include images, PDF, and compound objects, each with thumbnails and 
 administrative metadata. To date, approximately 7000 items have been loaded.
 
 Our data import tests are currently done with DSpace 6.  Our target repository will be DSpace 7.  We do not anticipate changes

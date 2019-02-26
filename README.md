@@ -2,18 +2,18 @@
 
 We plan to use the DSpace Simple Archive Format (saf) to import data from CONTENTdm and eXist-db into DSpace.
 
-The code in the repository implements conversion of exported data into **saf** item directories. For **saf** 
+Code in this repository converts exported data into **saf** item directories. For **saf** 
 documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 
-This work is currently being down with DSpace 6.  Our target repository will be DSpace 7.  We do not anticipate changes
+This work is currently done with DSpace 6.  Our target repository will be DSpace 7.  We do not anticipate changes
 in the DSpace import interface between versions 6 and 7.
 
-The initial commit of code fully implements exporting from CONTENTdm with the following two caveats:
+The initial code commit fully implements exporting from CONTENTdm with the following two caveats:
 
 1. Data was exported as "CONTENTdm Standard XML" with the "include only the full text field from page-level metadata"
 option.
-2. Metadata mapping systems is incomplete and will significantly change with more analysis.
-3. Local DSpace metadata fields assigned to administrative and application-specific metadata are provisional.
+2. Metadata mapping between systems is incomplete and will change with more analysis.
+3. the local DSpace metadata fields assigned to administrative and application-specific metadata are provisional.
 
 ## Project Structure and Status
 

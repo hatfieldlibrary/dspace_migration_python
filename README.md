@@ -8,6 +8,7 @@ The initial commit fully implements exporting from CONTENTdm with the following 
 option.
 2. Metadata mapping between systems is incomplete and will change with more analysis.
 3. The local DSpace metadata fields assigned to administrative and application-specific metadata are provisional.
+4. We have not yet considered workflows -- during and after the migration period.
 
 For **saf** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 

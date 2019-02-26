@@ -16,7 +16,7 @@ class ContentdmController:
 		Constructor.
 		:param collection: the Contentdm collection name (e.g. aphotos)
 		:param input_file: the xml file exported from Contentdm
-		:param output_file: The parent simple archive format output directory
+		:param output_directory: The parent simple archive format output directory
 		"""
 		self.collection = collection
 		self.input = input_file

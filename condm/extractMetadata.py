@@ -24,24 +24,25 @@ class ExtractMetadata:
         return page is None
 
     @staticmethod
-    def processIterable(parent_element, elements, name, qualifier):
+    def processIterableMap(parent_element, elements, element_map):
         """
         Use this function to process any iterable list of etree elements.
-        Provided that the element requires no special logic. The method
+        (Provided that the element requires no special logic.) This method
         adds the new sub-elements to the parent element.
         :param parent_element: the parent etree Element to which sub-elements will be added.
         :param elements: the list of etree elements to read.
-        :param name: the name of the element.
-        :param qualifier: the element qualifier, or None.
+        :param element_map: the dictionary for cdm to dspace mapping.
         """
         if elements is not None:
-            for element in elements:
-                if element.text is not None:
-                    sub_element = ET.SubElement(parent_element, 'dcvalue')
-                    sub_element.set('element', name);
-                    if qualifier is not None:
-                        sub_element.set('qualifier', qualifier)
-                    sub_element.text = element.text
+                for element in elements:
+                    if element.text is not None:
+                        dspace_element = element_map[element.tag]
+                        sub_element = ET.SubElement(parent_element, 'dcvalue')
+                        sub_element.set('element', dspace_element['element'])
+                        if dspace_element['qualifier'] is not None:
+                            sub_element.set('qualifier', dspace_element['qualifier'])
+                        sub_element.text = element.text
+
 
     def extractLocalMetadata(self, record):
         """
@@ -90,6 +91,7 @@ class ExtractMetadata:
         fields = FieldMaps()
         cdm = fields.getCdmFieldMap()
         dspace = fields.getDspaceFieldMap()
+        field_map = fields.getCdmToDspaceMap()
 
         cdmtitle = record.iterfind(cdm['title'])
         cdmalternatives = record.iterfind(cdm['alt_title'])
@@ -102,24 +104,24 @@ class ExtractMetadata:
         cdmidentifiers = record.iterfind(cdm['identifier'])
         cdmdate_created = record.iterfind(cdm['date_created'])
         cdmlanguage = record.iterfind(cdm['language'])
-        cdmisPartOf = record.iterfind(cdm['is_part_of'])
+        cdmisPartOf = record.iterfind(cdm['relation_ispartof'])
         cdmformats = record.iterfind(cdm['format'])
         cdmrights = record.iterfind(cdm['rights'])
         cdmrelations = record.iterfind(cdm['relation'])
         cdmprovenance = record.iterfind(cdm['provenance'])
         cdmpublishers = record.iterfind(cdm['publisher'])
         cdmtypes = record.iterfind(cdm['type'])
-        cdmextents = record.iterfind(cdm['extent'])
-        cdmmediums = record.iterfind(cdm['medium'])
+        cdmextents = record.iterfind(cdm['format_extent'])
+        cdmmediums = record.iterfind(cdm['format_medium'])
 
-        top = ET.Element('dublin_core');
+        top = ET.Element('dublin_core')
         top.set('schema', 'dc')
 
-        self.processIterable(top, cdmtitle, dspace['title'], None)
-        self.processIterable(top, cdmalternatives, dspace['title'], dspace['title_alt_qualifier'])
-        self.processIterable(top, cdmcreators, dspace['creator'], None)
-        self.processIterable(top, cdmdescriptions, dspace['description'], None)
-        self.processIterable(top, cdmdates, dspace['date'], None)
+        self.processIterableMap(top, cdmtitle, field_map)
+        self.processIterableMap(top, cdmalternatives, field_map)
+        self.processIterableMap(top, cdmcreators, field_map)
+        self.processIterableMap(top, cdmdescriptions, field_map)
+        self.processIterableMap(top, cdmdates, field_map)
 
         if cdmrelations is not None:
             for rel in cdmrelations:
@@ -130,19 +132,19 @@ class ExtractMetadata:
                         relEL.set('qualifier', dspace['relation_qualifier_uri'])
                     relEL.text = rel.text
 
-        self.processIterable(top, cdmspatial, dspace['coverage'], dspace['coverage_spatial_qualifier'])
-        self.processIterable(top, cdmsubjects, dspace['subject'], None)
-        self.processIterable(top, cdmisPartOf, dspace['relation'], dspace['relation_ispartof_qualifier'])
-        self.processIterable(top, cdmlanguage, dspace['language'], None)
-        self.processIterable(top, cdmdate_created, dspace['date'], dspace['date_created_qualifier'])
-        self.processIterable(top, cdmidentifiers, dspace['identifier'], None)
-        self.processIterable(top, cdmpublishers, dspace['publisher'], None)
-        self.processIterable(top, cdmrights, dspace['rights'], None)
-        self.processIterable(top, cdmprovenance, dspace['description'], dspace['description_provenance_qualifier'])
-        self.processIterable(top, cdmtypes, dspace['type'], None)
-        self.processIterable(top, cdmsources, dspace['source'], None)
-        self.processIterable(top, cdmmediums, dspace['format'], dspace['format_medium_qualifier'])
-        self.processIterable(top, cdmextents, dspace['format'], dspace['format_extent_qualifier'])
+        self.processIterableMap(top, cdmspatial, field_map)
+        self.processIterableMap(top, cdmsubjects, field_map)
+        self.processIterableMap(top, cdmisPartOf, field_map)
+        self.processIterableMap(top, cdmlanguage, field_map)
+        self.processIterableMap(top, cdmdate_created, field_map)
+        self.processIterableMap(top, cdmidentifiers, field_map)
+        self.processIterableMap(top, cdmpublishers, field_map)
+        self.processIterableMap(top, cdmrights, field_map)
+        self.processIterableMap(top, cdmprovenance, field_map)
+        self.processIterableMap(top, cdmtypes, field_map)
+        self.processIterableMap(top, cdmsources, field_map)
+        self.processIterableMap(top, cdmmediums, field_map)
+        self.processIterableMap(top, cdmextents, field_map)
 
         if not self.isSingleItem(record):
             # sets the format for compound objects
@@ -150,6 +152,6 @@ class ExtractMetadata:
             cpdformat.set('element', dspace['format'])
             cpdformat.text = 'Compound'
         else:
-            self.processIterable(top, cdmformats, dspace['format'], None)
+            self.processIterableMap(top, cdmformats, field_map)
 
         return top

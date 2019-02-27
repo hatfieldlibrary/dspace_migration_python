@@ -2,6 +2,9 @@
 
 class FieldMaps:
 
+    # This class defines dictionaries for CONTENTdm fields, DSpace fields, and
+    # mapping between the two systems.
+
     # Fields as they are exported by CONTENTdm
     cdmField = {
         'id': 'cdmid',
@@ -29,14 +32,12 @@ class FieldMaps:
         'identifier': 'identifier',
         'date_created': 'cdmcreated',
         'language': 'language',
-        'medium': 'medium',
-        'extent': 'extent',
-        'is_part_of': 'isPartOf',
-        'format': 'format',
+        'format_medium': 'medium',
+        'format_extent': 'extent',
+        'relation_ispartof': 'isPartOf',
         'rights': 'rights',
         'relation': 'relation',
         'provenance': 'provenance',
-        'publisher': 'publisher',
         'type': 'type',
     }
 
@@ -70,8 +71,92 @@ class FieldMaps:
 
     }
 
+    # Use this dictionary to map contentdm and dspace fields.
+    field_map = {
+
+        cdmField['title']: {
+            'element': dspaceField['title'],
+            'qualifier': None
+        },
+        cdmField['alt_title']: {
+            'element': dspaceField['title'],
+            'qualifier': dspaceField['title_alt_qualifier']
+        },
+        cdmField['creator']: {
+            'element': dspaceField['creator'],
+            'qualifier': None
+        },
+        cdmField['description']: {
+            'element': dspaceField['description'],
+            'qualifier': None
+        },
+        cdmField['date']: {
+            'element': dspaceField['date'],
+            'qualifier': None
+        },
+        cdmField['date_created']: {
+            'element': dspaceField['date'],
+            'qualifier': dspaceField['date_created_qualifier']
+        },
+        cdmField['coverage_spatial']: {
+            'element': dspaceField['coverage'],
+            'qualifier': dspaceField['coverage_spatial_qualifier']
+        },
+        cdmField['subject']: {
+            'element': dspaceField['subject'],
+            'qualifier': None
+        },
+        cdmField['relation_ispartof']: {
+            'element': dspaceField['relation'],
+            'qualifier': dspaceField['relation_ispartof_qualifier']
+        },
+        cdmField['language']: {
+            'element': dspaceField['language'],
+            'qualifier': None
+        },
+        cdmField['identifier']: {
+            'element': dspaceField['identifier'],
+            'qualifier': None
+        },
+        cdmField['publisher']: {
+            'element': dspaceField['publisher'],
+            'qualifier': None
+        },
+        cdmField['rights']: {
+            'element': dspaceField['rights'],
+            'qualifier': None
+        },
+        cdmField['provenance']: {
+            'element': dspaceField['description'],
+            'qualifier': dspaceField['description_provenance_qualifier']
+        },
+        cdmField['type']: {
+            'element': dspaceField['type'],
+            'qualifier': None
+        },
+        cdmField['source']: {
+            'element': dspaceField['source'],
+            'qualifier': None
+        },
+        cdmField['format']: {
+            'element': dspaceField['format'],
+            'qualifier': None
+        },
+        cdmField['format_medium']: {
+            'element': dspaceField['format'],
+            'qualifier': dspaceField['format_medium_qualifier']
+        },
+        cdmField['format_extent']: {
+            'element': dspaceField['format'],
+            'qualifier': dspaceField['format_extent_qualifier']
+        }
+    }
+
     def getCdmFieldMap(self):
         return self.cdmField
 
     def getDspaceFieldMap(self):
         return self.dspaceField
+
+    def getCdmToDspaceMap(self):
+            return self.field_map

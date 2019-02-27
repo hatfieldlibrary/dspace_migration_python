@@ -12,12 +12,24 @@ option.
 
 For **saf** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 
-## Code Usage and Status
+## Code Usage 
 
 A top-level process.py script takes command line arguments.  See the script for documentation.
 
 All subsequent work is done by python classes that have been coded separately for CONTENTdm and eXist-db repositories
 (work on the latter is incomplete).
+
+## Metadata
+
+The _FieldMaps_ class (fieldMaps.py) uses python dictionaries to define mapping between CONTENTdm and DSpace qualified
+Dublin Core and local metadata (as defined in the DSpace metadata registry). The _Fields_ class (fields.py) uses python dictionaries
+to define field names and qualifiers for both CONTENTdm and DSpace records. Dictionaries in the _Fields_ class are used in 
+the _FieldMaps_ class.
+
+Processing code uses these dictionaries to read CONTENTdm input and create the DSpace import files. Modifying a 
+dictionary changes the **saf** output. 
+
+## Status
 
 Output is written to **saf** sub-directories, each containing up to 1000 items. Data in **saf** subdirectories has been
  imported into DSpace.  Records include images, PDF, and compound objects, each with thumbnails and 

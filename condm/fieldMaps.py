@@ -108,6 +108,7 @@ class FieldMaps:
     }
 
     # This dictionary maps cdm to dspace LOCAL metadata.
+
     local_field_map = {
         cdm_structural_elements['preservation_location']: {
             'element': dspace_local_field['preservation_location'],

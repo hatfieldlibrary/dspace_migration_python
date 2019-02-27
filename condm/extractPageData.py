@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
-from fieldMap import FieldMaps
+from fields import Fields
 
 
 class ExtractPageData:
@@ -15,8 +15,8 @@ class ExtractPageData:
         :param top: the dublin_core (local schema) element
         :param record: the etree element for the contentdm record
         """
-        cdm_struc = FieldMaps.cdm_structural_elements
-        dspace_local = FieldMaps.dspace_local_field
+        cdm_struc = Fields.cdm_structural_elements
+        dspace_local = Fields.dspace_local_field
 
         structure_el = record.find(cdm_struc['compound_object_container'])
         pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])
@@ -40,7 +40,7 @@ class ExtractPageData:
         :param record: the etree element for the cdm record.
         :return: the full text of the item
         """
-        cdm_struc = FieldMaps.cdm_structural_elements
+        cdm_struc = Fields.cdm_structural_elements
 
         structure_el = record.find(cdm_struc['compound_object_container'])
         pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])

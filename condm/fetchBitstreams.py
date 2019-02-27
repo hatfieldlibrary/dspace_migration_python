@@ -2,7 +2,7 @@
 
 import urllib
 import time
-from fieldMap import FieldMaps
+from fields import Fields
 
 
 class FetchBitstreams:
@@ -69,8 +69,8 @@ class FetchBitstreams:
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
         """
-        cdm_dc = FieldMaps.cdm_dc_field
-        cdm_struc = FieldMaps.cdm_structural_elements
+        cdm_dc = Fields.cdm_dc_field
+        cdm_struc = Fields.cdm_structural_elements
 
         error_count = 0
         cdmid = record.find(cdm_struc['id'])
@@ -131,8 +131,8 @@ class FetchBitstreams:
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
         """
-        cdm_dc = FieldMaps.cdm_dc_field
-        cdm_struc = FieldMaps.cdm_structural_elements
+        cdm_dc = Fields.cdm_dc_field
+        cdm_struc = Fields.cdm_structural_elements
 
         cdmid_el = record.find(cdm_struc['id'])
 

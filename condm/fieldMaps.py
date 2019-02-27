@@ -1,86 +1,25 @@
 #!/usr/bin/env python
 
+from fields import Fields
+
+
 class FieldMaps:
+    """Mapping for CONTENTdm to DSpace dublin core and local fields.
 
-    # THE FIRST 4 DICTIONARIES DESCRIBE THE DC AND LOCAL ELEMENTS USED BY CDM AND DSPACE.
+    Dictionaries in the class define how CONTENTdm fields are mapped to DSpace qualified Dublin Core
+    and to local metadata fields defined in the DSpace metadata registry.
+    """
 
-    # DC fields as they are exported by CONTENTdm. Includes "unmapped".
-    cdm_dc_field = {
-        'unmapped': 'unmapped',
-        'title': 'title',
-        'creator': 'creator',
-        'description': 'description',
-        'alt_title': 'alternative',
-        'subject': 'subject',
-        'coverage_spatial': 'spatial',
-        'date': 'date',
-        'format': 'format',
-        'publisher': 'publisher',
-        'source': 'source',
-        'identifier': 'identifier',
-        'date_created': 'cdmcreated',
-        'language': 'language',
-        'format_medium': 'medium',
-        'format_extent': 'extent',
-        'relation_ispartof': 'isPartOf',
-        'rights': 'rights',
-        'relation': 'relation',
-        'provenance': 'provenance',
-        'type': 'type',
-    }
+    def __init__(self):
+        pass
 
-    # Non-dc (e.g. structural) xml elements exported by cdm.
-    cdm_structural_elements = {
-        'id': 'cdmid',
-        'filename': 'cdmfile',
-        'thumbnail': 'thumbnailURL',
-        'preservation_location': 'fullResolution',
-        'compound_object_container': 'structure',
-        'compound_object_page': 'page',
-        'compound_object_page_title': 'pagetitle',
-        'compound_object_page_file': 'pagefile',
-        'compound_object_page_file_type': 'pagefiletype',
-        'compound_object_page_file_loc': 'pagefilelocation',
-        'compound_object_page_text': 'pagetext'
-    }
+    cdm_dc_field = Fields.cdm_dc_field
+    cdm_structural_elements = Fields.cdm_structural_elements
+    dspace_dc_field = Fields.dspace_dc_field
+    dspace_local_field = Fields.dspace_local_field
 
-    # Fields used for DSpace dublin core import
-    dspace_dc_field = {
-        'title': 'title',
-        'title_alt_qualifier': 'alternative',
-        'creator': 'creator',
-        'description': 'description',
-        'description_provenance_qualifier': 'provenance',
-        'date': 'date',
-        'date_created_qualifier': 'created',
-        'subject': 'subject',
-        'source': 'source',
-        'relation': 'relation',
-        'relation_uri_qualifier': 'uri',
-        'relation_ispartof_qualifier': 'ispartof',
-        'relation_isformatof_qualifier': 'isformatof',
-        'coverage': 'coverage',
-        'coverage_spatial_qualifier': 'spatial',
-        'language': 'language',
-        'identifier': 'identifier',
-        'publisher': 'publisher',
-        'type': 'type',
-        'format': 'format',
-        'format_medium_qualifier': 'medium',
-        'format_extent_qualifier': 'extent',
-        'rights': 'rights'
+    # This dictionary maps cdm to dspace DUBLIN CORE.
 
-    }
-
-    # Fields for dspace local metadata import.
-    dspace_local_field = {
-        'eadid': 'EADID',
-        'preservation_location': 'mastercopy'
-    }
-
-    # THE FOLLOWING DICTIONARIES CONTROL HOW CDM RECORDS ARE IMPORTED INTO DSPACE.
-
-    # This dictionary maps cdm to dspace dublin core.
     dc_field_map = {
 
         cdm_dc_field['title']: {
@@ -180,4 +119,3 @@ class FieldMaps:
             'qualifier': None
         }
     }
-

@@ -2,7 +2,8 @@
 
 import xml.etree.ElementTree as ET
 from extractPageData import ExtractPageData
-from fieldMap import FieldMaps
+from fields import Fields
+from fieldMaps import FieldMaps
 
 
 class ExtractMetadata:
@@ -33,7 +34,7 @@ class ExtractMetadata:
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.
         """
-        cdm_dc = FieldMaps.cdm_dc_field
+        cdm_dc = Fields.cdm_dc_field
         if elements is not None:
                 for element in elements:
                     if element.text is not None:
@@ -57,9 +58,9 @@ class ExtractMetadata:
         :param record: etree Element representing the contentdm record.
         :return: a new etree Element representing data that will be written to metadata_local.xml.
         """
-        cdm_dc = FieldMaps.cdm_dc_field
-        cdm_structure = FieldMaps.cdm_structural_elements
-        dspace_local = FieldMaps.dspace_local_field
+        cdm_dc = Fields.cdm_dc_field
+        cdm_structure = Fields.cdm_structural_elements
+        dspace_local = Fields.dspace_local_field
         dspace_local_map = FieldMaps.local_field_map
 
         metadata_local = ET.Element('metadata_local')
@@ -89,8 +90,8 @@ class ExtractMetadata:
         :param record: the etree Element for the contentdm record.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
-        cdm_dc = FieldMaps.cdm_dc_field
-        dspace_dc = FieldMaps.dspace_dc_field
+        cdm_dc = Fields.cdm_dc_field
+        dspace_dc = Fields.dspace_dc_field
         dc_field_map = FieldMaps.dc_field_map
 
         dublin_core = ET.Element('dublin_core')

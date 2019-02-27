@@ -60,7 +60,8 @@ class FetchBitstreams:
 
             return error_count
 
-    def fetchThumbnailOnly(self, current_dir, record, collection):
+    @staticmethod
+    def fetchThumbnailOnly(current_dir, record, collection):
         """
         This function is used for compound objects. Compound objects do not download page bitstreams into
         dspace.  But a thumbnail image is still required.
@@ -68,13 +69,14 @@ class FetchBitstreams:
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
         """
-        fields = FieldMaps()
-        cdm = fields.getCdmFieldMap()
+        cdm_dc = FieldMaps.cdm_dc_field
+        cdm_struc = FieldMaps.cdm_structural_elements
+
         error_count = 0
-        cdmid = record.find(cdm['id'])
-        cdmfile = record.find(cdm['filename'])
-        doc_title = record.find(cdm['title'])
-        thumbnail_url = record.find(cdm['thumbnail'])
+        cdmid = record.find(cdm_struc['id'])
+        cdmfile = record.find(cdm_struc['filename'])
+        doc_title = record.find(cdm_dc['title'])
+        thumbnail_url = record.find(cdm_struc['thumbnail'])
         # the jpg file name; this assumes a cpd (compound object) file. Will break for other file types.
         thumbname = cdmfile.text.replace('cpd', 'jpg')
         # the thumbnail output file
@@ -119,8 +121,8 @@ class FetchBitstreams:
     def createBitstreamLink(collection, cdmid):
         return 'http://condm.willamette.edu:81/cgi-bin/showfile.exe?CISOROOT=/' + collection + '&CISOPTR=' + cdmid
 
-
-    def fetchBitStreams(self, current_dir, record, collection):
+    @staticmethod
+    def fetchBitStreams(current_dir, record, collection):
         """
         Extract the bitstream url from metadata, fetch the bitstream, and add to simple archive format entry.
         If a thumbnail image url is available, repeat operation for the thumbnail. This function throws and error
@@ -129,9 +131,10 @@ class FetchBitstreams:
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
         """
-        fields = FieldMaps()
-        map = fields.getCdmFieldMap()
-        cdmid_el = record.find(map['id'])
+        cdm_dc = FieldMaps.cdm_dc_field
+        cdm_struc = FieldMaps.cdm_structural_elements
+
+        cdmid_el = record.find(cdm_struc['id'])
 
         if cdmid_el is None:
             print('Error: no cdmid found')
@@ -140,9 +143,9 @@ class FetchBitstreams:
             if cdmid_el is not None:
 
                 error_count = 0
-                doc_title_el = record.find(map['title'])
-                cdmfile_el = record.find(map['filename'])
-                thumb_url_el = record.find(map['thumbnail'])
+                doc_title_el = record.find(cdm_dc['title'])
+                cdmfile_el = record.find(cdm_struc['filename'])
+                thumb_url_el = record.find(cdm_struc['thumbnail'])
 
                 # cdm link for bitstream
                 link = FetchBitstreams.createBitstreamLink(collection, cdmid_el.text)

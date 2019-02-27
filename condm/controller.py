@@ -40,7 +40,6 @@ class ContentdmController:
 		utils = Utils(out_dir)
 		metadata_extractor = ExtractMetadata()
 		page_data_extractor = ExtractPageData()
-		bitstream_fetcher = FetchBitstreams()
 
 		counter = 0
 		batch = 0
@@ -75,7 +74,7 @@ class ContentdmController:
 				# single item, not a compound object!
 				try:
 					# Get bitstreams for single item and add to archives
-					bitstream_fetcher.fetchBitStreams(current_dir, record, self.collection)
+					FetchBitstreams.fetchBitStreams(current_dir, record, self.collection)
 				except RuntimeError as err:
 					print(err)
 			
@@ -92,7 +91,7 @@ class ContentdmController:
 		
 				# This should be called after the full-text file has been added.
 				# It will retrieve the thumbnail for the compound object.
-				bitstream_fetcher.fetchThumbnailOnly(current_dir, record, self.collection)
+				FetchBitstreams.fetchThumbnailOnly(current_dir, record, self.collection)
 
 			counter += 1
 			file1.close()

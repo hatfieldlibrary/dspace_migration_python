@@ -15,23 +15,22 @@ class ExtractPageData:
         :param top: the dublin_core (local schema) element
         :param record: the etree element for the contentdm record
         """
-        fields = FieldMaps()
-        cdm = fields.getCdmFieldMap()
-        dspace = fields.getDspaceFieldMap()
+        cdm_struc = FieldMaps.cdm_structural_elements
+        dspace_local = FieldMaps.dspace_local_field
 
-        structure_el = record.find(cdm['compound_object_container'])
-        pages_el = structure_el.iterfind('.//' + cdm['compound_object_page'])
+        structure_el = record.find(cdm_struc['compound_object_container'])
+        pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])
 
         for page in pages_el:
 
-            title = page.find(cdm['compound_object_page_title'])
-            page_files = page.iterfind(cdm['compound_object_page_file'])
+            title = page.find(cdm_struc['compound_object_page_title'])
+            page_files = page.iterfind(cdm_struc['compound_object_page_file'])
             for file_el in page_files:
-                type_el = file_el.find(cdm['compound_object_page_file_type'])
+                type_el = file_el.find(cdm_struc['compound_object_page_file_type'])
                 if type_el.text == 'master':
-                    file_location = file_el.find(cdm['compound_object_page_file_loc'])
+                    file_location = file_el.find(cdm_struc['compound_object_page_file_loc'])
                     master_el = ET.SubElement(top, 'dcvalue')
-                    master_el.set('element', dspace['preservation_location'])
+                    master_el.set('element', dspace_local['preservation_location'])
                     if file_location.text is not None:
                         master_el.text = title.text + ' master: ' + file_location.text
 
@@ -41,14 +40,13 @@ class ExtractPageData:
         :param record: the etree element for the cdm record.
         :return: the full text of the item
         """
-        fields = FieldMaps()
-        cdm = fields.getCdmFieldMap()
+        cdm_struc = FieldMaps.cdm_structural_elements
 
-        structure_el = record.find(cdm['compound_object_container'])
-        pages_el = structure_el.iterfind('.//' + cdm['compound_object_page'])
+        structure_el = record.find(cdm_struc['compound_object_container'])
+        pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])
         fulltext = ''
         for page in pages_el:
-            page_el = page.find(cdm['compound_object_page_text'])
+            page_el = page.find(cdm_struc['compound_object_page_text'])
             if page_el is not None:
                 if page_el.text is not None:
                     fulltext += page_el.text

@@ -33,54 +33,55 @@ class ExtractMetadata:
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.
         """
+        cdm_dc = FieldMaps.cdm_dc_field
         if elements is not None:
                 for element in elements:
                     if element.text is not None:
-                        dspace_element = element_map[element.tag]
-                        sub_element = ET.SubElement(parent_element, 'dcvalue')
-                        sub_element.set('element', dspace_element['element'])
-                        if dspace_element['qualifier'] is not None:
-                            sub_element.set('qualifier', dspace_element['qualifier'])
-                        sub_element.text = element.text
-
+                        # It makes no sense add unmapped fields to dspace dublin core.
+                        # These need to be exported differently from cdm if we need them.
+                        # The 'unmapped' key has been included (temporarily?) in the cdm field dictionary
+                        # and is used in the hack that captures a subset of EADID local fields.
+                        # See extractLocalMetadata() below.
+                        if element.tag != cdm_dc['unmapped']:
+                            dspace_element = element_map[element.tag]
+                            sub_element = ET.SubElement(parent_element, 'dcvalue')
+                            sub_element.set('element', dspace_element['element'])
+                            if dspace_element['qualifier'] is not None:
+                                sub_element.set('qualifier', dspace_element['qualifier'])
+                            sub_element.text = element.text
 
     def extractLocalMetadata(self, record):
         """
-        This method extracts metadata to add to the metadata_local.xml file in the saf directory.
-        The extracted fields will be mapped to fields in the local metadata registry configured
-        for our dspace instance.
+        This method extracts the metadata to add metadata_local.xml in the saf directory.
+        Data fields are mapped to the local metadata registry configured for our dspace instance.
         :param record: etree Element representing the contentdm record.
         :return: a new etree Element representing data that will be written to metadata_local.xml.
         """
-        fields = FieldMaps()
-        cdm = fields.getCdmFieldMap()
-        dspace = fields.getDspaceFieldMap()
+        cdm_dc = FieldMaps.cdm_dc_field
+        cdm_structure = FieldMaps.cdm_structural_elements
+        dspace_local = FieldMaps.dspace_local_field
+        dspace_local_map = FieldMaps.local_field_map
 
-        top = ET.Element('dublin_core')
-        top.set('schema', 'local')
+        metadata_local = ET.Element('metadata_local')
+        metadata_local.set('schema', 'local')
 
-        cdmfullResolution = record.find(cdm['preservation_location'])
-        cdmunmapped = record.iterfind(cdm['unmapped'])
+        cdmfullResolution = record.iterfind(cdm_structure['preservation_location'])
+        # This should probably be considered a hack.
+        cdmunmapped = record.iterfind(cdm_dc['unmapped'])
 
-        # TODO: this needs to be mapped to a unique metadata field.
+        # TODO: the eadid needs to be mapped to a unique field. For now, use string match so some eadid fields will
+        #  appear in dspace.
         for element in cdmunmapped:
             if element.text is not None:
                 if element.text.find('WUA') != -1:
-                    relation_references = ET.SubElement(top, 'dcvalue')
-                    relation_references.set('schema', 'local')
-                    relation_references.set('element', dspace['eadid'])
+                    relation_references = ET.SubElement(metadata_local, 'dcvalue')
+                    relation_references.set('element', dspace_local['eadid'])
                     relation_references.text = element.text
 
-        if cdmfullResolution is not None:
-            if cdmfullResolution.text is not None:
-                res_el = ET.SubElement(top, 'dcvalue')
-                res_el.set('schema', 'local')
-                res_el.set('element', dspace['preservation_location'])
-                res_el.text = cdmfullResolution.text
+        self.processIterableMap(metadata_local, cdmfullResolution, dspace_local_map)
+        self.extract_page.addPageAdminData(metadata_local, record)
 
-        self.extract_page.addPageAdminData(top, record)
-
-        return top
+        return metadata_local
 
     def extractMetadata(self, record):
         """
@@ -88,70 +89,27 @@ class ExtractMetadata:
         :param record: the etree Element for the contentdm record.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
-        fields = FieldMaps()
-        cdm = fields.getCdmFieldMap()
-        dspace = fields.getDspaceFieldMap()
-        field_map = fields.getCdmToDspaceMap()
+        cdm_dc = FieldMaps.cdm_dc_field
+        dspace_dc = FieldMaps.dspace_dc_field
+        dc_field_map = FieldMaps.dc_field_map
 
-        cdmtitle = record.iterfind(cdm['title'])
-        cdmalternatives = record.iterfind(cdm['alt_title'])
-        cdmcreators = record.iterfind(cdm['creator'])
-        cdmdescriptions = record.iterfind(cdm['description'])
-        cdmsubjects = record.iterfind(cdm['subject'])
-        cdmspatial = record.iterfind(cdm['coverage_spatial'])
-        cdmdates = record.iterfind(cdm['date'])
-        cdmsources = record.iterfind(cdm['source'])
-        cdmidentifiers = record.iterfind(cdm['identifier'])
-        cdmdate_created = record.iterfind(cdm['date_created'])
-        cdmlanguage = record.iterfind(cdm['language'])
-        cdmisPartOf = record.iterfind(cdm['relation_ispartof'])
-        cdmformats = record.iterfind(cdm['format'])
-        cdmrights = record.iterfind(cdm['rights'])
-        cdmrelations = record.iterfind(cdm['relation'])
-        cdmprovenance = record.iterfind(cdm['provenance'])
-        cdmpublishers = record.iterfind(cdm['publisher'])
-        cdmtypes = record.iterfind(cdm['type'])
-        cdmextents = record.iterfind(cdm['format_extent'])
-        cdmmediums = record.iterfind(cdm['format_medium'])
+        dublin_core = ET.Element('dublin_core')
+        dublin_core.set('schema', 'dc')
 
-        top = ET.Element('dublin_core')
-        top.set('schema', 'dc')
+        # Because this uses sorted keys, the field order is alphabetical.
+        cdm_keys = sorted(cdm_dc.keys())
+        for key in cdm_keys:
+            if key in cdm_keys:
+                elements = record.iterfind(cdm_dc[key])
+                if key == cdm_dc['format']:
+                    if not self.isSingleItem(record):
+                         # Sets the format for compound objects.
+                        cpdformat = ET.SubElement(dublin_core, 'dcvalue')
+                        cpdformat.set('element', dspace_dc['format'])
+                        cpdformat.text = 'Compound'
+                    else:
+                        self.processIterableMap(dublin_core, elements, dc_field_map)
+                else:
+                    self.processIterableMap(dublin_core, elements, dc_field_map)
 
-        self.processIterableMap(top, cdmtitle, field_map)
-        self.processIterableMap(top, cdmalternatives, field_map)
-        self.processIterableMap(top, cdmcreators, field_map)
-        self.processIterableMap(top, cdmdescriptions, field_map)
-        self.processIterableMap(top, cdmdates, field_map)
-
-        if cdmrelations is not None:
-            for rel in cdmrelations:
-                if rel.text is not None:
-                    relEL = ET.SubElement(top, 'dcvalue')
-                    relEL.set('element', dspace['relation'])
-                    if (rel.text.find('http') != -1):
-                        relEL.set('qualifier', dspace['relation_qualifier_uri'])
-                    relEL.text = rel.text
-
-        self.processIterableMap(top, cdmspatial, field_map)
-        self.processIterableMap(top, cdmsubjects, field_map)
-        self.processIterableMap(top, cdmisPartOf, field_map)
-        self.processIterableMap(top, cdmlanguage, field_map)
-        self.processIterableMap(top, cdmdate_created, field_map)
-        self.processIterableMap(top, cdmidentifiers, field_map)
-        self.processIterableMap(top, cdmpublishers, field_map)
-        self.processIterableMap(top, cdmrights, field_map)
-        self.processIterableMap(top, cdmprovenance, field_map)
-        self.processIterableMap(top, cdmtypes, field_map)
-        self.processIterableMap(top, cdmsources, field_map)
-        self.processIterableMap(top, cdmmediums, field_map)
-        self.processIterableMap(top, cdmextents, field_map)
-
-        if not self.isSingleItem(record):
-            # sets the format for compound objects
-            cpdformat = ET.SubElement(top, 'dcvalue')
-            cpdformat.set('element', dspace['format'])
-            cpdformat.text = 'Compound'
-        else:
-            self.processIterableMap(top, cdmformats, field_map)
-
-        return top
+        return dublin_core

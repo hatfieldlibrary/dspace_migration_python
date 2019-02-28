@@ -29,8 +29,8 @@ class ExtractMetadata:
                         # It makes no sense add unmapped fields to dspace dublin core.
                         # These need to be exported from cdm differently if we want them.
                         # However, the 'unmapped' key has been included (temporarily?) in the
-                        # cdm field dictionary and is used in the hack that captures the
-                        # EADID local field. See extractLocalMetadata() below.
+                        # cdm field dictionary and is used in the hack that captures (some)
+                        # EADID local fields. See extractLocalMetadata() below.
                         if element.tag != cdm_dc['unmapped']:
                             dspace_element = element_map[element.tag]
                             sub_element = ET.SubElement(parent_element, 'dcvalue')

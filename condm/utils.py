@@ -72,4 +72,4 @@ class Utils:
         if batch == 1:
             return counter
         else:
-            return (batch * 1000) + counter
+            return ((batch - 1) * 1000) + counter

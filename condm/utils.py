@@ -6,27 +6,37 @@ import os
 
 class Utils:
 
-    def __init__(self, outdir):
-        self.outdir = outdir
+    def __init__(self):
+        pass
+
 
     @staticmethod
-    def makeBatchDir(batchVal):
-
+    def __make_batch_dir(batchVal):
+        # type: (int) -> str
+        """
+        Creates new batch directory name
+        :param batchVal: the counter for the batch
+        :return: new diretory name
+        """
         newDir = '/batch_' + str(batchVal)
         return newDir
 
-    def initWorkingDirectory(this, batch):
+    @staticmethod
+    def init_working_directory(outdir, batch):
+        # type: (str, int) -> str
         """
         Creates and returns path of working directory.
+        :param outdir: the base output directory
         :param batch: the count used to create a new sub-directory path.
         :return: string value for the new working directory that was created.
         """
-        workingdir = this.outdir + this.makeBatchDir(batch)
+        workingdir = outdir + Utils.__make_batch_dir(batch)
         os.mkdir(workingdir)
         return workingdir
 
     @staticmethod
-    def intSafSubDirectory(workingdir, counter):
+    def int_saf_sub_directory(workingdir, counter):
+        # type: (str, int) -> str
         """
         Creates the saf sub-directory and returns path.
         :param workingdir: the current working directory that contains saf output directories.
@@ -46,13 +56,13 @@ class Utils:
             current_dir = '/item_' + counter_str
 
         saf_item = workingdir + current_dir
-
         os.mkdir(saf_item)
 
         return saf_item
 
     @staticmethod
-    def getFinalCount(batch, counter):
+    def get_final_count(batch, counter):
+        # type: (int, int) -> int
         """
         Utility function for getting the final count of records loaded.
         :param batch: the count of saf sub-directories.

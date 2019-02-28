@@ -22,7 +22,7 @@ class ContentdmController:
 		self.input = input_file
 		self.output = output_directory
 
-	def processRecords(self):
+	def process_records(self):
 		"""
 		This is the top-level method for processing Contentdm records.
 		It initializes the processing environment, parses the xml input file,
@@ -37,7 +37,6 @@ class ContentdmController:
 		# The parent output directory.
 		out_dir = base_directory + '/condm/saf/' + self.output
 
-		utils = Utils(out_dir)
 		metadata_extractor = ExtractMetadata()
 		page_data_extractor = ExtractPageData()
 
@@ -60,17 +59,17 @@ class ContentdmController:
 			if counter % 1000 == 0:
 				counter = 0
 				batch += 1
-				working_dir = utils.initWorkingDirectory(batch)
+				working_dir = Utils.init_working_directory(out_dir, batch)
 			
 			# Create a new saf item sub-directory inside the working directory
-			current_dir = utils.intSafSubDirectory(working_dir, counter)
+			current_dir = Utils.int_saf_sub_directory(working_dir, counter)
 
 			# Capture dc metadata and write to archive
-			dc_metadata = metadata_extractor.extractMetadata(record)
+			dc_metadata = metadata_extractor.extract_metadata(record)
 			tree = ET.ElementTree(dc_metadata)
 			tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-			if metadata_extractor.isSingleItem(record):
+			if metadata_extractor.is_single_item(record):
 				# single item, not a compound object!
 				try:
 					# Get bitstreams for single item and add to archives
@@ -80,7 +79,7 @@ class ContentdmController:
 			else:
 				# A compound object.
 				# Create full-text file for compound object and add to saf directory.
-				extext = page_data_extractor.extractText(record)
+				extext = page_data_extractor.extract_text(record)
 				file2 = open(current_dir + '/file_1.txt', 'w')
 				file2.write(extext)
 				file3 = open(current_dir + '/contents', 'w')
@@ -90,15 +89,14 @@ class ContentdmController:
 
 				# This should be called after the full-text file has been added.
 				# It will retrieve the thumbnail for the compound object.
-				FetchBitstreams.fetchThumbnailOnly(current_dir, record, self.collection)
+				FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
 
 			counter += 1
 
-
 			# Extract and write metadata to be imported via our local dspace schema.
-			local_metadata = metadata_extractor.extractLocalMetadata(record)
+			local_metadata = metadata_extractor.extract_local_metadata(record)
 			tree = ET.ElementTree(local_metadata)
 			tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
 
-		final_count = utils.getFinalCount(batch, counter)
+		final_count = Utils.get_final_count(batch, counter)
 		print('%s records loaded'%(str(final_count)))

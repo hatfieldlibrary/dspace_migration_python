@@ -12,20 +12,8 @@ class ExtractMetadata:
         self.extract_page = ExtractPageData()
 
     @staticmethod
-    def isSingleItem(record):
-        """
-        Tests for compound object. If a page sub-element does not exist, this is a
-        single item.
-        :param record: the etree element for the contentdm record.
-        :return: boolean true if a single item and false if compound object.
-        """
-        structure = record.find('structure')
-        page = structure.find('.//page')
-
-        return page is None
-
-    @staticmethod
-    def processIterableMap(parent_element, elements, element_map):
+    def __process_iterable_map(parent_element, elements, element_map):
+        # type: (object, object, dict) -> None
         """
         Use this function to process any iterable list of etree elements.
         (Provided that the element requires no special logic.) This method
@@ -51,7 +39,21 @@ class ExtractMetadata:
                                 sub_element.set('qualifier', dspace_element['qualifier'])
                             sub_element.text = element.text
 
-    def extractLocalMetadata(self, record):
+    @staticmethod
+    def is_single_item(record):
+        """
+        Tests for compound object. If a page sub-element does not exist, this is a
+        single item.
+        :param record: the etree element for the contentdm record.
+        :return: boolean true if a single item and false if compound object.
+        """
+        structure = record.find('structure')
+        page = structure.find('.//page')
+
+        return page is None
+
+    def extract_local_metadata(self, record):
+        # type: (object) -> object
         """
         This method extracts the metadata to add metadata_local.xml in the saf directory.
         Data fields are mapped to the local metadata registry configured for our dspace instance.
@@ -79,12 +81,13 @@ class ExtractMetadata:
                     relation_references.set('element', dspace_local['eadid'])
                     relation_references.text = element.text
 
-        self.processIterableMap(metadata_local, cdmfullResolution, dspace_local_map)
-        self.extract_page.addPageAdminData(metadata_local, record)
+        self.__process_iterable_map(metadata_local, cdmfullResolution, dspace_local_map)
+        self.extract_page.add_page_admin_data(metadata_local, record)
 
         return metadata_local
 
-    def extractMetadata(self, record):
+    def extract_metadata(self, record):
+        # type: (object) -> object
         """
         Extracts data that will be added to the dublin_core.xml file in the saf item directory.
         :param record: the etree Element for the contentdm record.
@@ -103,14 +106,14 @@ class ExtractMetadata:
             if key in cdm_keys:
                 elements = record.iterfind(cdm_dc[key])
                 if key == cdm_dc['format']:
-                    if not self.isSingleItem(record):
+                    if not self.is_single_item(record):
                          # Sets the format for compound objects.
                         cpdformat = ET.SubElement(dublin_core, 'dcvalue')
                         cpdformat.set('element', dspace_dc['format'])
                         cpdformat.text = 'Compound'
                     else:
-                        self.processIterableMap(dublin_core, elements, dc_field_map)
+                        self.__process_iterable_map(dublin_core, elements, dc_field_map)
                 else:
-                    self.processIterableMap(dublin_core, elements, dc_field_map)
+                    self.__process_iterable_map(dublin_core, elements, dc_field_map)
 
         return dublin_core

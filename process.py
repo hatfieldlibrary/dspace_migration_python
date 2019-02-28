@@ -17,4 +17,4 @@ repo = sys.argv[1]
 
 if repo == 'cdm':
     controller = ContentdmController(sys.argv[2], sys.argv[3], sys.argv[4])
-    controller.processRecords()
+    controller.process_records()

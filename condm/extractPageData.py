@@ -9,7 +9,8 @@ class ExtractPageData:
     def __init__(self):
         pass
 
-    def addPageAdminData(self, top, record):
+    def add_page_admin_data(self, top, record):
+        # type: (object, object) -> None
         """
         Adds master file location for each page to the metadata_local.xml saf output file.
         :param top: the dublin_core (local schema) element
@@ -34,7 +35,8 @@ class ExtractPageData:
                     if file_location.text is not None:
                         master_el.text = title.text + ' master: ' + file_location.text
 
-    def extractText(self, record):
+    def extract_text(self, record):
+        # type: (object) -> str
         """
         Returns full text extracted from cdm compound object pages.
         :param record: the etree element for the cdm record.

@@ -11,7 +11,8 @@ class FetchBitstreams:
         pass
 
     @staticmethod
-    def appendToContents(current_dir, filename, error_count, line):
+    def __append_to_contents(current_dir, filename, error_count, line):
+        # type: (str, str, int, int) -> int
         """
         Appends a new file name to the saf item contents file.
         :param current_dir: the current item saf directory.
@@ -27,18 +28,19 @@ class FetchBitstreams:
             if line == 0:
                 # first write to the contents file.
                 content_file.write(filename)
+                content_file.close()
             else:
                 content_file.write('\n' + filename)
+                content_file.close()
         except:
             error_count += 1
             print('An error occurred writing to %s for the record %s' % (contents_out, filename))
 
-        content_file.close()
         return error_count
 
-
     @staticmethod
-    def fetchThumbnail(outfile, link, doc_title, error_count):
+    def __fetch_thumbnail(outfile, link, doc_title, error_count):
+        # type: (str, str, str, int) -> int
         """
         Fetches the thumbnail file and writes to the saf item directory.
         :param outfile: full path for the file to be written.
@@ -52,48 +54,17 @@ class FetchBitstreams:
             try:
                 urllib.urlretrieve(link, outfile)
             except IOError as err:
-                print('An error occured retriveing thumbnail for: %s' % (doc_title))
+                print('An error occured retriveing thumbnail for: %s' % doc_title)
                 print('IO Error: {0}'.format(err))
             except:
                 error_count += 1
-                print('An error occurred retrieving thumbnail for: %s' % (doc_title))
+                print('An error occurred retrieving thumbnail for: %s' % doc_title)
 
             return error_count
 
     @staticmethod
-    def fetchThumbnailOnly(current_dir, record, collection):
-        """
-        This function is used for compound objects. Compound objects do not download page bitstreams into
-        dspace.  But a thumbnail image is still required.
-        :param current_dir: the full path to the saf output directory
-        :param record: the etree element for a contentdm record
-        :param collection: the contentdm collection name
-        """
-        cdm_dc = Fields.cdm_dc_field
-        cdm_struc = Fields.cdm_structural_elements
-
-        error_count = 0
-        cdmid = record.find(cdm_struc['id'])
-        cdmfile = record.find(cdm_struc['filename'])
-        doc_title = record.find(cdm_dc['title'])
-        thumbnail_url = record.find(cdm_struc['thumbnail'])
-        # the jpg file name; this assumes a cpd (compound object) file. Will break for other file types.
-        thumbname = cdmfile.text.replace('cpd', 'jpg')
-        # the thumbnail output file
-        outfile = current_dir + '/' + thumbname
-        # thumbnail link
-        link = FetchBitstreams.createThumbnailLink(collection, cdmid.text)
-
-        if thumbnail_url.text is not None:
-            error_count = FetchBitstreams.fetchThumbnail(outfile, link, doc_title.text, error_count)
-            error_count = FetchBitstreams.appendToContents(current_dir, thumbname, error_count, 1)
-
-            if error_count > 0:
-                print('%s --  Thumbnail %s proccessed with %s errors.' % (doc_title.text, thumbname, error_count))
-
-
-    @staticmethod
-    def fetchBitstream(outfile, link, doc_title, error_count):
+    def __fetch_bitstream(outfile, link, doc_title, error_count):
+        # type: (str, str, str, int) -> int
         """
         Fetches single bitstream and writes to saf directory
         :param outfile: the file name and output path for the bitstream
@@ -114,15 +85,50 @@ class FetchBitstreams:
         return error_count
 
     @staticmethod
-    def createThumbnailLink(collection, cdmid):
+    def __create_thumbnail_link(collection, cdmid):
+        # type: (str, str) -> str
         return 'http://condm.willamette.edu:81/cgi-bin/thumbnail.exe?CISOROOT=/' + collection + '&CISOPTR=' + cdmid
 
     @staticmethod
-    def createBitstreamLink(collection, cdmid):
+    def __create_bitstream_link(collection, cdmid):
+        # type: (str, str) -> str
         return 'http://condm.willamette.edu:81/cgi-bin/showfile.exe?CISOROOT=/' + collection + '&CISOPTR=' + cdmid
 
     @staticmethod
+    def fetch_thumbnail_only(current_dir, record, collection):
+        # type: (str, object, str) -> None
+        """
+        This function is used for compound objects. Compound objects do not download page bitstreams into
+        dspace.  But a thumbnail image is still required.
+        :param current_dir: the full path to the saf output directory
+        :param record: the etree element for a contentdm record
+        :param collection: the contentdm collection name
+        """
+        cdm_dc = Fields.cdm_dc_field
+        cdm_struc = Fields.cdm_structural_elements
+
+        error_count = 0
+        cdmid = record.find(cdm_struc['id'])
+        cdmfile = record.find(cdm_struc['filename'])
+        doc_title = record.find(cdm_dc['title'])
+        thumbnail_url = record.find(cdm_struc['thumbnail'])
+        # the jpg file name; this assumes a cpd (compound object) file. Will break for other file types.
+        thumbname = cdmfile.text.replace('cpd', 'jpg')
+        # the thumbnail output file
+        outfile = current_dir + '/' + thumbname
+        # thumbnail link
+        link = FetchBitstreams.__create_thumbnail_link(collection, cdmid.text)
+
+        if thumbnail_url.text is not None:
+            error_count = FetchBitstreams.__fetch_thumbnail(outfile, link, doc_title.text, error_count)
+            error_count = FetchBitstreams.__append_to_contents(current_dir, thumbname, error_count, 1)
+
+            if error_count > 0:
+                print('%s --  Thumbnail %s proccessed with %s errors.' % (doc_title.text, thumbname, error_count))
+
+    @staticmethod
     def fetchBitStreams(current_dir, record, collection):
+        # type: (str, object, str) -> None
         """
         Extract the bitstream url from metadata, fetch the bitstream, and add to simple archive format entry.
         If a thumbnail image url is available, repeat operation for the thumbnail. This function throws and error
@@ -148,13 +154,13 @@ class FetchBitstreams:
                 thumb_url_el = record.find(cdm_struc['thumbnail'])
 
                 # cdm link for bitstream
-                link = FetchBitstreams.createBitstreamLink(collection, cdmid_el.text)
+                link = FetchBitstreams.__create_bitstream_link(collection, cdmid_el.text)
 
                 # the output filename for the bitstream.
                 outfile = current_dir + '/' + cdmfile_el.text
-                error_count = FetchBitstreams.fetchBitstream(outfile, link, doc_title_el.text, error_count)
+                error_count = FetchBitstreams.__fetch_bitstream(outfile, link, doc_title_el.text, error_count)
 
-                error_count = FetchBitstreams.appendToContents(current_dir, cdmfile_el.text, error_count, 0)
+                error_count = FetchBitstreams.__append_to_contents(current_dir, cdmfile_el.text, error_count, 0)
 
                 # check for thumbnail url in the cdm record.
                 if thumb_url_el.text is not None:
@@ -165,10 +171,10 @@ class FetchBitstreams:
                     outfile = current_dir + '/' + thumbname
 
                     # cdm link for thumbnail
-                    link = FetchBitstreams.createThumbnailLink(collection, cdmid_el.text)
+                    link = FetchBitstreams.__create_thumbnail_link(collection, cdmid_el.text)
 
-                    error_count = FetchBitstreams.fetchThumbnail(outfile, link, doc_title_el.text, error_count)
-                    error_count = FetchBitstreams.appendToContents(current_dir, thumbname, error_count, 1)
+                    error_count = FetchBitstreams.__fetch_thumbnail(outfile, link, doc_title_el.text, error_count)
+                    error_count = FetchBitstreams.__append_to_contents(current_dir, thumbname, error_count, 1)
 
                     if error_count > 0:
                         print('%s --  Thumbnail %s proccessed with %s errors.' %

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import os
+import xml.etree.ElementTree as ET
+
 from extractMetadata import ExtractMetadata
 from fetchBitstreams import FetchBitstreams
 from extractPageData import ExtractPageData
 from utils import Utils
-
-import xml.etree.ElementTree as ET
 
 
 class ContentdmController:

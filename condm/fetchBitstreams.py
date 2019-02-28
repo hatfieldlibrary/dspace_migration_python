@@ -74,7 +74,7 @@ class FetchBitstreams:
         :param link: the url to retrieve the bitstream
         :param doc_title: the title of the current document (dc)
         :param error_count: the current error count
-            :return: the error count, incremented if an error encountered
+        :return: the error count, incremented if an error encountered
         """
         try:
             urllib.urlretrieve(link, outfile)

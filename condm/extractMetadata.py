@@ -45,6 +45,7 @@ class ExtractMetadata:
         """
         Tests for compound object. If a page sub-element does not exist, this is a
         single item.
+
         :param record: the etree element for the contentdm record.
         :return: boolean true if a single item and false if compound object.
         """
@@ -58,6 +59,7 @@ class ExtractMetadata:
         """
         This method extracts the metadata to add metadata_local.xml in the saf directory.
         Data fields are mapped to the local metadata registry configured for our dspace instance.
+
         :param record: etree Element representing the contentdm record.
         :return: a new etree Element representing data that will be written to metadata_local.xml.
         """
@@ -91,6 +93,7 @@ class ExtractMetadata:
         # type: (object) -> object
         """
         Extracts data that will be added to the dublin_core.xml file in the saf item directory.
+
         :param record: the etree Element for the contentdm record.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """

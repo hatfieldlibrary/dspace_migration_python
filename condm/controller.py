@@ -14,6 +14,7 @@ class ContentdmController:
 	def __init__(self, collection, input_file, output_directory):
 		"""
 		Constructor.
+
 		:param collection: the Contentdm collection name (e.g. aphotos)
 		:param input_file: the xml file exported from Contentdm
 		:param output_directory: The parent simple archive format output directory
@@ -73,7 +74,7 @@ class ContentdmController:
 				# single item, not a compound object!
 				try:
 					# Get bitstreams for single item and add to archives
-					FetchBitstreams.fetchBitStreams(current_dir, record, self.collection)
+					FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection)
 				except RuntimeError as err:					print(err)
 
 			else:

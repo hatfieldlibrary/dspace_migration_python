@@ -14,7 +14,8 @@ class Utils:
     def __make_batch_dir(batchVal):
         # type: (int) -> str
         """
-        Creates new batch directory name
+        Creates new batch directory name.
+
         :param batchVal: the counter for the batch
         :return: new diretory name
         """
@@ -26,6 +27,7 @@ class Utils:
         # type: (str, int) -> str
         """
         Creates and returns path of working directory.
+
         :param outdir: the base output directory
         :param batch: the count used to create a new sub-directory path.
         :return: string value for the new working directory that was created.
@@ -39,6 +41,7 @@ class Utils:
         # type: (str, int) -> str
         """
         Creates the saf sub-directory and returns path.
+
         :param workingdir: the current working directory that contains saf output directories.
         :param counter: the current item count
         :return: string value for the saf item directory that was created.
@@ -65,6 +68,7 @@ class Utils:
         # type: (int, int) -> int
         """
         Utility function for getting the final count of records loaded.
+
         :param batch: the count of saf sub-directories.
         :param counter: the current count of records loaded.
         :return: the final count, including records loaded in previous batches.

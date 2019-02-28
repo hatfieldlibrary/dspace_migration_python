@@ -15,6 +15,7 @@ class FetchBitstreams:
         # type: (str, str, int, int) -> int
         """
         Appends a new file name to the saf item contents file.
+
         :param current_dir: the current item saf directory.
         :param filename: the file name (string)
         :param error_count: the current error count
@@ -43,6 +44,7 @@ class FetchBitstreams:
         # type: (str, str, str, int) -> int
         """
         Fetches the thumbnail file and writes to the saf item directory.
+
         :param outfile: full path for the file to be written.
         :param link: link used to retrieve the file from contentdm.
         :param doc_title: the title of the current document (for error logging).
@@ -66,7 +68,8 @@ class FetchBitstreams:
     def __fetch_bitstream(outfile, link, doc_title, error_count):
         # type: (str, str, str, int) -> int
         """
-        Fetches single bitstream and writes to saf directory
+        Fetches single bitstream and writes to saf directory.
+
         :param outfile: the file name and output path for the bitstream
         :param link: the url to retrieve the bitstream
         :param doc_title: the title of the current document (dc)
@@ -100,6 +103,7 @@ class FetchBitstreams:
         """
         This function is used for compound objects. Compound objects do not download page bitstreams into
         dspace.  But a thumbnail image is still required.
+
         :param current_dir: the full path to the saf output directory
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
@@ -127,12 +131,13 @@ class FetchBitstreams:
                 print('%s --  Thumbnail %s proccessed with %s errors.' % (doc_title.text, thumbname, error_count))
 
     @staticmethod
-    def fetchBitStreams(current_dir, record, collection):
+    def fetch_bit_streams(current_dir, record, collection):
         # type: (str, object, str) -> None
         """
         Extract the bitstream url from metadata, fetch the bitstream, and add to simple archive format entry.
         If a thumbnail image url is available, repeat operation for the thumbnail. This function throws and error
         if called for a compound object.
+
         :param current_dir: the full path to the saf output directory
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name

@@ -13,6 +13,7 @@ class ExtractPageData:
         # type: (object, object) -> None
         """
         Adds master file location for each page to the metadata_local.xml saf output file.
+
         :param top: the dublin_core (local schema) element
         :param record: the etree element for the contentdm record
         """
@@ -39,6 +40,7 @@ class ExtractPageData:
         # type: (object) -> str
         """
         Returns full text extracted from cdm compound object pages.
+
         :param record: the etree element for the cdm record.
         :return: the full text of the item
         """

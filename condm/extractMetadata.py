@@ -15,9 +15,10 @@ class ExtractMetadata:
     def __process_iterable_map(parent_element, elements, element_map):
         # type: (object, object, dict) -> None
         """
-        Use this function to process any iterable list of etree elements.
-        (Provided that the element requires no special logic.) This method
-        adds the new sub-elements to the parent element.
+        Use this function to process an iterable list of etree elements using
+        a CONTENTdm to DSpace field map. This method adds new sub-elements to the
+        parent element (which will later be written to the saf dublin_core.xml).
+
         :param parent_element: the parent etree Element to which sub-elements will be added.
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.

@@ -63,7 +63,7 @@ class ExtractMetadata:
         dspace_local = Fields.dspace_local_field
         dspace_local_map = FieldMaps.local_field_map
 
-        metadata_local = ET.Element('metadata_local')
+        metadata_local = ET.Element('dublin_core')
         metadata_local.set('schema', 'local')
 
         cdmfullResolution = record.iterfind(cdm_structure['preservation_location'])

@@ -67,17 +67,16 @@ class ContentdmController:
 
 			# Capture dc metadata and write to archive
 			dc_metadata = metadata_extractor.extractMetadata(record)
-			file1 = open(current_dir + '/dublin_core.xml', 'w')
-			file1.write(ET.tostring(dc_metadata))
+			tree = ET.ElementTree(dc_metadata)
+			tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
 			if metadata_extractor.isSingleItem(record):
 				# single item, not a compound object!
 				try:
 					# Get bitstreams for single item and add to archives
 					FetchBitstreams.fetchBitStreams(current_dir, record, self.collection)
-				except RuntimeError as err:
-					print(err)
-			
+				except RuntimeError as err:					print(err)
+
 			else:
 				# A compound object.
 				# Create full-text file for compound object and add to saf directory.
@@ -88,19 +87,18 @@ class ContentdmController:
 				file3.write('file_1.txt')
 				file2.close()
 				file3.close()
-		
+
 				# This should be called after the full-text file has been added.
 				# It will retrieve the thumbnail for the compound object.
 				FetchBitstreams.fetchThumbnailOnly(current_dir, record, self.collection)
 
 			counter += 1
-			file1.close()
+
 
 			# Extract and write metadata to be imported via our local dspace schema.
-			file1 = open(current_dir + '/metadata_local.xml', 'w')
 			local_metadata = metadata_extractor.extractLocalMetadata(record)
-			file1.write(ET.tostring(local_metadata))
-			file1.close()
+			tree = ET.ElementTree(local_metadata)
+			tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
 
 		final_count = utils.getFinalCount(batch, counter)
 		print('%s records loaded'%(str(final_count)))

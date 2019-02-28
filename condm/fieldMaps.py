@@ -55,7 +55,7 @@ class FieldMaps:
             'qualifier': None
         },
         # From archives_images: <relation>http://archiveswest.orbiscascade.org/ark:/80444/xv81204</relation>
-        # Could be mapped to dsapce relation.uri. If that's what we need, then cdm field mapping should
+        # Could be mapped to dspace relation.uri. If that's what we need, then cdm field mapping should
         # be changed so we can easily identify the field after export.
         cdm_dc_field['relation']: {
             'element': dspace_dc_field['relation'],
@@ -81,6 +81,7 @@ class FieldMaps:
             'element': dspace_dc_field['rights'],
             'qualifier': None
         },
+        # Dspace creates it's own decription.provenance at import.
         cdm_dc_field['provenance']: {
             'element': dspace_dc_field['description'],
             'qualifier': dspace_dc_field['description_provenance_qualifier']

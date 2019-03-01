@@ -33,7 +33,7 @@ dictionary changes the **saf** output.
 
 Output is written to **saf** sub-directories, each containing up to 1000 items. Data in **saf** subdirectories has been
  imported into DSpace.  Records include images, PDF, and compound objects, each with thumbnails and 
-administrative metadata. To date, approximately 7000 items have been loaded.
+administrative metadata. To date, approximately 18000 items have been loaded. 02/28/2019
 
 Our data import tests are currently done with DSpace 6.  Our target repository will be DSpace 7.  We do not anticipate changes
 in the DSpace import interface between versions 6 and 7.

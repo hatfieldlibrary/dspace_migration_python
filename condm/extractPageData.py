@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import Element
+
 from fields import Fields
 
 
@@ -10,7 +12,7 @@ class ExtractPageData:
         pass
 
     def add_page_admin_data(self, top, record):
-        # type: (object, object) -> None
+        # type: (Element, Element) -> None
         """
         Adds master file location for each page to the metadata_local.xml saf output file.
 
@@ -37,7 +39,7 @@ class ExtractPageData:
                         master_el.text = title.text + ' master: ' + file_location.text
 
     def extract_text(self, record):
-        # type: (object) -> str
+        # type: (Element) -> str
         """
         Returns full text extracted from cdm compound object pages.
 

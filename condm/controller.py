@@ -15,6 +15,9 @@ class ContentdmController:
 		"""
 		Constructor.
 
+		:type output_directory: str
+		:type input_file: str
+		:type collection: str
 		:param collection: the Contentdm collection name (e.g. aphotos)
 		:param input_file: the xml file exported from Contentdm
 		:param output_directory: The parent simple archive format output directory
@@ -44,6 +47,7 @@ class ContentdmController:
 		counter = 0
 		batch = 0
 		working_dir = ''
+		error_count = 0
 
 		# open the input file for reading.
 		input_xml = open(file1, 'r')
@@ -54,6 +58,8 @@ class ContentdmController:
 		records = root.findall('./record')
 
 		for record in records:
+
+			doc_title = record.find('title').text
 	
 			# Each working directory will contain 1000 items.
 			# The working directories are labelled batch_1, batch_2 ...
@@ -70,34 +76,75 @@ class ContentdmController:
 			tree = ET.ElementTree(dc_metadata)
 			tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
+			# single item, not a compound object!
 			if metadata_extractor.is_single_item(record):
-				# single item, not a compound object!
+
 				try:
 					# Get bitstreams for single item and add to archives
 					FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection)
-				except RuntimeError as err:					print(err)
+				except RuntimeError as err:
+					error_count += 1
+					print(err)
+				except IOError as err:
+					error_count += 1
+					print('An error occurred retrieving bitstreams for: %s'% doc_title)
+					print('IO Error: {0}'.format(err))
+				except:
+					error_count += 1
+					print('An error occurred retrieving bitstreams for: %s'% doc_title)
+
 
 			else:
-				# A compound object.
-				# Create full-text file for compound object and add to saf directory.
-				extext = page_data_extractor.extract_text(record)
-				file2 = open(current_dir + '/file_1.txt', 'w')
-				file2.write(extext)
-				file3 = open(current_dir + '/contents', 'w')
-				file3.write('file_1.txt')
-				file2.close()
-				file3.close()
 
-				# This should be called after the full-text file has been added.
-				# It will retrieve the thumbnail for the compound object.
-				FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
+				try:
+					# A compound object.
+					# Create full-text file for compound object and add to saf directory.
+					extext = page_data_extractor.extract_text(record)
+					file2 = open(current_dir + '/file_1.txt', 'w')
+					file2.write(extext)
+					file3 = open(current_dir + '/contents', 'w')
+					file3.write('file_1.txt')
+					file2.close()
+					file3.close()
+				except IOError as err:
+					error_count += 1
+					print('An error occurred writing compound object data to saf for: %s'%doc_title)
+					print('IO Error: {0}'.format(err))
+				except:
+					error_count += 1
+					print('An error occurred writing compound object data to saf: %s'%doc_title)
+
+				try:
+					# This should be called after the full-text file has been added.
+					# It will retrieve the thumbnail for the compound object.
+					FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
+				except IOError as err:
+					error_count += 1
+					print('An error occurred retrieving thumbnail for: %s'% doc_title)
+					print('IO Error: {0}'.format(err))
+				except:
+					error_count += 1
+					print('An error occurred retrieving thumbnail for: %s'% doc_title)
 
 			counter += 1
 
 			# Extract and write metadata to be imported via our local dspace schema.
 			local_metadata = metadata_extractor.extract_local_metadata(record)
 			tree = ET.ElementTree(local_metadata)
-			tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
+
+			try:
+				tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
+			except IOError as err:
+				error_count += 1
+				print('An error occurred writing local metadata for: %s'% doc_title)
+				print('IO Error: {0}'.format(err))
+			except:
+				error_count += 1
+				print('An error occurred writing local metadata for: %s'% doc_title)
 
 		final_count = Utils.get_final_count(batch, counter)
-		print('%s records loaded'%(str(final_count)))
+
+		print('%s records loaded'%str(final_count))
+
+		if error_count > 0:
+			print'%s errors!'%str(error_count)

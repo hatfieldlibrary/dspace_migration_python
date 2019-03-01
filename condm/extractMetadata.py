@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
+from collections import Iterable
+from xml.etree.ElementTree import Element
+
 from extractPageData import ExtractPageData
 from fields import Fields
 from fieldMaps import FieldMaps
+from utils import Utils
 
 
 class ExtractMetadata:
@@ -13,7 +17,7 @@ class ExtractMetadata:
 
     @staticmethod
     def __process_iterable_map(parent_element, elements, element_map):
-        # type: (object, object, dict) -> None
+        # type: (Element, Iterable, dict) -> None
         """
         Use this function to process a list of etree elements using
         a CONTENTdm to DSpace field map. This method adds new sub-elements to the
@@ -33,6 +37,8 @@ class ExtractMetadata:
                         # cdm field dictionary and is used in the hack that captures (some)
                         # EADID local fields. See extractLocalMetadata() below.
                         if element.tag != cdm_dc['unmapped']:
+                            # Sometimes CONTENTdm exports encoded text that DSpace doesn't handle.
+                            element = Utils.correct_text_encoding(element)
                             dspace_element = element_map[element.tag]
                             sub_element = ET.SubElement(parent_element, 'dcvalue')
                             sub_element.set('element', dspace_element['element'])
@@ -55,7 +61,7 @@ class ExtractMetadata:
         return page is None
 
     def extract_local_metadata(self, record):
-        # type: (object) -> object
+        # type: (Element) -> Element
         """
         This method extracts the metadata to add metadata_local.xml in the saf directory.
         Data fields are mapped to the local metadata registry configured for our dspace instance.
@@ -90,7 +96,7 @@ class ExtractMetadata:
         return metadata_local
 
     def extract_metadata(self, record):
-        # type: (object) -> object
+        # type: (Element) -> Element
         """
         Extracts data that will be added to the dublin_core.xml file in the saf item directory.
 

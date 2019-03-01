@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import sys
 import os
+from _elementtree import Element
 
 
 class Utils:
@@ -77,3 +77,20 @@ class Utils:
             return counter
         else:
             return ((batch - 1) * 1000) + counter
+
+    @staticmethod
+    def correct_text_encoding(element):
+        # type: (Element) -> object
+        """
+        CONTENTdm is sometimes exporting encoded characters that DSpace does not
+        convert properly. If that problem can't be fixed in the software, use this
+        function to make substitutions before importing to DSpace.
+
+        :param element: The etree element
+        :return: The etree element after substitution
+        """
+
+        # apostrophe
+        element.text.replace('&amp;#x27', '&apos;')
+
+        return element

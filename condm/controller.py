@@ -93,7 +93,6 @@ class ContentdmController:
 					error_count += 1
 					print('An error occurred retrieving bitstreams for: %s. See %s'%(doc_title, current_dir))
 
-
 			else:
 
 				try:

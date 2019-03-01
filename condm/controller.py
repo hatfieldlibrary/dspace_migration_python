@@ -87,11 +87,11 @@ class ContentdmController:
 					print(err)
 				except IOError as err:
 					error_count += 1
-					print('An error occurred retrieving bitstreams for: %s'% doc_title)
+					print('An error occurred retrieving bitstreams for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
 				except:
 					error_count += 1
-					print('An error occurred retrieving bitstreams for: %s'% doc_title)
+					print('An error occurred retrieving bitstreams for: %s. See %s'%(doc_title, current_dir))
 
 
 			else:
@@ -108,11 +108,11 @@ class ContentdmController:
 					file3.close()
 				except IOError as err:
 					error_count += 1
-					print('An error occurred writing compound object data to saf for: %s'%doc_title)
+					print('An error occurred writing compound object data to saf for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
 				except:
 					error_count += 1
-					print('An error occurred writing compound object data to saf: %s'%doc_title)
+					print('An error occurred writing compound object data to saf: %s. See %s'%(doc_title, current_dir))
 
 				try:
 					# This should be called after the full-text file has been added.
@@ -120,11 +120,11 @@ class ContentdmController:
 					FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
 				except IOError as err:
 					error_count += 1
-					print('An error occurred retrieving thumbnail for: %s'% doc_title)
+					print('An error occurred retrieving thumbnail for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
 				except:
 					error_count += 1
-					print('An error occurred retrieving thumbnail for: %s'% doc_title)
+					print('An error occurred retrieving thumbnail for: %s. See %s'%(doc_title, current_dir))
 
 			counter += 1
 
@@ -136,11 +136,11 @@ class ContentdmController:
 				tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
 			except IOError as err:
 				error_count += 1
-				print('An error occurred writing local metadata for: %s'% doc_title)
+				print('An error occurred writing local metadata for: %s. See %s'%(doc_title, current_dir))
 				print('IO Error: {0}'.format(err))
 			except:
 				error_count += 1
-				print('An error occurred writing local metadata for: %s'% doc_title)
+				print('An error occurred writing local metadata for: %s. See %s'%(doc_title, current_dir))
 
 		final_count = Utils.get_final_count(batch, counter)
 

@@ -91,6 +91,9 @@ class Utils:
         """
 
         # apostrophe
-        element.text.replace('&amp;#x27', '&apos;')
+        element.text = element.text.replace('&amp;#x27', '&apos;')
+
+        # some contentdm transcriptions include html markup for line breaks
+        element.text = element.text.replace('lt;br gt;', '')
 
         return element

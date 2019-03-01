@@ -3,6 +3,7 @@
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element
 
+from condm.utils import Utils
 from fields import Fields
 
 
@@ -26,7 +27,6 @@ class ExtractPageData:
         pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])
 
         for page in pages_el:
-
             title = page.find(cdm_struc['compound_object_page_title'])
             page_files = page.iterfind(cdm_struc['compound_object_page_file'])
             for file_el in page_files:
@@ -55,6 +55,7 @@ class ExtractPageData:
             page_el = page.find(cdm_struc['compound_object_page_text'])
             if page_el is not None:
                 if page_el.text is not None:
+                    page_el = Utils.correct_text_encoding(page_el)
                     fulltext += page_el.text
 
         return fulltext

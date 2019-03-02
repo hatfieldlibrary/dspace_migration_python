@@ -1,34 +1,115 @@
 #!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
+from collections import Iterable
+from xml.etree.ElementTree import Element
 
-def extractMetadata(filename):
+from extractPageData import ExtractPageData
+from fields import Fields
+from fieldMaps import FieldMaps
+from utils import Utils
 
-        file = open(filename,'r')
-        id = filename[15:-4]
-	tree = ET.parse(file)
-	root = tree.getroot()
-	title = root[0].text
-	print title
-	vol = root[1].text
-	issue = root[2].text
-	date = root[3].text
-	top = ET.Element('dublin_core');
-	# top.set('schema','dc')
-	titleEL = ET.SubElement(top, 'dcvalue')
-	titleEL.set('element','title')
-	titleEL.text = title;
-	volumeEL = ET.SubElement(top, 'dcvalue')
-        volumeEL.set('element','description')
-	volumeEL.text = vol
-        issueEL = ET.SubElement(top, 'dcvalue')
-        issueEL.set('element','description')
-	issueEL.text = issue;
-        dateEL = ET.SubElement(top, 'dcvalue')
-        dateEL.set('element','date')
-	dateEL.set('qualifier','issued')
-	dateEL.text = date
-	identifierEL = ET.SubElement(top, 'dcvalue')
-	identifierEL.set('element','identifier')
-	identifierEL.text = id
-	return top	
+
+class ExtractMetadata:
+
+    def __init__(self):
+        self.extract_page = ExtractPageData()
+
+    @staticmethod
+    def __process_iterable_map(parent_element, elements, element_map):
+        # type: (Element, Iterable, dict) -> None
+        """
+        Use this function to process a list of etree elements using
+        a CONTENTdm to DSpace field map. This method adds new sub-elements to the
+        parent element (which will later be written to the saf dublin_core.xml).
+
+        :param parent_element: the parent etree Element to which sub-elements will be added.
+        :param elements: the list of etree elements to read.
+        :param element_map: the dictionary for cdm to dspace mapping.
+        """
+        cdm_dc = Fields.mets_mods_field
+        if elements is not None:
+            for element in elements:
+                if element.text is not None:
+                    # It makes no sense add unmapped fields to dspace dublin core.
+                    # These need to be exported from cdm differently if we want them.
+                    # However, the 'unmapped' key has been included (temporarily?) in the
+                    # cdm field dictionary and is used in the hack that captures (some)
+                    # EADID local fields. See extractLocalMetadata() below.
+                    if element.tag != cdm_dc['unmapped']:
+                        # Sometimes CONTENTdm exports encoded text that DSpace doesn't handle.
+                        element = Utils.correct_text_encoding(element)
+                        dspace_element = element_map[element.tag]
+                        sub_element = ET.SubElement(parent_element, 'dcvalue')
+                        sub_element.set('element', dspace_element['element'])
+                        if dspace_element['qualifier'] is not None:
+                            sub_element.set('qualifier', dspace_element['qualifier'])
+                        sub_element.text = element.text
+
+    @staticmethod
+    def is_single_item(record):
+        """
+        Tests for compound object. If a page sub-element does not exist, this is a
+        single item.
+
+        :param record: the etree element for the contentdm record.
+        :return: boolean true if a single item and false if compound object.
+        """
+        structure = record.find('structure')
+        page = structure.find('.//page')
+
+        return page is None
+
+    def extract_local_metadata(self, record):
+        # type: (Element) -> Element
+        """
+        This method extracts the metadata to add metadata_local.xml in the saf directory.
+        Data fields are mapped to the local metadata registry configured for our dspace instance.
+
+        :param record: etree Element representing the contentdm record.
+        :return: a new etree Element representing data that will be written to metadata_local.xml.
+        """
+        mods_fields = Fields.mets_mods_field
+        mets_structure = Fields.mets_structural_elements
+        dspace_local = Fields.dspace_local_field
+        dspace_local_map = FieldMaps.local_field_map
+
+        metadata_local = ET.Element('dublin_core')
+        metadata_local.set('schema', 'local')
+
+        self.extract_page.add_page_admin_data(metadata_local, record)
+
+        return metadata_local
+
+    def extract_metadata(self, record):
+        # type: (Element) -> Element
+        """
+        Extracts data that will be added to the dublin_core.xml file in the saf item directory.
+
+        :param record: the etree Element for the contentdm record.
+        :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
+        """
+        cdm_dc = Fields.mets_mods_field
+        dspace_dc = Fields.dspace_dc_field
+        dc_field_map = FieldMaps.mods_field_map
+
+        dublin_core = ET.Element('dublin_core')
+        dublin_core.set('schema', 'dc')
+
+        # Because this uses sorted keys, the field order is alphabetical.
+        cdm_keys = sorted(cdm_dc.keys())
+        for key in cdm_keys:
+            if key in cdm_keys:
+                elements = record.iterfind(cdm_dc[key])
+                if key == cdm_dc['format']:
+                    if not self.is_single_item(record):
+                        # Sets the format for compound objects.
+                        cpdformat = ET.SubElement(dublin_core, 'dcvalue')
+                        cpdformat.set('element', dspace_dc['format'])
+                        cpdformat.text = 'Compound'
+                    else:
+                        self.__process_iterable_map(dublin_core, elements, dc_field_map)
+                else:
+                    self.__process_iterable_map(dublin_core, elements, dc_field_map)
+
+        return dublin_core

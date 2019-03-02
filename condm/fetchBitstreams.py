@@ -148,8 +148,24 @@ class FetchBitstreams:
                 cdmfile_el = record.find(cdm_struc['filename'])
                 thumb_url_el = record.find(cdm_struc['thumbnail'])
 
+                # NOTE: This test may need to be modified or removed if eventually
+                # we need to treat some cpd files as image records with multiple
+                # bitstreams.
+
                 if cdmfile_el.text.find('cpd') != -1:
                     raise RuntimeError('ERROR: Requesting bitstreams for a compound object.')
+
+                # The fetch_bitstream and append_to_contents calls below will need to be embedded in
+                # a loop if later we decide that simple compound objects should be treated as dspace
+                # items with multiple bitsteams. In that case, we will need to gather the
+                # ids for image links into a list list (or better, use the uri's provided
+                # in the xml by removing the xml encoding for the ampersand. e.g. the __create_
+                # bitstream_link method would do a string replacement).
+                #
+                # As mentioned above, a compound object would typically be prevented from reaching
+                # this method. That means that there will need to be some hook in the metadata that tells the
+                # controller to fetch bitstreams for a compound object rather than use the default text
+                # only strategy.
 
                 # cdm link for bitstream
                 link = FetchBitstreams.__create_bitstream_link(collection, cdmid_el.text)

@@ -3,7 +3,7 @@
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element
 
-from condm.utils import Utils
+from shared.utils import Utils
 from fields import Fields
 
 

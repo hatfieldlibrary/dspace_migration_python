@@ -143,10 +143,7 @@ class FetchBitstreams:
         else:
             if cdmid_el is not None:
 
-                error_count = 0
-                doc_title_el = record.find(cdm_dc['title'])
                 cdmfile_el = record.find(cdm_struc['filename'])
-                thumb_url_el = record.find(cdm_struc['thumbnail'])
 
                 # NOTE: This test may need to be modified or removed if eventually
                 # we need to treat some cpd files as image records with multiple
@@ -154,6 +151,10 @@ class FetchBitstreams:
 
                 if cdmfile_el.text.find('cpd') != -1:
                     raise RuntimeError('ERROR: Requesting bitstreams for a compound object.')
+
+                error_count = 0
+                doc_title_el = record.find(cdm_dc['title'])
+                thumb_url_el = record.find(cdm_struc['thumbnail'])
 
                 # The fetch_bitstream and append_to_contents calls below will need to be embedded in
                 # a loop if later we decide that simple compound objects should be treated as dspace

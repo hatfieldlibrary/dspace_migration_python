@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 from extractMetadata import ExtractMetadata
 from fetchBitstreams import FetchBitstreams
 from extractPageData import ExtractPageData
-from utils import Utils
+from shared.utils import Utils
 
 
 class ContentdmController:
@@ -89,29 +89,40 @@ class ContentdmController:
 					error_count += 1
 					print('An error occurred retrieving bitstreams for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
-				except:
+				except Exception as err:
 					error_count += 1
 					print('An error occurred retrieving bitstreams for: %s. See %s'%(doc_title, current_dir))
+					print('Exception: {0}'.format(err))
 
 			else:
-
 				try:
 					# A compound object.
 					# Create full-text file for compound object and add to saf directory.
 					extext = page_data_extractor.extract_text(record)
 					file2 = open(current_dir + '/file_1.txt', 'w')
 					file2.write(extext)
-					file3 = open(current_dir + '/contents', 'w')
-					file3.write('file_1.txt')
 					file2.close()
-					file3.close()
 				except IOError as err:
 					error_count += 1
 					print('An error occurred writing compound object data to saf for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
-				except:
+				except Exception as err:
 					error_count += 1
 					print('An error occurred writing compound object data to saf: %s. See %s'%(doc_title, current_dir))
+					print('Exception: {0}'.format(err))
+
+				try:
+					file3 = open(current_dir + '/contents', 'w')
+					file3.write('file_1.txt')
+					file3.close()
+				except IOError as err:
+					error_count += 1
+					print('An error occurred writing the saf contents for: %s. See %s'%(doc_title, current_dir))
+					print('IO Error: {0}'.format(err))
+				except Exception as err:
+					error_count += 1
+					print('An error occurred writing the saf contents for: %s. See %s'%(doc_title, current_dir))
+					print('Exception: {0}'.format(err))
 
 				try:
 					# This should be called after the full-text file has been added.
@@ -121,9 +132,10 @@ class ContentdmController:
 					error_count += 1
 					print('An error occurred retrieving thumbnail for: %s. See %s'%(doc_title, current_dir))
 					print('IO Error: {0}'.format(err))
-				except:
+				except Exception as err:
 					error_count += 1
 					print('An error occurred retrieving thumbnail for: %s. See %s'%(doc_title, current_dir))
+					print('Exception: {0}'.format(err))
 
 			counter += 1
 
@@ -137,9 +149,10 @@ class ContentdmController:
 				error_count += 1
 				print('An error occurred writing local metadata for: %s. See %s'%(doc_title, current_dir))
 				print('IO Error: {0}'.format(err))
-			except:
+			except Exception as err:
 				error_count += 1
 				print('An error occurred writing local metadata for: %s. See %s'%(doc_title, current_dir))
+				print('Exception: {0}'.format(err))
 
 		final_count = Utils.get_final_count(batch, counter)
 

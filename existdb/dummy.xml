@@ -1,0 +1,63 @@
+<mets xmlns:premis="http://www.oclc.org/premis" xmlns="http://www.loc.gov/METS/" xmlns:mods="http://www.loc.gov/mods/v3"
+      xmlns:ndnp="http://www.loc.gov/ndnp" xmlns:mix="http://www.loc.gov/mix/"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" TYPE="urn:library-of-congress:ndnp:mets:newspaper:issue"
+      PROFILE="urn:library-of-congress:mets:profiles:ndnp:issue:v1.5"
+      LABEL="Willamette Collegian (Salem, OR), 1875-11-01" xsi:schemaLocation="
+      http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version17/mets.v1-7.xsd
+      http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+
+    <!-- This is a frankenstein record illustrating the range of possible elements and attributes. -->
+
+    <!-- Elements that may take default values: accessCondition, languageTerm:text, typeOfResource
+         statement of responsibility -->
+
+    <dmdSec ID="issueModsBib">
+        <mdWrap MDTYPE="MODS" LABEL="Issue metadata">
+            <xmlData>
+                <mods:mods>
+                    <mods:identifier type="doi">https://doi.org/10.31096/WUA023-Collegian-18751101</mods:identifier>
+                    <mods:relatedItem type="host">
+                        <mods:identifier type="lccn">sn00000001</mods:identifier>
+                        <mods:part>
+                            <mods:detail type="volume">
+                                <mods:number>1</mods:number>
+                            </mods:detail>
+                            <mods:detail type="issue">
+                                <mods:number>3</mods:number>
+                            </mods:detail>
+                            <mods:detail type="edition">
+                                <mods:number>1</mods:number>
+                            </mods:detail>
+                        </mods:part>
+                    </mods:relatedItem>
+                    <mods:accessCondition>All rights reserved by Willamette University</mods:accessCondition>
+                    <mods:language>
+                        <mods:languageTerm type="text">English</mods:languageTerm>
+                        <mods:languageTerm type="code" authority="iso639-2b">eng</mods:languageTerm>
+                    </mods:language>
+                    <mods:note type="statement of responsibility">Willamette University</mods:note>
+                    <mods:originInfo>
+                        <mods:dateIssued>1913</mods:dateIssued>
+                        <mods:dateIssued encoding="w3cdtf">1865-07-20</mods:dateIssued>
+                        <mods:dateIssued encoding="temper">1971</mods:dateIssued>
+                        <mods:dateIssued qualifier="approximate">1971</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:titleInfo lang="English">
+                        <mods:title>Wallulah</mods:title>
+                        <mods:subTitle>1913</mods:subTitle>
+                    </mods:titleInfo>
+                    <mods:typeOfResource>text</mods:typeOfResource>
+                    <mods:originInfo>
+                        <mods:dateIssued encoding="iso8601">1875-11-01</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:physicalDescription>
+                        <mods:extent>5 1/4" x 4 1/4"</mods:extent>
+                    </mods:physicalDescription>
+                    <mods:note type="noteAboutReproduction">Present</mods:note>
+                </mods:mods>
+
+            </xmlData>
+        </mdWrap>
+    </dmdSec>
+</mets>

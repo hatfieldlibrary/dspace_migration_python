@@ -43,6 +43,7 @@ class Fields:
         'preservation_location': 'fullResolution',
         'compound_object_container': 'structure',
         'compound_object_page': 'page',
+        'compound_object_page_pointer': 'pageptr',
         'compound_object_page_title': 'pagetitle',
         'compound_object_page_file': 'pagefile',
         'compound_object_page_file_type': 'pagefiletype',

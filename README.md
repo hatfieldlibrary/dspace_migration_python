@@ -10,6 +10,10 @@ option.
 3. The local DSpace metadata fields assigned to administrative and application-specific metadata are provisional.
 4. We have not considered workflow details for during and after the migration period.
 
+For exist-db, metadata is extracted from the mets file.  The current implementation should extract all relevant
+data and add default values as defined in configuration.  Full text is extracted from the fulltext directory
+for the collection.
+
 For **saf** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 
 ## Code Usage 
@@ -21,13 +25,22 @@ All subsequent work is done by python classes that have been coded separately fo
 
 ## Metadata
 
+### CONTENTdm
 The _FieldMaps_ class (fieldMaps.py) uses python dictionaries to define mapping between CONTENTdm and DSpace qualified
 Dublin Core and local metadata (as defined in the DSpace metadata registry). The _Fields_ class (fields.py) uses python dictionaries
 to define field names and qualifiers for both CONTENTdm and DSpace records. Dictionaries in the _Fields_ class are used in 
 the _FieldMaps_ class.
 
-Processing code uses these dictionaries to read CONTENTdm input and create the DSpace import files. Modifying a 
-dictionary changes the **saf** output. 
+The code uses these dictionaries to read CONTENTdm input and create the saf output files. Modifying a dictionary changes 
+the **saf** xml output. 
+
+### Existdb
+Extracting metadata from mets is slightly more complex. Data is extracted based on elements, attributes and attribute
+values that are defined in the _ExistDbFields_ class. The mods metadata can be sparse, so a few default values are 
+defined in the _DefaultFieldValueMap_ class. All exported records will include these default values if they are not
+provided in the mets.
+
+As with CONTENTdm, Modifying a dictionary changes the **saf** xml output. 
 
 ## Status
 

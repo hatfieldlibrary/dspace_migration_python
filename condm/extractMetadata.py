@@ -7,7 +7,7 @@ from xml.etree.ElementTree import Element
 from extractPageData import ExtractPageData
 from fields import Fields
 from fieldMaps import FieldMaps
-from utils import Utils
+from shared.utils import Utils
 
 
 class ExtractMetadata:

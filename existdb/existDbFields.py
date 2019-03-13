@@ -41,7 +41,7 @@ class ExistDbFields:
         'mets_header_element': 'mets:metsHdr',
         'mets_agent_element': 'mets:agent',
         'mets_agent_name_element': 'mets:name',
-        'descriptive_metadata_section_element': 'mets:dmdSec',
+        'descriptive_metadata_section': 'mets:dmdSec',
         'mods_section_element': 'mods:mods'
     }
 
@@ -51,13 +51,21 @@ class ExistDbFields:
         'item_details_element': 'detail',
         'date_issued_element': 'dateIssued',
         'note_element': 'note',
+        'statement_responsibility_element': 'note',
         'access_conditions_element': 'accessCondition',
         'language_element': 'languageTerm',
         'sub_title_element': 'subTitle',
         'physical_description_element': 'physicalDescription',
         'physical_extent_element': 'extent',
         'resource_type_element': 'typeOfResource',
-        'statement_responsibility_element': 'note'
+    }
+
+    switch_tag = {
+        'statement_of_responsibility': {
+            'id': 'statementresponsibility',
+            'exist': 'note',
+            'dspace': 'description'
+        }
     }
 
     # The elements and attributes to read from the existdb mets file.
@@ -123,7 +131,9 @@ class ExistDbFields:
         'title_alt_qualifier': 'alternative',
         'creator': 'creator',
         'description': 'description',
+        'description_statement_of_responsibility': 'description',
         'description_provenance_qualifier': 'provenance',
+        'description_statement_responsibility_qualifier': 'statementofresponsibility',
         'date': 'date',
         'date_created_qualifier': 'created',
         'subject': 'subject',

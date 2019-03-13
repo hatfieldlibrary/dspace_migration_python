@@ -13,9 +13,10 @@ class ExistDbFieldMaps:
     mets_structural_elements = ExistDbFields.mets_structural_elements
     processor_field = ExistDbFields.processor_mods_elements
     dspace_dc_field = ExistDbFields.dspace_dc_field
+    switch_tag = ExistDbFields.switch_tag
 
     # Defines how to map mets metadata to dspace dublin core.
-    mods_field_map = {
+    ds_field_map = {
 
         mets_structural_elements['label_attr']: {
             'element': dspace_dc_field['title'],
@@ -45,9 +46,10 @@ class ExistDbFieldMaps:
             'element': dspace_dc_field['format'],
             'qualifier': dspace_dc_field['format_extent_qualifier'],
         },
-        processor_field['note_element']: {
-            'element': dspace_dc_field['source'],
-            'qualifier': None
+        # This the switch to set the dspace element name (in this case, the element is "description."
+        switch_tag['statement_of_responsibility'].get('id'): {
+            'element': switch_tag['statement_of_responsibility'].get('dspace'),
+            'qualifier': dspace_dc_field['description_statement_responsibility_qualifier']
         },
         processor_field['item_details_element']: {
             'element': 'identifier',

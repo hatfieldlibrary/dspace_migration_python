@@ -157,7 +157,7 @@ class FetchBitstreams:
                 thumb_url_el = record.find(cdm_struc['thumbnail'])
 
                 # The fetch_bitstream and append_to_contents calls below will need to be embedded in
-                # a loop if later we decide that simple compound objects should be treated as dspace
+                # a loop if we decide that simple compound objects should be treated as dspace
                 # items with multiple bitsteams. In that case, we will need to gather the
                 # ids for image links into a list list (or better, use the uri's provided
                 # in the xml by removing the xml encoding for the ampersand. e.g. the __create_

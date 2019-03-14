@@ -31,6 +31,7 @@ class Fields:
         'relation_ispartof': 'isPartOf',
         'rights': 'rights',
         'relation': 'relation',
+        'relation_requires': 'requires',
         'provenance': 'provenance',
         'type': 'type',
     }

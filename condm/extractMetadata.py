@@ -117,10 +117,22 @@ class ExtractMetadata:
                 elements = record.iterfind(cdm_dc[key])
                 if key == cdm_dc['format']:
                     if not self.is_single_item(record):
-                         # Sets the format for compound objects.
+
+                         # Sets the format element for compound objects.
                         cpdformat = ET.SubElement(dublin_core, 'dcvalue')
                         cpdformat.set('element', dspace_dc['format'])
                         cpdformat.text = 'Compound'
+
+                        # Rather than rely on the CONTENTdm notion of a compound object
+                        # to control our application logic, we should add a new field --
+                        # relation:requires -- and use it to specify the data repository
+                        # that is required to view the item. Currently, this is 'existdb'
+                        # The initial batch of test records was exported without this element.
+                        require_relation = ET.SubElement(dublin_core, 'dcvalue')
+                        require_relation.set('element', dspace_dc['require'])
+                        require_relation.set('qualifier', dspace_dc['require_relation'])
+                        require_relation.text = 'existdb'
+
                     else:
                         self.__process_iterable_map(dublin_core, elements, dc_field_map)
                 else:

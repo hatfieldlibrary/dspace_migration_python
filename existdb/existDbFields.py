@@ -49,6 +49,7 @@ class ExistDbFields:
     processor_mods_elements = {
         'identifier_element': 'identifier',
         'item_details_element': 'detail',
+        'item_number_element': 'number',
         'date_issued_element': 'dateIssued',
         'note_element': 'note',
         'statement_responsibility_element': 'note',
@@ -58,14 +59,6 @@ class ExistDbFields:
         'physical_description_element': 'physicalDescription',
         'physical_extent_element': 'extent',
         'resource_type_element': 'typeOfResource',
-    }
-
-    switch_tag = {
-        'statement_of_responsibility': {
-            'id': 'statementresponsibility',
-            'exist': 'note',
-            'dspace': 'description'
-        }
     }
 
     # The elements and attributes to read from the existdb mets file.
@@ -84,7 +77,7 @@ class ExistDbFields:
         mets_mods_elements['item_details_element']: {
             'element': mets_mods_elements['item_details_element'],
             'attr': mets_mods_element_attrs['type_attr'],
-            'attr_val': ['volume']
+            'attr_val': ['volume', 'issue', 'edition']
         },
         mets_mods_elements['access_conditions_element']: {
             'element': mets_mods_elements['access_conditions_element'],
@@ -136,9 +129,11 @@ class ExistDbFields:
         'description_statement_responsibility_qualifier': 'statementofresponsibility',
         'date': 'date',
         'date_created_qualifier': 'created',
+        'date_issued_qualifier': 'issued',
         'subject': 'subject',
         'source': 'source',
         'relation': 'relation',
+        'relation_requires': 'requires',
         'relation_uri_qualifier': 'uri',
         'relation_ispartof_qualifier': 'ispartof',
         'relation_isformatof_qualifier': 'isformatof',
@@ -146,6 +141,7 @@ class ExistDbFields:
         'coverage_spatial_qualifier': 'spatial',
         'language': 'language',
         'identifier': 'identifier',
+        'identifier_exist_id_attr': 'other',
         'citation_qualifier': 'citation',
         'publisher': 'publisher',
         'type': 'type',

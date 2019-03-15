@@ -51,7 +51,7 @@ class ExtractMetadata:
         :param element: the details element
         """
         citation_type = element.attrib['type']
-        if element.text is not None:
+        if element[0].text is not None:
             if citation_type == 'volume':
                 self.citation += 'volume ' + element[0].text
             if citation_type == 'issue':
@@ -97,17 +97,14 @@ class ExtractMetadata:
                     if element.tag.startswith("{"):
                         element.tag = element.tag.split('}', 1)[1]
 
+                    # citation
                     if element.tag == processor_field['item_details_element']:
                         # Accumulate citation information in details elements, to be added at the
                         # end of this loop.
-                        # citation_type = element.attrib['type']
-                        # The collegian contains at least one item for which the
-                        # element contains no text. It seems best to avoid
-                        # the issue (not throw an error). But I will log to
-                        # console.
                         if element[0].text is not None:
                             self.__set_citation(element)
 
+                    # statement of responsibility
                     elif element.tag == processor_field['note_element']:
                         # Note elements contain statement of responsibility (which maps to a dspace dublin
                         # core field)
@@ -121,8 +118,11 @@ class ExtractMetadata:
                             self.add_sub_element(parent_element,
                                                  element_map[self.switch_tag['statement_of_responsibility'].get('id')],
                                                  element.text)
+
+                    # Although not implemented, we may eventually want to add language:iso
+
                     else:
-                        # Just add the new sub-element with no attributes.
+                        # Just add the new sub-element.
                         self.add_sub_element(parent_element, element_map[element.tag], element.text)
 
     def __add_default_metadata(self, dublin_core):

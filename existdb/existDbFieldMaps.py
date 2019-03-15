@@ -14,6 +14,8 @@ class ExistDbFieldMaps:
     processor_field = ExistDbFields.processor_mods_elements
     dspace_dc_field = ExistDbFields.dspace_dc_field
 
+    # Dspace mapping keys can be mets elements (e.g. dateIssued) or unique
+    # keys defined below.
     switch_tag = {
         'statement_of_responsibility': {
             # Use this key to lookup DC mapping for statement of responsibility.

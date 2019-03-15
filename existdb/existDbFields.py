@@ -45,7 +45,7 @@ class ExistDbFields:
         'mods_section_element': 'mods:mods'
     }
 
-    # For subsequent processing,it's convenient to have a dictionary that excludes the namespace.
+    # For subsequent processing it's convenient to have a dictionary that excludes the namespace.
     processor_mods_elements = {
         'identifier_element': 'identifier',
         'item_details_element': 'detail',

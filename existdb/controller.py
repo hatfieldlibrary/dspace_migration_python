@@ -105,6 +105,9 @@ class ExistController:
             tree = ET.ElementTree(dc_metadata)
             tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
+            # Temporary hack for Wallulah processing. Should not be needed with updated fulltext file names.
+            # item = item_id + '.xml'
+
             # Extract the full text
             fulltext = page_data_extractor.extract_text(os.path.join(text_dir + '/' + item))
 

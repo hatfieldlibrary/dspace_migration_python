@@ -75,6 +75,7 @@ class ExtractMetadata:
 
             # Use tags without namespace.
             processor_field = self.tag_names.processor_mods_elements
+            attribute_names = self.tag_names.mets_mods_element_attrs
 
             # Switches between exist and dspace field names.
             #
@@ -120,7 +121,14 @@ class ExtractMetadata:
                                                  element.text)
 
                     # Although not implemented, we may eventually want to add language:iso
-
+                    elif element.tag == processor_field['language_element']:
+                        # If the authority attribute exists, add iso qualifier to dspace language element.
+                        if attribute_names['authority_attr'] in element.attrib:
+                            self.add_sub_element(parent_element,
+                                                element_map[self.switch_tag['language_iso'].get('id')],
+                                                element.text)
+                        else:
+                            self.add_sub_element(parent_element, element_map[element.tag], element.text)
                     else:
                         # Just add the new sub-element.
                         self.add_sub_element(parent_element, element_map[element.tag], element.text)

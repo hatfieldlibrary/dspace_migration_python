@@ -140,6 +140,7 @@ class ExistDbFields:
         'coverage': 'coverage',
         'coverage_spatial_qualifier': 'spatial',
         'language': 'language',
+        'language_iso_qualifier': 'iso',
         'identifier': 'identifier',
         'identifier_exist_id_attr': 'other',
         'citation_qualifier': 'citation',

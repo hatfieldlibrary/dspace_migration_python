@@ -35,6 +35,9 @@ class ExistDbFieldMaps:
             # will be used to tell the dspace angular client where item
             # can be found.  (We could also embed the base or full url here.)
             'id': 'uses_exist_db_relation'
+        },
+        'language_iso': {
+            'id': 'language_iso_qualifier'
         }
     }
 
@@ -74,6 +77,10 @@ class ExistDbFieldMaps:
         processor_field['language_element']: {
             'element': dspace_dc_field['language'],
             'qualifier': None
+        },
+        switch_tag['language_iso'].get('id'): {
+            'element': dspace_dc_field['language'],
+            'qualifier': dspace_dc_field['language_iso_qualifier']
         },
         processor_field['physical_extent_element']: {
             'element': dspace_dc_field['format'],

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import re
 import xml.etree.ElementTree as ET
 
 from extractMetadata import ExtractMetadata
@@ -11,10 +12,11 @@ from shared.utils import Utils
 
 class ContentdmController:
 
+    error_count = 0
+
     def __init__(self, collection, input_file, output_directory):
         """
         Constructor.
-
         :type output_directory: str
         :type input_file: str
         :type collection: str
@@ -25,6 +27,81 @@ class ContentdmController:
         self.collection = collection
         self.input = input_file
         self.output = output_directory
+
+    @staticmethod
+    def extract_full_text(record, current_dir, doc_title, page_data_extractor):
+        # type (Element, str, str, ExtractPageData) -> bool
+        """
+        Attempts to extract full text from a compound object record and writes
+        data to saf directory if found. Returns True if full text was found.
+        :param record: the exported contentdm record
+        :param current_dir: the output directory
+        :param doc_title: the title of the item
+        :param page_data_extractor: an instance of the extractor class.
+        :return:
+        """
+        regex = re.compile('[a-z]')
+        try:
+            # A compound object.
+            # Create full-text file for compound object and add to saf directory.
+            full_text_data = page_data_extractor.extract_text(record)
+            if regex.search(full_text_data) is not None:
+                file2 = open(current_dir + '/file_1.txt', 'w')
+                file2.write(full_text_data)
+                file2.close()
+                return True
+
+        except IOError as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing compound object data to saf for: %s. See %s' % (
+                doc_title, current_dir))
+            print('IO Error: {0}'.format(err))
+        except Exception as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing compound object data to saf: %s. See %s' % (
+                doc_title, current_dir))
+            print('Exception: {0}'.format(err))
+
+    @staticmethod
+    def write_contents_file(current_dir, doc_title):
+        # type (str, str) -> None
+        """
+        Writes the full text file name (file_1.txt) to the saf contents file.
+        :param current_dir: output directory
+        :param doc_title: title of the record being processed.
+        """
+        try:
+            FetchBitstreams.append_to_contents(current_dir, 'file_1.txt', 0)
+
+        except IOError as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+            print('IO Error: {0}'.format(err))
+        except Exception as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+            print('Exception: {0}'.format(err))
+
+    @staticmethod
+    def append_contents_file(current_dir, doc_title):
+        # type (str, str) -> None
+        """
+         Appends the full text file name (file_1.txt) to the saf contents file.
+        :param current_dir: output directory
+        :param doc_title: title of the record being processed.
+        """
+        try:
+            FetchBitstreams.append_to_contents(current_dir, 'file_1.txt', 1)
+
+        except IOError as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+            print('IO Error: {0}'.format(err))
+        except Exception as err:
+            ContentdmController.error_count += 1
+            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+            print('Exception: {0}'.format(err))
+
 
     def process_records(self):
         """
@@ -37,7 +114,7 @@ class ContentdmController:
         """
         base_directory = os.getcwd()
         # The input file.
-        file1 = base_directory + '/condm/data/' + self.input
+        input_file = base_directory + '/condm/data/' + self.input
         # The parent output directory.
         out_dir = base_directory + '/condm/saf/' + self.output
 
@@ -47,10 +124,9 @@ class ContentdmController:
         counter = 0
         batch = 0
         working_dir = ''
-        error_count = 0
 
         # open the input file for reading.
-        input_xml = open(file1, 'r')
+        input_xml = open(input_file, 'r')
 
         # Parse the input file and gather the 'record' nodes.
         tree = ET.parse(input_xml)
@@ -78,69 +154,70 @@ class ContentdmController:
 
             # Capture dc metadata and write to archive
             dc_metadata = metadata_extractor.extract_metadata(record)
+
             tree = ET.ElementTree(dc_metadata)
             tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-            # single item, not a compound object!
+            # This is a single item, not a compound object!
             if metadata_extractor.is_single_item(record):
-
                 try:
                     # Get bitstreams for single item and add to archives
-                    FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection)
+                    FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection, False)
+
                 except RuntimeError as err:
-                    error_count += 1
+                    ContentdmController.error_count += 1
                     print(err)
                 except IOError as err:
-                    error_count += 1
+                    ContentdmController.error_count += 1
                     print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
                     print('IO Error: {0}'.format(err))
                 except Exception as err:
-                    error_count += 1
+                    ContentdmController.error_count += 1
                     print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
                     print('Exception: {0}'.format(err))
 
+            elif metadata_extractor.should_process_compound_as_single(record):
+                # This is a compound object that will be processed as a single item.
+                try:
+                    FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection, True)
+
+                except RuntimeError as err:
+                    self.error_count += 1
+                    print(err)
+                except IOError as err:
+                    self.error_count += 1
+                    print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
+                    print('IO Error: {0}'.format(err))
+                except Exception as err:
+                    self.error_count += 1
+                    print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
+                    print('Exception: {0}'.format(err))
+
+                # extract full text and add to saf directory
+                found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
+                if found_text:
+                    # Appends to the saf contents file after bitstreams have been added.
+                    self.append_contents_file(current_dir, doc_title)
             else:
-                try:
-                    # A compound object.
-                    # Create full-text file for compound object and add to saf directory.
-                    extext = page_data_extractor.extract_text(record)
-                    file2 = open(current_dir + '/file_1.txt', 'w')
-                    file2.write(extext)
-                    file2.close()
-                except IOError as err:
-                    error_count += 1
-                    print('An error occurred writing compound object data to saf for: %s. See %s' % (
-                    doc_title, current_dir))
-                    print('IO Error: {0}'.format(err))
-                except Exception as err:
-                    error_count += 1
-                    print('An error occurred writing compound object data to saf: %s. See %s' % (
-                    doc_title, current_dir))
-                    print('Exception: {0}'.format(err))
+                # This is a compound object.
+                # Extract full text and add it to saf directory
+                found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
+                if found_text:
+                    # Writes to first line of saf contents file before the thumbnail is retrieved.
+                    self.write_contents_file(current_dir, doc_title)
 
-                try:
-                    file3 = open(current_dir + '/contents', 'w')
-                    file3.write('file_1.txt')
-                    file3.close()
-                except IOError as err:
-                    error_count += 1
-                    print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
-                    print('IO Error: {0}'.format(err))
-                except Exception as err:
-                    error_count += 1
-                    print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
-                    print('Exception: {0}'.format(err))
-
+                # Get a thumbnail image.
                 try:
                     # This should be called after the full-text file has been added.
                     # It will retrieve the thumbnail for the compound object.
                     FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
+
                 except IOError as err:
-                    error_count += 1
+                    self.error_count += 1
                     print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
                     print('IO Error: {0}'.format(err))
                 except Exception as err:
-                    error_count += 1
+                    self.error_count += 1
                     print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
                     print('Exception: {0}'.format(err))
 
@@ -152,12 +229,13 @@ class ContentdmController:
 
             try:
                 tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
+
             except IOError as err:
-                error_count += 1
+                self.error_count += 1
                 print('An error occurred writing local metadata for: %s. See %s' % (doc_title, current_dir))
                 print('IO Error: {0}'.format(err))
             except Exception as err:
-                error_count += 1
+                self.error_count += 1
                 print('An error occurred writing local metadata for: %s. See %s' % (doc_title, current_dir))
                 print('Exception: {0}'.format(err))
 
@@ -165,5 +243,5 @@ class ContentdmController:
 
         print('%s records loaded' % str(final_count))
 
-        if error_count > 0:
-            print'%s errors!' % str(error_count)
+        if self.error_count > 0:
+            print'%s errors!' % str(self.error_count)

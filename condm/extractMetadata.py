@@ -6,11 +6,14 @@ from xml.etree.ElementTree import Element
 
 from extractPageData import ExtractPageData
 from fields import Fields
+from collection_config import CollectionConfig
 from fieldMaps import FieldMaps
 from shared.utils import Utils
 
 
 class ExtractMetadata:
+
+    cdm_dc = Fields.cdm_dc_field
 
     def __init__(self):
         self.extract_page = ExtractPageData()
@@ -27,7 +30,7 @@ class ExtractMetadata:
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.
         """
-        cdm_dc = Fields.cdm_dc_field
+
         if elements is not None:
                 for element in elements:
                     if element.text is not None:
@@ -36,7 +39,7 @@ class ExtractMetadata:
                         # However, the 'unmapped' key has been included (temporarily?) in the
                         # cdm field dictionary and is used in the hack that captures (some)
                         # EADID local fields. See extractLocalMetadata() below.
-                        if element.tag != cdm_dc['unmapped']:
+                        if element.tag != ExtractMetadata.cdm_dc['unmapped']:
                             # Sometimes CONTENTdm exports encoded text that DSpace doesn't handle.
                             element = Utils.correct_text_encoding(element)
                             dspace_element = element_map[element.tag]
@@ -60,6 +63,24 @@ class ExtractMetadata:
 
         return page is None
 
+    @staticmethod
+    def should_process_compound_as_single(record):
+        """
+        Checks to see if a compound object record should be treated as a single item. Call
+        this function before processing a contentdm compound object record.
+        :param record: etree Element representing the contentdm record.
+        :return: true if the value in the collection id field is found in the list collection configuration
+                array for items that do not need to be loaded as compound objects (e.g. postcards)
+        """
+        if record.find(ExtractMetadata.cdm_dc['collection_id']) is not None:
+            colls = CollectionConfig.collections_to_omit_compound_objects
+            els = record.findall(ExtractMetadata.cdm_dc['collection_id'])
+            for element in els:
+                collection_field_list = filter(lambda x: x == element.text, iter(colls))
+                if len(collection_field_list) > 0:
+                    return bool(1)
+        return bool(0)
+
     def extract_local_metadata(self, record):
         # type: (Element) -> Element
         """
@@ -69,7 +90,6 @@ class ExtractMetadata:
         :param record: etree Element representing the contentdm record.
         :return: a new etree Element representing data that will be written to metadata_local.xml.
         """
-        cdm_dc = Fields.cdm_dc_field
         cdm_structure = Fields.cdm_structural_elements
         dspace_local = Fields.dspace_local_field
         dspace_local_map = FieldMaps.local_field_map
@@ -79,7 +99,7 @@ class ExtractMetadata:
 
         cdmfullResolution = record.iterfind(cdm_structure['preservation_location'])
         # This should probably be considered a hack.
-        cdmunmapped = record.iterfind(cdm_dc['unmapped'])
+        cdmunmapped = record.iterfind(ExtractMetadata.cdm_dc['unmapped'])
 
         # TODO: the eadid needs to be mapped to a unique field. For now, use string match so some eadid fields will
         #  appear in dspace.
@@ -103,7 +123,6 @@ class ExtractMetadata:
         :param record: the etree Element for the contentdm record.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
-        cdm_dc = Fields.cdm_dc_field
         dspace_dc = Fields.dspace_dc_field
         dc_field_map = FieldMaps.dc_field_map
 
@@ -111,13 +130,12 @@ class ExtractMetadata:
         dublin_core.set('schema', 'dc')
 
         # Because this uses sorted keys, the field order is alphabetical.
-        cdm_keys = sorted(cdm_dc.keys())
+        cdm_keys = sorted(ExtractMetadata.cdm_dc.keys())
         for key in cdm_keys:
             if key in cdm_keys:
-                elements = record.iterfind(cdm_dc[key])
-                if key == cdm_dc['format']:
-                    if not self.is_single_item(record):
-
+                elements = record.iterfind(ExtractMetadata.cdm_dc[key])
+                if key == ExtractMetadata.cdm_dc['format']:
+                    if not self.is_single_item(record) and not self.should_process_compound_as_single(record):
                          # Sets the format element for compound objects.
                         cpdformat = ET.SubElement(dublin_core, 'dcvalue')
                         cpdformat.set('element', dspace_dc['format'])
@@ -129,7 +147,7 @@ class ExtractMetadata:
                         # that is required to view the item. Currently, this is 'existdb'
                         # The initial batch of test records was exported without this element.
                         require_relation = ET.SubElement(dublin_core, 'dcvalue')
-                        require_relation.set('element', dspace_dc['require'])
+                        require_relation.set('element', dspace_dc['relation'])
                         require_relation.set('qualifier', dspace_dc['require_relation'])
                         require_relation.text = 'existdb'
 

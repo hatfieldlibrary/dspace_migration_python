@@ -34,6 +34,7 @@ class Fields:
         'relation_requires': 'requires',
         'provenance': 'provenance',
         'type': 'type',
+        'collection_id': 'type'
     }
 
     # Non-dc (e.g. structural) xml elements exported by cdm.
@@ -49,7 +50,9 @@ class Fields:
         'compound_object_page_file': 'pagefile',
         'compound_object_page_file_type': 'pagefiletype',
         'compound_object_page_file_loc': 'pagefilelocation',
-        'compound_object_page_text': 'pagetext'
+        'compound_object_page_text': 'pagetext',
+        'compound_object_access_file': 'access',
+        'compound_object_thumb_file': 'thumbnail'
     }
 
     # Fields used for DSpace dublin core import
@@ -67,6 +70,7 @@ class Fields:
         'relation_uri_qualifier': 'uri',
         'relation_ispartof_qualifier': 'ispartof',
         'relation_isformatof_qualifier': 'isformatof',
+        'require_relation': 'requires',
         'coverage': 'coverage',
         'coverage_spatial_qualifier': 'spatial',
         'language': 'language',
@@ -77,7 +81,6 @@ class Fields:
         'format_medium_qualifier': 'medium',
         'format_extent_qualifier': 'extent',
         'rights': 'rights'
-
     }
 
     # Fields for dspace local metadata import.

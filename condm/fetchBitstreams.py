@@ -9,26 +9,25 @@ from fields import Fields
 
 class FetchBitstreams:
 
+    cdm_dc = Fields.cdm_dc_field
+    cdm_struc = Fields.cdm_structural_elements
+
     def __init__(self):
         pass
 
     @staticmethod
-    def __append_to_contents(current_dir, filename, error_count, line):
-        # type: (str, str, int, int) -> int
+    def append_to_contents(current_dir, filename, line):
+        # type: (str, str, int) -> None
         """
         Appends a new file name to the saf item contents file.
-
         :param current_dir: the current item saf directory.
         :param filename: the file name (string)
-        :param error_count: the current error count
         :param line: either 1 or 0, with 0 representing the first line of the file (no preceding line break)
-        :return: the error count
         """
         contents_out = current_dir + '/contents'
-
         content_file = open(contents_out, 'a')
         if line == 0:
-            # first write to the contents file.
+            # this is the first write to the contents file.
             content_file.write(filename)
             content_file.close()
         else:
@@ -36,37 +35,38 @@ class FetchBitstreams:
             content_file.close()
 
 
-    @staticmethod
-    def __fetch_thumbnail(outfile, link, doc_title, error_count):
-        # type: (str, str, str, int) -> int
-        """
-        Fetches the thumbnail file and writes to the saf item directory.
-
-        :param outfile: full path for the file to be written.
-        :param link: link used to retrieve the file from contentdm.
-        :param doc_title: the title of the current document (for error logging).
-        :param error_count: the current error count.
-        :return: the error count.
-        """
-        if link is not None:
-
-            try:
-                urllib.urlretrieve(link, outfile)
-            except IOError as err:
-                print('An error occured retriveing thumbnail for: %s' % doc_title)
-                print('IO Error: {0}'.format(err))
-            except:
-                error_count += 1
-                print('An error occurred retrieving thumbnail for: %s' % doc_title)
-
-            return error_count
+    # @staticmethod
+    # def __fetch_thumbnail(outfile, link, doc_title, error_count):
+    #     # type: (str, str, str, int) -> int
+    #     """
+    #     Fetches the thumbnail file and writes to the saf item directory.
+    #     :param outfile: full path for the file to be written.
+    #     :param link: link used to retrieve the file from contentdm.
+    #     :param doc_title: the title of the current document (for error logging).
+    #     :param error_count: the current error count.
+    #     :return: the error count.
+    #     """
+    #     if link is not None:
+    #         try:
+    #             urllib.urlretrieve(link, outfile)
+    #         except IOError as err:
+    #             print('An error occured retriveing thumbnail for: %s' % doc_title)
+    #             print('IO Error: {0}'.format(err))
+    #         except:
+    #             error_count += 1
+    #             print('An error occurred retrieving thumbnail for: %s' % doc_title)
+    #
+    #         return error_count
 
     @staticmethod
-    def __fetch_bitstream(outfile, link, doc_title, error_count):
-        # type: (str, str, str, int) -> int
+    def __fetch_bitstream(outfile, link):
+        # type: (str, str) -> None
         """
         Fetches single bitstream and writes to saf directory.
-
+        Note that bitstream file names need not be unique in dspace
+        because DSpace 6.x stores the name of a bitstream in the "dc.title" metadata field attached to the bitstream.
+        However, they probably will be unique in all cases whene in our contentdm
+        exports, since the file name is derived from the exported xml.
         :param outfile: the file name and output path for the bitstream
         :param link: the url to retrieve the bitstream
         :param doc_title: the title of the current document (dc)
@@ -91,17 +91,14 @@ class FetchBitstreams:
     def fetch_thumbnail_only(current_dir, record, collection):
         # type: (str, Element, str) -> None
         """
-        This function is used for compound objects. Compound objects do not download page bitstreams into
-        dspace.  But a thumbnail image is still required.
-
+        This function is used for compound objects. Compound objects do not import page bitstreams into
+        dspace, but the import still wants to have thumbnail image.
         :param current_dir: the full path to the saf output directory
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
         """
         cdm_dc = Fields.cdm_dc_field
         cdm_struc = Fields.cdm_structural_elements
-
-        error_count = 0
         cdmid = record.find(cdm_struc['id'])
         cdmfile = record.find(cdm_struc['filename'])
         doc_title = record.find(cdm_dc['title'])
@@ -112,83 +109,143 @@ class FetchBitstreams:
         outfile = current_dir + '/' + thumbname
         # thumbnail link
         link = FetchBitstreams.__create_thumbnail_link(collection, cdmid.text)
-
         if thumbnail_url.text is not None:
-            error_count = FetchBitstreams.__fetch_bitstream(outfile, link, doc_title.text, error_count)
-            error_count = FetchBitstreams.__append_to_contents(current_dir, thumbname, error_count, 1)
-
-            if error_count > 0:
-                print('%s --  Thumbnail %s proccessed with %s errors.' % (doc_title.text, thumbname, error_count))
+            FetchBitstreams.__fetch_bitstream(outfile, link)
+            FetchBitstreams.append_to_contents(current_dir, thumbname, 1)
 
     @staticmethod
-    def fetch_bit_streams(current_dir, record, collection):
-        # type: (str, Element, str) -> None
+    def add_bitstream(cdmid_el, cdmfile, current_dir, collection, page_count):
+        # type (Element, str, str, str, int) -> None
+        """
+        Adds a bitstream to the saf directory
+        :param cdmid_el: the Element containing the contentdm pointer text
+        :param cdmfile: the element containing the cdmfile text
+        :param current_dir: the output directory
+        :param collection: the contentdm collection
+        :param page_count: indicates when to add line break to the contents file
+        :return:
+        """
+        link = FetchBitstreams.__create_bitstream_link(collection, cdmid_el.text)
+        # the output filename for the bitstream.
+        outfile = current_dir + '/' + cdmfile
+        FetchBitstreams.__fetch_bitstream(outfile, link)
+        FetchBitstreams.append_to_contents(current_dir, cdmfile, page_count)
+
+    @staticmethod
+    def add_thumbnail(cdmid, cdm_file, thumb, current_dir, collection, page_count):
+        # type (str, str, str, str, str, int) -> None
+        """
+        Adds a thumbnail image to the saf directory
+        :param cdmid: the contentdm pointer
+        :param cdm_file: the file name of contentdm bitstream
+        :param thumb: file name of the thumbnail image
+        :param current_dir: the output directory
+        :param collection: the contentdm collection name
+        :param page_count: indicates when to add line break to the contents file
+        :return:
+        """
+        # Always pass a thumb object with type other than None if a thumbnail exists.
+        if thumb is not None:
+            thumbname = cdm_file.replace('jp2', 'jpg').replace('pdf', 'jpg')
+            # defines the output location for the thumbnail .jpg
+            outfile = current_dir + '/' + thumbname
+             # cdm link for thumbnail
+            link = FetchBitstreams.__create_thumbnail_link(collection, cdmid)
+            FetchBitstreams.__fetch_bitstream(outfile, link)
+            FetchBitstreams.append_to_contents(current_dir, thumbname, page_count)
+
+    @staticmethod
+    def fetch_multiple_bitsteams(cdmid_el, current_dir, record, collection):
+        # type (Element, str, str, str) -> None
+        """
+        This function is used to request multiple files from a compound object
+        that will be added to a single record.  For example, multiple postcard
+        images (front an back). Note that this function must assume the file type
+        because the file type is not exported by contentdm for compound object pages.
+        Since our compound objects in contentdm are jp2 files, the .jp2 extension
+        is appended below.
+        :param cdmid_el: Element containing the record's contentdm pointer
+        :param current_dir: the current working directory
+        :param record: the record to process
+        :param collection: the contentdm collection name
+        :return:
+        """
+        # the structure element contains pages
+        structure = record.find(FetchBitstreams.cdm_struc['compound_object_container'])
+        # get all pages.
+        pages = structure.findall('.//' + FetchBitstreams.cdm_struc['compound_object_page'])
+        page_count = 0
+        for page in pages:
+            # get the cdm pointer for the page
+            file_el = page.find(FetchBitstreams.cdm_struc['compound_object_page_pointer'])
+            # get the files information for the page
+            files = page.findall('.//' + FetchBitstreams.cdm_struc['compound_object_page_file'])
+            for file in files:
+                # get the file type and process the access images and thumbnails
+                file_type_el = file.find(FetchBitstreams.cdm_struc['compound_object_page_file_type'])
+                # access file
+                if file_type_el.text == FetchBitstreams.cdm_struc['compound_object_access_file']:
+                    # append .jp2 extension.
+                    image_file = file_el.text + '.jp2'
+                    FetchBitstreams.add_bitstream(file_el,
+                                                  image_file,
+                                                  current_dir,
+                                                  collection,
+                                                  page_count)
+                # thumbnail file
+                if file_type_el.text == FetchBitstreams.cdm_struc['compound_object_thumb_file']:
+                    # set file name to pointer plus extension
+                    ptr = file_el.text
+                    file_name = ptr + '.jpg'
+                    FetchBitstreams.add_thumbnail(
+                        file_el.text,
+                        file_name,
+                        file_name,
+                        current_dir,
+                        collection,
+                        page_count)
+                page_count += 1
+
+    @staticmethod
+    def fetch_single_bitstream(cdmid_el, current_dir, record, collection):
+
+        cdmfile_el = record.find(FetchBitstreams.cdm_struc['filename'])
+
+        # NOTE: This test may need to be modified or removed if eventually
+        # we need to treat some cpd files as image records with multiple
+        # bitstreams.
+        # if cdmfile_el.text.find('cpd') != -1:
+        #    raise RuntimeError('ERROR: Requesting bitstreams for a compound object.')
+
+        thumb_url_el = record.find(FetchBitstreams.cdm_struc['thumbnail'])
+        FetchBitstreams.add_bitstream(cdmid_el, cdmfile_el.text, current_dir, collection, 0)
+        FetchBitstreams.add_thumbnail(cdmid_el.text, cdmfile_el.text, thumb_url_el, current_dir, collection, 1)
+
+    @staticmethod
+    def fetch_bit_streams(current_dir, record, collection, multiple):
+        # type: (str, Element, str, bool) -> None
         """
         Extract the bitstream url from metadata, fetch the bitstream, and add to simple archive format entry.
         If a thumbnail image url is available, repeat operation for the thumbnail. This function throws and error
         if called for a compound object.
-
         :param current_dir: the full path to the saf output directory
         :param record: the etree element for a contentdm record
         :param collection: the contentdm collection name
+        :param multiple: indicates whether to retrieve multiple separate bitstreams from compound object
         """
-        cdm_dc = Fields.cdm_dc_field
         cdm_struc = Fields.cdm_structural_elements
-
         cdmid_el = record.find(cdm_struc['id'])
-
         if cdmid_el is None:
             print('Error: no cdmid found')
-
         else:
             if cdmid_el is not None:
-
-                cdmfile_el = record.find(cdm_struc['filename'])
-
-                # NOTE: This test may need to be modified or removed if eventually
-                # we need to treat some cpd files as image records with multiple
-                # bitstreams.
-
-                if cdmfile_el.text.find('cpd') != -1:
-                    raise RuntimeError('ERROR: Requesting bitstreams for a compound object.')
-
-                error_count = 0
-                doc_title_el = record.find(cdm_dc['title'])
-                thumb_url_el = record.find(cdm_struc['thumbnail'])
-
-                # The fetch_bitstream and append_to_contents calls below will need to be embedded in
-                # a loop if we decide that simple compound objects should be treated as dspace
-                # items with multiple bitsteams. In that case, we will need to gather the
-                # ids for image links into a list list (or better, use the uri's provided
-                # in the xml by removing the xml encoding for the ampersand. e.g. the __create_
-                # bitstream_link method would do a string replacement).
-                #
-                # As mentioned above, a compound object would typically be prevented from reaching
-                # this method. That means that there will need to be some hook in the metadata that tells the
-                # controller to fetch bitstreams for a compound object rather than use the default text
-                # only strategy.
-
-                # cdm link for bitstream
-                link = FetchBitstreams.__create_bitstream_link(collection, cdmid_el.text)
-
-                # the output filename for the bitstream.
-                outfile = current_dir + '/' + cdmfile_el.text
-                FetchBitstreams.__fetch_bitstream(outfile, link, doc_title_el.text, error_count)
-                FetchBitstreams.__append_to_contents(current_dir, cdmfile_el.text, error_count, 0)
-
-                # check for thumbnail url in the cdm record.
-                if thumb_url_el.text is not None:
-                    # the jpg file name; this assumes a jp2 file or pdf file. Will break for other file types.
-                    thumbname = cdmfile_el.text.replace('jp2', 'jpg').replace('pdf', 'jpg')
-
-                    # defines the output location for the thumbnail .jpg
-                    outfile = current_dir + '/' + thumbname
-
-                    # cdm link for thumbnail
-                    link = FetchBitstreams.__create_thumbnail_link(collection, cdmid_el.text)
-
-                    FetchBitstreams.__fetch_bitstream(outfile, link, doc_title_el.text, error_count)
-                    FetchBitstreams.__append_to_contents(current_dir, thumbname, error_count, 1)
+                if multiple:
+                    # process the compound object data and add multiple bitstreams to the saf directory
+                    FetchBitstreams.fetch_multiple_bitsteams(cdmid_el, current_dir, record, collection)
+                else:
+                    # process as a single item record (compound object bitstreams will be a single thumbnail
+                    # image and the full text transcription.
+                    FetchBitstreams.fetch_single_bitstream(cdmid_el, current_dir, record, collection)
 
                 # being nice, but this also works running full speed ahead.
                 time.sleep(.200)

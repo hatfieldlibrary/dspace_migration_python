@@ -47,7 +47,6 @@ class ExtractPageData:
         :return: the full text of the item
         """
         cdm_struc = Fields.cdm_structural_elements
-
         structure_el = record.find(cdm_struc['compound_object_container'])
         pages_el = structure_el.iterfind('.//' + cdm_struc['compound_object_page'])
         fulltext = ''
@@ -57,5 +56,4 @@ class ExtractPageData:
                 if page_el.text is not None:
                     page_el = Utils.correct_text_encoding(page_el)
                     fulltext += page_el.text
-
         return fulltext

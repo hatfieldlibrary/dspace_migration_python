@@ -7,7 +7,7 @@ from existdb.controller import ExistController
 # Allowed repo names are 'cdm' and 'exist-db'.
 #
 # command line arguments
-# controller.py <repo> <collection> <source_file or directory> <outputdirectory>
+# process.py <repo> <collection> <source_file or directory> <outputdirectory>
 #
 # example1 ./process.py cdm manuscripts archives_manuscripts.xml archives_manuscripts
 # example2 ./process.py exist collegian collegian collegian

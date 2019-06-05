@@ -153,7 +153,7 @@ class ContentdmController:
             current_dir = Utils.int_saf_sub_directory(working_dir, counter)
 
             # Capture dc metadata and write to archive
-            dc_metadata = metadata_extractor.extract_metadata(record)
+            dc_metadata = metadata_extractor.extract_metadata(record, self.collection)
 
             tree = ET.ElementTree(dc_metadata)
             tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
@@ -176,7 +176,7 @@ class ContentdmController:
                     print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
                     print('Exception: {0}'.format(err))
 
-            elif metadata_extractor.should_process_compound_as_single(record):
+            elif metadata_extractor.should_process_compound_as_single(record, self.collection):
                 # This is a compound object that will be processed as a single item.
                 try:
                     FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection, True)

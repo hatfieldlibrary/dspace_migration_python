@@ -64,17 +64,18 @@ class ExtractMetadata:
         return page is None
 
     @staticmethod
-    def should_process_compound_as_single(record):
+    def should_process_compound_as_single(record, collection):
         """
         Checks to see if a compound object record should be treated as a single item. Call
         this function before processing a contentdm compound object record.
         :param record: etree Element representing the contentdm record.
+        :param collection: the contentdm collection name
         :return: true if the value in the collection id field is found in the list collection configuration
                 array for items that do not need to be loaded as compound objects (e.g. postcards)
         """
-        if record.find(ExtractMetadata.cdm_dc['collection_id']) is not None:
-            colls = CollectionConfig.collections_to_omit_compound_objects
-            els = record.findall(ExtractMetadata.cdm_dc['collection_id'])
+        if record.find(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name']) is not None:
+            colls = CollectionConfig.collections_to_omit_compound_objects[collection]['field_values']
+            els = record.findall(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name'])
             for element in els:
                 collection_field_list = filter(lambda x: x == element.text, iter(colls))
                 if len(collection_field_list) > 0:
@@ -97,7 +98,7 @@ class ExtractMetadata:
         metadata_local = ET.Element('dublin_core')
         metadata_local.set('schema', 'local')
 
-        cdmfullResolution = record.iterfind(cdm_structure['preservation_location'])
+        full_resolution = record.iterfind(cdm_structure['preservation_location'])
         # This should probably be considered a hack.
         cdmunmapped = record.iterfind(ExtractMetadata.cdm_dc['unmapped'])
 
@@ -110,17 +111,18 @@ class ExtractMetadata:
                     relation_references.set('element', dspace_local['eadid'])
                     relation_references.text = element.text
 
-        self.__process_iterable_map(metadata_local, cdmfullResolution, dspace_local_map)
+        self.__process_iterable_map(metadata_local, full_resolution, dspace_local_map)
         self.extract_page.add_page_admin_data(metadata_local, record)
 
         return metadata_local
 
-    def extract_metadata(self, record):
-        # type: (Element) -> Element
+    def extract_metadata(self, record, collection):
+        # type: (Element, str) -> Element
         """
         Extracts data that will be added to the dublin_core.xml file in the saf item directory.
 
         :param record: the etree Element for the contentdm record.
+        :param collection: the contentdm collection name
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
         dspace_dc = Fields.dspace_dc_field
@@ -135,8 +137,9 @@ class ExtractMetadata:
             if key in cdm_keys:
                 elements = record.iterfind(ExtractMetadata.cdm_dc[key])
                 if key == ExtractMetadata.cdm_dc['format']:
-                    if not self.is_single_item(record) and not self.should_process_compound_as_single(record):
-                         # Sets the format element for compound objects.
+                    if not self.is_single_item(record) and not \
+                            self.should_process_compound_as_single(record, collection):
+                        # Sets the format element for compound objects.
                         cpdformat = ET.SubElement(dublin_core, 'dcvalue')
                         cpdformat.set('element', dspace_dc['format'])
                         cpdformat.text = 'Compound'

@@ -33,8 +33,7 @@ class Fields:
         'relation': 'relation',
         'relation_requires': 'requires',
         'provenance': 'provenance',
-        'type': 'type',
-        'collection_id': 'type'
+        'type': 'type'
     }
 
     # Non-dc (e.g. structural) xml elements exported by cdm.

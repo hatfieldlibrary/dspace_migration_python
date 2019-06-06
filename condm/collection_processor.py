@@ -7,9 +7,13 @@ from fetchBitstreams import FetchBitstreams
 from extractPageData import ExtractPageData
 from shared.utils import Utils
 
+
 class CollectionProcessor:
 
     error_count = 0
+    counter = 0
+    batch = 0
+    working_dir = ''
 
     def __init__(self, parent_collection, output_directory):
         """
@@ -105,27 +109,16 @@ class CollectionProcessor:
        directory (e.g. item_0010/).  Other processing tasks are delegated
        to imported classes.
        """
-        base_directory = os.getcwd()
-
-        # The input file.
-        input_file = base_directory + '/condm/data/' + self.input
-        # The parent output directory.
-        out_dir = base_directory + '/condm/saf/' + self.output
 
         metadata_extractor = ExtractMetadata()
         page_data_extractor = ExtractPageData()
 
-        counter = 0
-        batch = 0
-        working_dir = ''
-
-        # open the input file for reading.
-        input_xml = open(input_file, 'r')
-
-        # Parse the input file and gather the 'record' nodes.
-        tree = ET.parse(input_xml)
-        root = tree.getroot()
-        records = root.findall('./record')
+        # Each working directory will contain 1000 items.
+        # The working directories are labelled batch_1, batch_2 ...
+        if self.counter % 1000 == 0:
+            self.counter = 0
+            self.batch += 1
+            self.working_dir = Utils.init_working_directory(self.output, self.batch)
 
         # TODO as with existdb, we need to add an identifier used to look up compound
         # objects in exist. Since we haven't yet created existdb records from CONTENTdm
@@ -134,18 +127,11 @@ class CollectionProcessor:
 
         doc_title = record.find('title').text
 
-        # Each working directory will contain 1000 items.
-        # The working directories are labelled batch_1, batch_2 ...
-        if counter % 1000 == 0:
-            counter = 0
-            batch += 1
-            working_dir = Utils.init_working_directory(out_dir, batch)
-
         # Create a new saf item sub-directory inside the working directory
-        current_dir = Utils.int_saf_sub_directory(working_dir, counter)
+        current_dir = Utils.int_saf_sub_directory(self.working_dir, self.counter)
 
         # Capture dc metadata and write to archive
-        dc_metadata = metadata_extractor.extract_metadata(record, self.collection)
+        dc_metadata = metadata_extractor.extract_metadata(record, self.parent_collection)
 
         tree = ET.ElementTree(dc_metadata)
         tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
@@ -154,7 +140,7 @@ class CollectionProcessor:
         if metadata_extractor.is_single_item(record):
             try:
                 # Get bitstreams for single item and add to archives
-                FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection, False)
+                FetchBitstreams.fetch_bit_streams(current_dir, record, self.parent_collection, False)
 
             except RuntimeError as err:
                 CollectionProcessor.error_count += 1
@@ -168,10 +154,10 @@ class CollectionProcessor:
                 print('An error occurred retrieving bitstreams for: %s. See %s' % (doc_title, current_dir))
                 print('Exception: {0}'.format(err))
 
-        elif metadata_extractor.should_process_compound_as_single(record, self.collection):
+        elif metadata_extractor.should_process_compound_as_single(record, self.parent_collection):
             # This is a compound object that will be processed as a single item.
             try:
-                FetchBitstreams.fetch_bit_streams(current_dir, record, self.collection, True)
+                FetchBitstreams.fetch_bit_streams(current_dir, record, self.parent_collection, True)
 
             except RuntimeError as err:
                 self.error_count += 1
@@ -202,7 +188,7 @@ class CollectionProcessor:
             try:
                 # This should be called after the full-text file has been added.
                 # It will retrieve the thumbnail for the compound object.
-                FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.collection)
+                FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.parent_collection)
 
             except IOError as err:
                 self.error_count += 1
@@ -213,7 +199,7 @@ class CollectionProcessor:
                 print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
                 print('Exception: {0}'.format(err))
 
-        counter += 1
+        self.counter += 1
 
         # Extract and write metadata to be imported via our local dspace schema.
         local_metadata = metadata_extractor.extract_local_metadata(record)
@@ -231,9 +217,3 @@ class CollectionProcessor:
             print('An error occurred writing local metadata for: %s. See %s' % (doc_title, current_dir))
             print('Exception: {0}'.format(err))
 
-        final_count = Utils.get_final_count(batch, counter)
-
-        print('%s records loaded into %s' % (str(final_count), self.output))
-
-        if self.error_count > 0:
-            print'%s errors!' % str(self.error_count)

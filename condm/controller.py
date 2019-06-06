@@ -3,15 +3,18 @@
 import os
 import xml.etree.ElementTree as ET
 
+from analyzer import Analyzer
 from collection_config import CollectionConfig
 from collection_processor import CollectionProcessor
+from shared.utils import Utils
 
 
 class ContentdmController:
 
     error_count = 0
+    analyzer = None
 
-    def __init__(self, collection, input_file, output_directory):
+    def __init__(self, collection, input_file, output_directory, dry_run):
         """
         Constructor.
         :type output_directory: str
@@ -24,6 +27,8 @@ class ContentdmController:
         self.collection = collection
         self.input = input_file
         self.output = output_directory
+        self.dry_run = dry_run
+        self.analyzer = Analyzer()
 
     def process_collections(self):
         """
@@ -33,6 +38,7 @@ class ContentdmController:
         a base processor is used. Each processor directs output to the
         saf directory defined in the collection configuration.
         """
+
         base_directory = os.getcwd()
         # The input file.
         input_file = base_directory + '/condm/data/' + self.input
@@ -41,15 +47,24 @@ class ContentdmController:
         sub_collections = cdm_collection['field_values']
 
         # The parent output directory.
-        base_out_dir = base_directory + '/condm/saf/' + self.output
+        parent_out_dir = base_directory + '/condm/saf/' + self.output
 
+        base_out_dir = parent_out_dir + '/base'
         base_processor = CollectionProcessor(self.collection, base_out_dir)
+        if not self.dry_run:
+            Utils.init_sub_collection_directory(base_out_dir)
 
         collection_map = {}
         for sub_collection in sub_collections:
-            out_dir = base_out_dir + '/' + sub_collection['dspace_out']
-            collection_processor = CollectionProcessor(self.collection, out_dir)
-            collection_map[sub_collection['cdm_collection']] = collection_processor
+            if sub_collection['load']:
+                out_dir = parent_out_dir + '/' + sub_collection['dspace_out']
+                if not self.dry_run:
+                    Utils.init_sub_collection_directory(out_dir)
+                collection_processor = CollectionProcessor(self.collection, out_dir)
+                collection_map[sub_collection['cdm_collection']] = {
+                    'processor': collection_processor,
+                    'load': sub_collection['load']
+                }
 
         # open the input file for reading.
         input_xml = open(input_file, 'r')
@@ -61,13 +76,28 @@ class ContentdmController:
 
         for record in records:
 
-            collection_field_value = record.find(cdm_collection['field_name'])
-            processor = collection_map[collection_field_value]
-            if processor is not None:
-                processor.process_record(record)
+            collection_field_value_el = record.find(cdm_collection['field_name'])
+            collection_field_value = collection_field_value_el.text
+            if collection_field_value in collection_map:
+                if self.dry_run:
+                    self.analyzer.sub_collection(collection_field_value)
+                else:
+                    self.analyzer.sub_collection(collection_field_value)
+                    processor = collection_map[collection_field_value]['processor']
+                    if collection_map[collection_field_value]['load']:
+                        processor.process_record(record)
             else:
-                print 'Collection processor not found for ' + collection_field_value
-                base_processor.process_record(record)
+                if self.dry_run:
+                    self.analyzer.sub_collection(collection_field_value)
+                else:
+                    print 'Collection processor not found for ' + collection_field_value
+                    base_processor.process_record(record)
 
+        self.analyzer.print_sub_collection_rpt()
 
-
+        # final_count = Utils.get_final_count(self.batch, self.counter)
+        #
+        # print('%s records loaded into %s' % (str(final_count), self.output))
+        #
+        # if self.error_count > 0:
+        #     print'%s errors!' % str(self.error_count)

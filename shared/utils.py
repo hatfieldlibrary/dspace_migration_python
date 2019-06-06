@@ -23,6 +23,16 @@ class Utils:
         return newDir
 
     @staticmethod
+    def init_sub_collection_directory(outdir):
+        # type: (str, str) -> None
+        """
+        Creates a sub-collection directory
+        :param outdir: the full path to the sub-collection directory
+        :return: string value for the new working directory that was created.
+        """
+        os.mkdir(outdir)
+
+    @staticmethod
     def init_working_directory(outdir, batch):
         # type: (str, int) -> str
         """
@@ -59,6 +69,7 @@ class Utils:
             current_dir = '/item_' + counter_str
 
         saf_item = workingdir + current_dir
+
         os.mkdir(saf_item)
 
         return saf_item

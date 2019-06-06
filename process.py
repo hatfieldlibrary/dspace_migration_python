@@ -24,11 +24,11 @@ from existdb.controller import ExistController
 
 parser = argparse.ArgumentParser(description='Process contentdm exported collection to saf.')
 parser.add_argument('repo', metavar='repo', type=str,
-                    help='the repository name')
+                    help='the repository name (cdm | exist)')
 parser.add_argument('collection', metavar='collection', type=str,
-                    help='the contentdm collection name')
+                    help='the repository collection name')
 parser.add_argument('source_file', metavar='source_file', type=str,
-                    help='the exported contentdm xml file')
+                    help='the exported xml data source')
 parser.add_argument('saf_dir', metavar='saf_directory', type=str,
                     help='the parent saf target directory')
 parser.add_argument("-d", "--dry-run", action="store_true",

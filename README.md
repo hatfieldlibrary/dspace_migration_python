@@ -17,12 +17,22 @@ for the collection.
 For **saf** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 
 ## Code Usage 
+```
+usage: process.py [-h] [-d] repo collection source_file saf_directory
 
-A top-level process.py script takes command line arguments.  See the script for documentation.
+Process contentdm exported collection to saf.
 
-All subsequent work is done by python classes that have been coded separately for CONTENTdm and eXist-db repositories
-(work on the latter is incomplete).
+positional arguments:
+  repo           the repository name (cdm | exist)
+  collection     the repository collection name
+  source_file    the exported xml data source
+  saf_directory  the parent saf target directory
 
+optional arguments:
+  -h, --help     show this help message and exit
+  -d, --dry-run  Dry run displays collection analytics only. No data is
+                 processed.
+```
 ## Metadata
 
 ### CONTENTdm

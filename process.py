@@ -24,7 +24,7 @@ repo = sys.argv[1]
 
 if repo == 'cdm':
     controller = ContentdmController(sys.argv[2], sys.argv[3], sys.argv[4])
-    controller.process_records()
+    controller.process_collections()
 
 if repo == 'exist':
     controller = ExistController(sys.argv[2], sys.argv[3], sys.argv[4])

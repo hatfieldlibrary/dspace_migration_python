@@ -17,3 +17,19 @@ class CollectionConfig:
             ]
         }
     }
+
+    sub_collection_mapping = {
+        'aphotos': {
+            'field_name': 'source',
+            'field_values': [
+                {
+                    'cdm_collection': 'Postcard Collection',
+                    'dspace_out': 'postcard_collection'
+                },
+                {
+                    'cdm_collection': 'Helen Pearce Collection',
+                    'dspace_out': 'pearce_collection'
+                }
+            ]
+        }
+    }

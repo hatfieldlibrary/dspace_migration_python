@@ -30,7 +30,6 @@ class ExtractMetadata:
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.
         """
-
         if elements is not None:
                 for element in elements:
                     if element.text is not None:
@@ -60,7 +59,6 @@ class ExtractMetadata:
         """
         structure = record.find('structure')
         page = structure.find('.//page')
-
         return page is None
 
     @staticmethod
@@ -143,7 +141,6 @@ class ExtractMetadata:
                         cpdformat = ET.SubElement(dublin_core, 'dcvalue')
                         cpdformat.set('element', dspace_dc['format'])
                         cpdformat.text = 'Compound'
-
                         # Rather than rely on the CONTENTdm notion of a compound object
                         # to control our application logic, we should add a new field --
                         # relation:requires -- and use it to specify the data repository

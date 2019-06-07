@@ -11,13 +11,27 @@ class CollectionConfig:
     # into dspace as single items that contain more than one bitstream (e.g. postcards).
     collections_to_omit_compound_objects = {
         'aphotos': {
-            'field_name': 'type',
+            'field_name': 'source',
             'field_values': [
-                'postcards'
+                'Postcard Collection',
+                'Kathleen Gemberling Adkison Collection',
+                'Ken Jacobson Photographs'
+            ]
+        },
+        'pnaa': {
+            'field_name': 'source',
+            'field_values': [
+                'Jim Shull Works by Northwest Artists Slide Collection; Pacific Northwest Artists Archive'
+
             ]
         }
     }
 
+    # Maps contentdm collection names to saf directories.
+    # If the load value is False, the collection will not
+    # be processed to an saf directory for that collection.
+    # However, it will be processed into the "base" saf
+    # directory so its metadata can be reviewed.
     sub_collection_mapping = {
         'aphotos': {
             'field_name': 'source',
@@ -53,11 +67,6 @@ class CollectionConfig:
                     'load': True
                 },
                 {
-                    'cdm_collection': 'Salem and Eastern Oregon Photographs',
-                    'dspace_out': 'salem_and_eastern_oregon',
-                    'load': True
-                },
-                {
                     'cdm_collection': 'Salem Eastern Oregon Photographs',
                     'dspace_out': 'salem_eastern_oregon',
                     'load': True
@@ -79,8 +88,13 @@ class CollectionConfig:
                 },
                 {
                     'cdm_collection': 'Willamette University Archives Chloe Clarke Willson Collection',
-                    'dspace_out': '',
-                    'load': False
+                    'dspace_out': 'chloe_willson',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Stowell Diary',
+                    'dspace_out': 'stowell_image',
+                    'load': True
                 },
                 {
                     'cdm_collection': 'Scrapbooks',
@@ -88,10 +102,36 @@ class CollectionConfig:
                     'load': False
                 },
                 {
-                    'cdm_collection': 'Stowell Diary',
+                    'cdm_collection': 'Scrapbooks;',
+                    'dspace_out': '',
+                    'load': False
+                },
+                {
+                    'cdm_collection': '      PNAA',
                     'dspace_out': '',
                     'load': False
                 }
             ]
+        },
+        'pnaa': {
+            'field_name': 'source',
+            'field_values': [
+                {
+                    'cdm_collection': 'Jim Shull Works by Northwest Artists Slide Collection; Pacific Northwest Artists Archive',
+                    'dspace_out': 'shull_slide_collection',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'PNAA',
+                    'dspace_out': '',
+                    'load': False
+                },
+                {
+                    'cdm_collection': 'Pacific Northwest Artists Archive',
+                    'dspace_out': '',
+                    'load': False
+                },
+            ]
         }
+
     }

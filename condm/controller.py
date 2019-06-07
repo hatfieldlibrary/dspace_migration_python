@@ -50,7 +50,7 @@ class ContentdmController:
         parent_out_dir = base_directory + '/condm/saf/' + self.output
 
         base_out_dir = parent_out_dir + '/base'
-        base_processor = CollectionProcessor(self.collection, base_out_dir)
+        base_processor = CollectionProcessor(self.collection, base_out_dir, self.analyzer, self.dry_run)
         if not self.dry_run:
             Utils.init_sub_collection_directory(base_out_dir)
 
@@ -60,11 +60,14 @@ class ContentdmController:
                 out_dir = parent_out_dir + '/' + sub_collection['dspace_out']
                 if not self.dry_run:
                     Utils.init_sub_collection_directory(out_dir)
-                collection_processor = CollectionProcessor(self.collection, out_dir)
+                collection_processor = CollectionProcessor(self.collection, out_dir, self.analyzer, self.dry_run)
                 collection_map[sub_collection['cdm_collection']] = {
                     'processor': collection_processor,
                     'load': sub_collection['load']
                 }
+            else:
+                if self.dry_run:
+                    self.analyzer.excluded_collection(sub_collection['cdm_collection'])
 
         # open the input file for reading.
         input_xml = open(input_file, 'r')
@@ -74,30 +77,34 @@ class ContentdmController:
         root = tree.getroot()
         records = root.findall('./record')
 
+        count = 0
         for record in records:
 
             collection_field_value_el = record.find(cdm_collection['field_name'])
             collection_field_value = collection_field_value_el.text
             if collection_field_value in collection_map:
+                processor = collection_map[collection_field_value]['processor']
+                if collection_map[collection_field_value]['load']:
+                    processor.process_record(record)
                 if self.dry_run:
                     self.analyzer.sub_collection(collection_field_value)
-                else:
-                    self.analyzer.sub_collection(collection_field_value)
-                    processor = collection_map[collection_field_value]['processor']
-                    if collection_map[collection_field_value]['load']:
-                        processor.process_record(record)
             else:
+                base_processor.process_record(record)
                 if self.dry_run:
-                    self.analyzer.sub_collection(collection_field_value)
-                else:
-                    print 'Collection processor not found for ' + collection_field_value
-                    base_processor.process_record(record)
+                    self.analyzer.unprocessed_collection(collection_field_value)
 
-        self.analyzer.print_sub_collection_rpt()
+            count += 1
 
-        # final_count = Utils.get_final_count(self.batch, self.counter)
-        #
-        # print('%s records loaded into %s' % (str(final_count), self.output))
-        #
-        # if self.error_count > 0:
-        #     print'%s errors!' % str(self.error_count)
+        if self.dry_run:
+            print '\nSUB-COLLECTIONS'
+            self.analyzer.print_sub_collection_rpt()
+            self.analyzer.print_unprocessed_collection_rpt()
+            self.analyzer.print_excluded_collection_rpt()
+
+            print '\nITEM TYPES'
+            self.analyzer.print_item_type_report()
+            print('\n%s records processed in dry run of %s' % (str(count), self.output))
+
+        if not self.dry_run:
+            print('\n%s records loaded into %s' % (str(count), self.output))
+            print 'To see more load information use the --dry-run flag.'

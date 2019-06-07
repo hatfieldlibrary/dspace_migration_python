@@ -1,7 +1,8 @@
-import os
+
 import re
 import xml.etree.ElementTree as ET
 
+from analyzer import Analyzer
 from extractMetadata import ExtractMetadata
 from fetchBitstreams import FetchBitstreams
 from extractPageData import ExtractPageData
@@ -14,8 +15,10 @@ class CollectionProcessor:
     counter = 0
     batch = 0
     working_dir = ''
+    dry_run = False
+    analyzer = None
 
-    def __init__(self, parent_collection, output_directory):
+    def __init__(self, parent_collection, output_directory, analyzer, dry_run):
         """
         Constructor.
         :type parent_collection: str
@@ -25,6 +28,9 @@ class CollectionProcessor:
         """
         self.parent_collection = parent_collection
         self.output = output_directory
+        self.dry_run = dry_run
+        assert isinstance(analyzer, Analyzer), "%r is not a print queue" % analyzer
+        self.analyzer = analyzer
 
     @staticmethod
     def extract_full_text(record, current_dir, doc_title, page_data_extractor):
@@ -100,15 +106,15 @@ class CollectionProcessor:
             print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
             print('Exception: {0}'.format(err))
 
-    def process_record(self, record):
+    def generate_saf(self, record):
         """
-       This is the top-level method for processing Contentdm records.
-       It initializes the processing environment, parses the xml input file,
-       and iterates over records, maintaining state for the current working
-       directory (e.g. saf/archives_images/batch_1) and current saf item
-       directory (e.g. item_0010/).  Other processing tasks are delegated
-       to imported classes.
-       """
+        This is the top-level method for processing Contentdm records.
+        It initializes the processing environment, parses the xml input file,
+        and iterates over records, maintaining state for the current working
+        directory (e.g. saf/archives_images/batch_1) and current saf item
+        directory (e.g. item_0010/).  Other processing tasks are delegated
+        to imported classes.
+        """
 
         metadata_extractor = ExtractMetadata()
         page_data_extractor = ExtractPageData()
@@ -217,3 +223,14 @@ class CollectionProcessor:
             print('An error occurred writing local metadata for: %s. See %s' % (doc_title, current_dir))
             print('Exception: {0}'.format(err))
 
+    def process_record(self, record):
+        if self.dry_run:
+            metadata_extractor = ExtractMetadata()
+            if metadata_extractor.is_single_item(record):
+                self.analyzer.add_single_item()
+            elif metadata_extractor.should_process_compound_as_single(record, self.parent_collection):
+                self.analyzer.add_multiple_item_record()
+            else:
+                self.analyzer.add_compound_object()
+        else:
+            self.generate_saf(record)

@@ -80,3 +80,25 @@ ITEM TYPES
  
 5317 records processed in dry run of aphotos
 ```  
+
+## Simple Archive Format (SAF) Output
+
+### CONTENTdm Collections
+For CONTENTdm, each parent SAF directory contains subdirectories defined in the `CollectionConfig` for each collection. (This step is
+not required for eXist-db collections.) For CONTENTdm, the `CollectionConfig` can also be used to exclude specific
+collections from compound object processing.
+
+### SAF Directory Contents
+Each SAF subdirectory contains numbered `batch` subdirectories. Each of these subdirectories contains up to 1000 items.
+
+In each item directory, bitstream files may include images (jp2), thumbnail images, PDF files. It may also include
+a text file with transcriptions of CONTENTdm compound objects or eXist-db full text files.
+ 
+The `contents` file in each item directory provides an inventory of the bitstream files.  The `dublin_core.xml` file contains all CONTENTdm Dublin
+Core metadata mapped to DSpace fields (see `FieldMaps`).  The `metadata_local` file maps to our local DSpace
+metadata registry (also configured in `FieldMaps`).
+
+### DSpace Import
+Items can be loaded into DSpace collections as show here:
+https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format#ImportingandExportingItemsviaSimpleArchiveFormat-ImportingItems
+

@@ -24,7 +24,10 @@ optional arguments:
 ```
 You need to create "data" and "saf" directories for CONTENTdm and eXist-db.  For example, `./existdb/data` and `./existdb/saf`.
 
-The input xml files from CONTENTdm and eXist-db go into the `data` directories. Output will be written to `saf` sub-directories.
+The input xml files from CONTENTdm and eXist-db go into the `data` directories. 
+
+Output will be written to `saf` subdirectories. You need to manually create the top-level saf directories for your
+exported collections.  For example, `./condm/saf/photographs`.
 
 
 ## Metadata

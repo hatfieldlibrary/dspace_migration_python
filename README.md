@@ -23,8 +23,7 @@ optional arguments:
 ```
 You need to create "data" and "saf" directories for CONTENTdm and eXist-db.  For example, `./existdb/data` and `./existdb.saf`.
 
-The input data files from CONTENTdm and eXist-db go into the data directories. Output will be written to sud-directories
-in `saf`.
+The input data files from CONTENTdm and eXist-db go into the data directories. Output will be written to `saf` sub-directories.
 
 
 ## Metadata

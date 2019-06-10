@@ -9,7 +9,8 @@ For DSpace **SAF** documentation, see https://wiki.duraspace.org/display/DSDOC6x
 ```
 usage: process.py [-h] [-d] repo collection source_file saf_directory
 
-Process contentdm exported collection to saf.
+Process exported collection data to saf. The supported repositories are
+CONTENTdm and the WU eXist-db METS/ALTO collections.
 
 positional arguments:
   repo           the repository name (cdm | exist)

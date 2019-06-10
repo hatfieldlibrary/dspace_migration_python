@@ -1,6 +1,6 @@
 # Simple Archive Format Processing
 
-Configurable program that generates DSpace Simple Archive Format (SAF) directories from data exported from
+This program generates DSpace Simple Archive Format (SAF) directories from data exported from
 CONTENTdm and our local eXist-db METS/ALTO collections.
 
 For DSpace **SAF** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format

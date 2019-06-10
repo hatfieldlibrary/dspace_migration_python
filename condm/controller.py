@@ -54,6 +54,7 @@ class ContentdmController:
         if not self.dry_run:
             Utils.init_sub_collection_directory(base_out_dir)
 
+        # Queue up the collection processors.
         collection_map = {}
         for sub_collection in sub_collections:
             if sub_collection['load']:

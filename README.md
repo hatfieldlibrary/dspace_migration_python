@@ -38,3 +38,45 @@ Extracting metadata from mets is slightly more complex. Data is extracted based 
 values that are defined in the `ExistDbFields` class. The mods metadata can be sparse, so a few default values are 
 defined in the `DefaultFieldValueMap` class. All exported records will include these default values if they are not
 provided in the mets.
+
+## Analytics
+Running the program with the `--dry-run` flag will produce a brief analytics report (without loading any data).
+
+Here is a sample:
+```$xslt
+ 
+SUB-COLLECTIONS
+ 
+Item counts for sub-collections
+ 800: Vernor Martin Sackett Collection
+  70: Sanders Soviet Poster Collection
+  18: Willamette University Student Life Glass Negatives
+   1: Stowell Diary
+  78: Kathleen Gemberling Adkison Collection
+2700: Campus Photographs
+  29: Helen Pearce Collection
+  42: Ken Jacobson Photographs
+ 161: Postcard Collection
+  38: Salem Eastern Oregon Photographs
+1363: Paulus Glass Plate Collection
+   1: Willamette University Archives Chloe Clarke Willson Collection
+ 
+Item counts for all unprocessed collections (these will be added to the "base" saf directory).
+  1: Scrapbooks
+  1: Salem and  Eastern Oregon Photographs;
+  1:       PNAA
+ 12: Willamette University Archives Paulus Glass Plate Collection
+  1: Scrapbooks;
+ 
+Item counts for collections that were excluded by configuration.
+  1: Scrapbooks
+  1:       PNAA
+  1: Scrapbooks;
+ 
+ITEM TYPES
+   2: Compound Objects
+ 120: Items with multiple bitstreams
+5195: Single bitstream items
+ 
+5317 records processed in dry run of aphotos
+```  

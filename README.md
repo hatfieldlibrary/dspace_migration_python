@@ -85,6 +85,7 @@ ITEM TYPES
 5317 records processed in dry run of aphotos
 ```  
 
+
 ## Simple Archive Format (SAF) Output
 
 ### CONTENTdm Collections
@@ -102,7 +103,7 @@ The `contents` file in each item directory provides an inventory of the bitstrea
 Core metadata mapped to DSpace fields (see `FieldMaps`).  The `metadata_local` file maps to our local DSpace
 metadata registry (also configured in `FieldMaps`).
 
-### DSpace Import
+## DSpace Import
 Items can be loaded into DSpace collections as show here:
 https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format#ImportingandExportingItemsviaSimpleArchiveFormat-ImportingItems
 

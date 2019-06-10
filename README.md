@@ -89,13 +89,13 @@ ITEM TYPES
 
 ### CONTENTdm Collections
 For CONTENTdm, each parent SAF directory contains subdirectories as defined in the `CollectionConfig`. (This step is
-not required for eXist-db collections.) For CONTENTdm, the `CollectionConfig` can also be used to exclude specific
+not required for eXist-db.) For CONTENTdm, the `CollectionConfig` can also be used to exclude specific
 collections from compound object processing.
 
 ### SAF Directory Contents
 Each SAF subdirectory contains numbered `batch` subdirectories. Each of these subdirectories contains up to 1000 items.
 
-In each item directory, bitstream files may include images (jp2), thumbnail images, PDF files. It may also include
+In each item directory, bitstream files may include images (jp2), thumbnail images, PDF files. The item directory may also include
 a text file with transcriptions of CONTENTdm compound objects or eXist-db full text files.
  
 The `contents` file in each item directory provides an inventory of the bitstream files.  The `dublin_core.xml` file contains all CONTENTdm Dublin

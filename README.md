@@ -44,7 +44,7 @@ defined in the `DefaultFieldValueMap` class. All exported records will include t
 provided in the METS.
 
 ## Analytics
-Running the program with the `--dry-run` flag will produce a brief analytics report (without loading any data).
+Running the program with the `--dry-run` flag will produce a brief analytics report (without loading any data). Currently enabled for CONTENTdm only.
 
 Here is a sample:
 ```$xslt
@@ -88,7 +88,7 @@ ITEM TYPES
 ## Simple Archive Format (SAF) Output
 
 ### CONTENTdm Collections
-For CONTENTdm, each parent SAF directory contains subdirectories defined in the `CollectionConfig` for each collection. (This step is
+For CONTENTdm, each parent SAF directory contains subdirectories as defined in the `CollectionConfig`. (This step is
 not required for eXist-db collections.) For CONTENTdm, the `CollectionConfig` can also be used to exclude specific
 collections from compound object processing.
 

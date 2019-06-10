@@ -1,8 +1,9 @@
 # Simple Archive Format Processing
 
-We plan to use the DSpace Simple Archive Format (saf) to import data from CONTENTdm and eXist-db into DSpace.
+Configurable program that generates DSpace Simple Archive Format (SAF) directories from data exported from
+CONTENTdm and our local eXist-db METS/ALTO collections.
 
-For **saf** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
+For DSpace **SAF** documentation, see https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format
 
 ## Code Usage 
 ```
@@ -21,23 +22,23 @@ optional arguments:
   -d, --dry-run  Dry run displays collection analytics only. No data is
                  processed.
 ```
-You need to create "data" and "saf" directories for CONTENTdm and eXist-db.  For example, `./existdb/data` and `./existdb.saf`.
+You need to create "data" and "saf" directories for CONTENTdm and eXist-db.  For example, `./existdb/data` and `./existdb/saf`.
 
-The input data files from CONTENTdm and eXist-db go into the data directories. Output will be written to `saf` sub-directories.
+The input xml files from CONTENTdm and eXist-db go into the `data` directories. Output will be written to `saf` sub-directories.
 
 
 ## Metadata
 
 ### CONTENTdm
-For CONTENTdm, two classes control the program output.  `CollectionConfig` contains dictionaries that define how
-CONTENTdm collection fields (e.g. as defined in the Dublin Core source field) will be processed.  The `FieldMap`
-class contains mapping between CONTENTdm record and DSpace Dublic Core and Local DSpace fields.
+For CONTENTdm, two classes configure the program output.  `CollectionConfig` contains dictionaries that define how
+individual CONTENTdm collections (e.g. as specified in the Dublin Core source field) will be processed.  The `FieldMap`
+class contains mapping between the CONTENTdm record and DSpace Dublin Core and Local metadata fields.
 
 ### Existdb
-Extracting metadata from mets is slightly more complex. Data is extracted based on elements, attributes and attribute
-values that are defined in the `ExistDbFields` class. The mods metadata can be sparse, so a few default values are 
+Extracting metadata from METS is slightly more complex. Data extraction is based on elements, attributes and attribute
+values that are defined in the `ExistDbFields` class. The MODS metadata can be sparse, so a few default values are 
 defined in the `DefaultFieldValueMap` class. All exported records will include these default values if they are not
-provided in the mets.
+provided in the METS.
 
 ## Analytics
 Running the program with the `--dry-run` flag will produce a brief analytics report (without loading any data).

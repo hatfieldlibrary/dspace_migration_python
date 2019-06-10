@@ -30,6 +30,10 @@ The input xml files from CONTENTdm and eXist-db go into the corresponding `data`
 Output will be written to `saf` subdirectories. You need to manually create the top-level `saf` directories for your
 exported collections.  For example, `./condm/saf/photographs`.
 
+## Export
+Data must be exported from CONTENTdm as CONTENTdm Standard XML, including only the full-text field from page-level metadata.
+
+For eXist-db METS/ALTO collections, the METS and full text collections are required for each publication.
 
 ## Metadata
 

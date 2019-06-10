@@ -29,7 +29,7 @@ The input data files from CONTENTdm and eXist-db go into the data directories. O
 ## Metadata
 
 ### CONTENTdm
-For CONTENTdm, to classes control the program output.  `CollectionConfig` contains dictionaries that define how
+For CONTENTdm, two classes control the program output.  `CollectionConfig` contains dictionaries that define how
 CONTENTdm collection fields (e.g. as defined in the Dublin Core source field) will be processed.  The `FieldMap`
 class contains mapping between CONTENTdm record and DSpace Dublic Core and Local DSpace fields.
 

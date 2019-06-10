@@ -22,7 +22,7 @@ from existdb.controller import ExistController
 
 # The source repository
 
-parser = argparse.ArgumentParser(description='Process contentdm exported collection to saf.')
+parser = argparse.ArgumentParser(description='Process exported collection data to saf. The supported repositories are CONTENTdm and the WU eXist-db METS/ALTO collections.')
 parser.add_argument('repo', metavar='repo', type=str,
                     help='the repository name (cdm | exist)')
 parser.add_argument('collection', metavar='collection', type=str,

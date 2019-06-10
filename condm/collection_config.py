@@ -8,7 +8,7 @@ class CollectionConfig:
         pass
 
     # Collections that contain contentdm compound objects that should be loaded
-    # into dspace as single items that contain more than one bitstream (e.g. postcards).
+    # into dspace as single records with more than one bitstream (e.g. Postcard Collection).
     collections_to_omit_compound_objects = {
         'aphotos': {
             'field_name': 'source',
@@ -17,6 +17,10 @@ class CollectionConfig:
                 'Kathleen Gemberling Adkison Collection',
                 'Ken Jacobson Photographs'
             ]
+        },
+        'manuscripts': {
+            'field_name': 'source',
+            'field_values': []
         },
         'pnaa': {
             'field_name': 'source',
@@ -111,6 +115,71 @@ class CollectionConfig:
                     'dspace_out': '',
                     'load': False
                 }
+            ]
+        },
+        'manuscripts': {
+            'field_name': 'source',
+            'field_values': [
+                {
+                    'cdm_collection': 'Charles E. Larsen Chemawa Indian School Collection',
+                    'dspace_out': 'charles_larsen',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Chloe Clarke Willson Collection',
+                    'dspace_out': 'chloe_clarke_willson',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'James H. Wilbur Letters',
+                    'dspace_out': 'james_wilbur',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'John G. Burggraf Letters',
+                    'dspace_out': 'john_burggraf',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Office of the President: Francis S. Hoyt letter',
+                    'dspace_out': 'frances_hoyt',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Office of the President: Nelson Rounds papers',
+                    'dspace_out': 'nelson_rounds',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Stowell Diary',
+                    'dspace_out': 'stowell_diary',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'The John D. Beach Civil War Letters Collection',
+                    'dspace_out': 'john_beach',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'The Waltz family papers',
+                    'dspace_out': 'waltz_family',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Viola Price Franklin Letter Collection',
+                    'dspace_out': 'viola_price',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Constance Fowler Collection',
+                    'dspace_out': 'constance_fowler',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Robert W. "Bob" Packwood papers',
+                    'dspace_out': 'bob_packwood',
+                    'load': True
+                },
             ]
         },
         'pnaa': {

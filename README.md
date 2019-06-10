@@ -33,9 +33,9 @@ exported collections.  For example, `./condm/saf/photographs`.
 ## Metadata
 
 ### CONTENTdm
-For CONTENTdm, two classes configure the program output.  `CollectionConfig` contains dictionaries that define how
-individual CONTENTdm collections (e.g. as specified in the Dublin Core source field) will be processed.  The `FieldMap`
-class contains mapping between the CONTENTdm record and DSpace Dublin Core and Local metadata fields.
+For CONTENTdm, two classes configure the program output: 
+* `CollectionConfig` contains dictionaries that define how parent CONTENTdm collections will be sorted into smaller collections based on item metadata (e.g. as specified in the Dublin Core source field).  
+* The `FieldMap` class contains mapping between the CONTENTdm record and DSpace Dublin Core and Local metadata fields.
 
 ### Existdb
 Extracting metadata from METS is slightly more complex. Data extraction is based on elements, attributes and attribute

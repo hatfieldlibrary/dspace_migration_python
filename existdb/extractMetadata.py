@@ -191,9 +191,10 @@ class ExtractMetadata:
     def extract_metadata(self, record, item_id):
         # type: (Element, str) -> Element
         """
-        Extracts data that will be added to the dublin_core.xml file in the saf item directory.
+        Extracts metadata from the METS record.
 
         :param record: the etree Element for the mets record.
+        :param item_id: the item identifier.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
         # The child elements and attributes to read from the existdb mods element.

@@ -8,6 +8,14 @@ class ExtractExistFullText:
         pass
 
     def extract_text(self, filename):
+        # type: (str) -> str
+        """
+        Extracts the full text from the exist-db full text xml file. The result
+        returned by this function will be written to the SAF directory as a simple text file.
+
+        :param filename: the path to the full text xml file
+        :return: concatenated text from the full text
+        """
 
         holder = ''
 

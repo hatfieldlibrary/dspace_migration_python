@@ -46,5 +46,5 @@ if repo == 'cdm':
     controller.process_collections()
 
 if repo == 'exist':
-    controller = ExistController(args.collection, args.source_file, args.saf_dir)
+    controller = ExistController(args.collection, args.source_file, args.saf_dir, dry_run)
     controller.process_records()

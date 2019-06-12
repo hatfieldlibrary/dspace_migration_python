@@ -4,14 +4,16 @@ import os
 import xml.etree.ElementTree as ET
 from io import open
 
+from analyzer import Analyzer
 from extractMetadata import ExtractMetadata
 from extractExistFullText import ExtractExistFullText
+from fetchThumbnail import FetchThumbnailImage
 from shared.utils import Utils
 
 
 class ExistController:
 
-    def __init__(self, collection, input_dir, output_directory):
+    def __init__(self, collection, input_dir, output_directory, dry_run):
         """
         Constructor.
 
@@ -25,6 +27,8 @@ class ExistController:
         self.collection = collection
         self.input = input_dir
         self.output = output_directory
+        self.dry_run = dry_run
+        self.analyzer = Analyzer()
 
     def process_records(self):
         """
@@ -70,16 +74,20 @@ class ExistController:
             # Get extractor instances.
             metadata_extractor = ExtractMetadata()
             page_data_extractor = ExtractExistFullText()
+            fetch_thumbnail_utility = FetchThumbnailImage()
 
             # Each working directory will contain 1000 items.
             # The working directories are labelled batch_1, batch_2 ...
             if counter % 1000 == 0:
                 counter = 0
                 batch += 1
-                working_dir = Utils.init_working_directory(out_dir, batch)
+                if not self.dry_run:
+                    working_dir = Utils.init_working_directory(out_dir, batch)
 
-            # Create the working directory
-            current_dir = Utils.int_saf_sub_directory(working_dir, counter)
+            current_dir = ''
+            if not self.dry_run:
+                # Create the working directory
+                current_dir = Utils.int_saf_sub_directory(working_dir, counter)  # type: str
 
             # The convention for exisb-db mets files is to append '01' at the end of the string.
             # For series, the file name without the appended value equals the dateIssued, and
@@ -98,26 +106,30 @@ class ExistController:
             # removing \d\d.xml
             item_id = item[:-6]
 
-            # Extract metadata
-            dc_metadata = metadata_extractor.extract_metadata(root, item_id)
-
-            # Write as xml
-            tree = ET.ElementTree(dc_metadata)
-            tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
-
             # Temporary hack for Wallulah processing. Should not be needed with updated fulltext file names.
             # item = item_id + '.xml'
 
+            # Extract metadata
+            dc_metadata = metadata_extractor.extract_metadata(root, item_id)
             # Extract the full text
             fulltext = page_data_extractor.extract_text(os.path.join(text_dir + '/' + item))
+            # For the image path, remove only the xml extension.
+            image_path = item[:-4]
+            fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
+
+            if not self.dry_run:
+                # Write as xml
+                tree = ET.ElementTree(dc_metadata)
+                tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
             # For utf-8 output we need to use the io library open function. With python3 this can be done
             # using the default python open func. (I'm using python 2.7)
             try:
-                # Write fulltext
-                with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
-                    file2.write(unicode(fulltext))
-                    file2.close()
+                if not self.dry_run:
+                    # Write fulltext
+                    with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
+                        file2.write(unicode(fulltext))
+                        file2.close()
             except IOError as err:
                 error_count += 1
                 print('An error occurred writing full text data to saf for: %s. See %s' % (doc_title, current_dir))
@@ -128,10 +140,11 @@ class ExistController:
                 print 'AssertionError: {0}'.format(err)
 
             try:
-                # Add text file to the saf contents file.
-                with open(current_dir + '/contents', 'w') as file3:
-                    file3.write(unicode('file_1.txt'))
-                    file3.close()
+                if not self.dry_run:
+                    # Add text file to the saf contents file.
+                    with open(current_dir + '/contents', 'a') as file3:
+                        file3.write(unicode('\nfile_1.txt'))
+                        file3.close()
             except IOError as err:
                 error_count += 1
                 print('An error occurred writing contents to saf for: %s. See %s' % (doc_title, current_dir))

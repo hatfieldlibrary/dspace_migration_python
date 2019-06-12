@@ -42,7 +42,12 @@ class ExistDbFields:
         'mets_agent_element': 'mets:agent',
         'mets_agent_name_element': 'mets:name',
         'descriptive_metadata_section': 'mets:dmdSec',
-        'mods_section_element': 'mods:mods'
+        'mods_section_element': 'mods:mods',
+        'file_section': 'mets:fileSec',
+        'file_group': 'mets:fileGrp',
+        'file': 'mets:file',
+        'file_location': 'mets:FLocat',
+        'file_href': '{http://www.w3.org/1999/xlink}href'
     }
 
     # For subsequent processing it's convenient to have a dictionary that excludes the namespace.
@@ -58,7 +63,7 @@ class ExistDbFields:
         'sub_title_element': 'subTitle',
         'physical_description_element': 'physicalDescription',
         'physical_extent_element': 'extent',
-        'resource_type_element': 'typeOfResource',
+        'resource_type_element': 'typeOfResource'
     }
 
     # The elements and attributes to read from the existdb mets file.

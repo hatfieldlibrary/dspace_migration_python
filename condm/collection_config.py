@@ -28,6 +28,10 @@ class CollectionConfig:
                 'Jim Shull Works by Northwest Artists Slide Collection; Pacific Northwest Artists Archive'
 
             ]
+        },
+        'glee': {
+            'field_name': 'source',
+            'field_values': []
         }
     }
 
@@ -181,6 +185,10 @@ class CollectionConfig:
                     'load': True
                 },
             ]
+        },
+        'glee': {
+            'field_name': 'source',
+            'field_values': []
         },
         'pnaa': {
             'field_name': 'source',

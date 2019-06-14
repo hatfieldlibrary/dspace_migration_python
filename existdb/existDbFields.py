@@ -12,6 +12,7 @@ class ExistDbFields:
     # Mods elements
     mets_mods_elements = {
         'identifier_element': 'mods:identifier',
+        'identifier_element_doi': 'mods:identifier',
         'item_details_element': 'mods:detail',
         'date_issued_element': 'mods:dateIssued',
         'note_element': 'mods:note',
@@ -53,6 +54,7 @@ class ExistDbFields:
     # For subsequent processing it's convenient to have a dictionary that excludes the namespace.
     processor_mods_elements = {
         'identifier_element': 'identifier',
+        'identifier_element_doi': 'identifier',
         'item_details_element': 'detail',
         'item_number_element': 'number',
         'date_issued_element': 'dateIssued',
@@ -76,8 +78,13 @@ class ExistDbFields:
         },
         mets_mods_elements['identifier_element']: {
             'element': mets_mods_elements['identifier_element'],
-            'attr': mets_mods_element_attrs['doi_type_attr'],
+            'attr': mets_mods_element_attrs['type_attr'],
             'attr_val': None
+        },
+        mets_mods_elements['identifier_element_doi']: {
+            'element': mets_mods_elements['identifier_element'],
+            'attr': mets_mods_element_attrs['type_attr'],
+            'attr_val': ['doi']
         },
         mets_mods_elements['item_details_element']: {
             'element': mets_mods_elements['item_details_element'],
@@ -147,7 +154,7 @@ class ExistDbFields:
         'language': 'language',
         'language_iso_qualifier': 'iso',
         'identifier': 'identifier',
-        'identifier_exist_id_attr': 'other',
+        'identifier_doi_attr': 'other',
         'citation_qualifier': 'citation',
         'publisher': 'publisher',
         'type': 'type',

@@ -80,8 +80,8 @@ class ExtractMetadata:
                     return bool(1)
         return bool(0)
 
-    def extract_local_metadata(self, record):
-        # type: (Element) -> Element
+    def extract_local_metadata(self, record, collection):
+        # type: (Element, str) -> Element
         """
         This method extracts the metadata to add metadata_local.xml in the saf directory.
         Data fields are mapped to the local metadata registry configured for our dspace instance.
@@ -96,20 +96,28 @@ class ExtractMetadata:
         metadata_local = ET.Element('dublin_core')
         metadata_local.set('schema', 'local')
 
-        full_resolution = record.iterfind(cdm_structure['preservation_location'])
+        # The eadid and condmid are added directly here. (Not using the local dspace field map.)
         # This should probably be considered a hack.
         cdmunmapped = record.iterfind(ExtractMetadata.cdm_dc['unmapped'])
-
         # TODO: the eadid needs to be mapped to a unique field. For now, use string match so some eadid fields will
         #  appear in dspace.
-        for element in cdmunmapped:
-            if element.text is not None:
-                if element.text.find('WUA') != -1:
-                    relation_references = ET.SubElement(metadata_local, 'dcvalue')
-                    relation_references.set('element', dspace_local['eadid'])
-                    relation_references.text = element.text
+        # for element in cdmunmapped:
+        #     if element.text is not None:
+        #         if element.text.find('WUA') != -1:
+        #             relation_references = ET.SubElement(metadata_local, 'dcvalue')
+        #             relation_references.set('element', dspace_local['eadid'])
+        #             relation_references.text = element.text
+        # Create the condm id.
+        # ptr = record.find(cdm_structure['id'])
+        # cdm_id = collection + ptr.text
+        # cdm_id_local_field = ET.SubElement(metadata_local, 'dcvalue')
+        # cdm_id_local_field.set('element', dspace_local['mets_identifier'])
+        # cdm_id_local_field.text = cdm_id
 
+        # Process any page data from preservation_location (non-compound objects)
+        full_resolution = record.iterfind(cdm_structure['preservation_location'])
         self.__process_iterable_map(metadata_local, full_resolution, dspace_local_map)
+        # Extract preservation data for compound objects.
         self.extract_page.add_page_admin_data(metadata_local, record)
 
         return metadata_local

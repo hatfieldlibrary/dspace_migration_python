@@ -17,6 +17,10 @@ class ExistDbFieldMaps:
     # Dspace mapping keys can be mets elements (e.g. dateIssued) or unique
     # keys defined below.
     switch_tag = {
+        'identifier_other': {
+            # Apply this to identifier elements that need the "other" qualifier.
+            'id': 'identifier_other'
+        },
         'statement_of_responsibility': {
             # Use this key to lookup DC mapping for statement of responsibility.
             # This is read from the mods:note element in the mets file. It maps
@@ -57,6 +61,10 @@ class ExistDbFieldMaps:
             'element': dspace_dc_field['relation'],
             'qualifier': dspace_dc_field['relation_requires']
         },
+        switch_tag['identifier_other'].get('id'): {
+            'element': 'identifier',
+            'qualifier': dspace_dc_field['identifier_doi_attr']
+        },
         processor_field['identifier_element']: {
             'element': 'identifier',
             'qualifier': None
@@ -64,7 +72,7 @@ class ExistDbFieldMaps:
         # Maps item identifier to identifier:other (for the exist item id).
         switch_tag['exist_db_id'].get('id'): {
             'element': dspace_dc_field['identifier'],
-            'qualifier': dspace_dc_field['identifier_exist_id_attr']
+            'qualifier': None
         },
         processor_field['resource_type_element']: {
             'element': dspace_dc_field['type'],

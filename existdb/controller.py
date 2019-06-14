@@ -4,7 +4,7 @@ import os
 import xml.etree.ElementTree as ET
 from io import open
 
-from analyzer import Analyzer
+from analyzer import ExistAnalyzer
 from extractMetadata import ExtractMetadata
 from extractExistFullText import ExtractExistFullText
 from fetchThumbnail import FetchThumbnailImage
@@ -28,7 +28,7 @@ class ExistController:
         self.input = input_dir
         self.output = output_directory
         self.dry_run = dry_run
-        self.analyzer = Analyzer()
+        self.analyzer = ExistAnalyzer()
 
     def process_records(self):
         """
@@ -74,7 +74,7 @@ class ExistController:
             # Get extractor instances.
             metadata_extractor = ExtractMetadata()
             page_data_extractor = ExtractExistFullText()
-            fetch_thumbnail_utility = FetchThumbnailImage()
+            fetch_thumbnail_utility = FetchThumbnailImage(self.analyzer)
 
             # Each working directory will contain 1000 items.
             # The working directories are labelled batch_1, batch_2 ...
@@ -143,7 +143,7 @@ class ExistController:
                 if not self.dry_run:
                     # Add text file to the saf contents file.
                     with open(current_dir + '/contents', 'a') as file3:
-                        file3.write(unicode('\nfile_1.txt'))
+                        file3.write(unicode('file_1.txt'))
                         file3.close()
             except IOError as err:
                 error_count += 1
@@ -163,3 +163,7 @@ class ExistController:
 
         if error_count > 0:
             print'%s errors!' % str(error_count)
+
+        print ('Image processing failed for:')
+        self.analyzer.print_image_encoding_failures()
+

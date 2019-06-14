@@ -208,7 +208,7 @@ class CollectionProcessor:
         self.counter += 1
 
         # Extract and write metadata to be imported via our local dspace schema.
-        local_metadata = metadata_extractor.extract_local_metadata(record)
+        local_metadata = metadata_extractor.extract_local_metadata(record, self.parent_collection)
         tree = ET.ElementTree(local_metadata)
 
         try:

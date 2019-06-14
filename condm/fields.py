@@ -85,7 +85,8 @@ class Fields:
     # Fields for dspace local metadata import.
     dspace_local_field = {
         'eadid': 'EADID',
-        'preservation_location': 'mastercopy'
+        'preservation_location': 'mastercopy',
+        'mets_identifier': 'METSID'
     }
 
 

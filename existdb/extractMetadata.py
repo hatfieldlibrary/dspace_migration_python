@@ -105,6 +105,17 @@ class ExtractMetadata:
                         if element[0].text is not None:
                             self.__set_citation(element)
 
+                    elif element.tag == processor_field['identifier_element_doi']:
+                        identifier_type = element.attrib['type']
+                        if identifier_type == 'doi':
+                            self.add_sub_element(parent_element,
+                                                 element_map[self.switch_tag['identifier_other'].get('id')],
+                                                 element.text)
+                        # else:
+                        #     self.add_sub_element(parent_element,
+                        #                          element_map[processor_field['identifier_element']],
+                        #                          element.text)
+
                     # statement of responsibility
                     elif element.tag == processor_field['note_element']:
                         # Note elements contain statement of responsibility (which maps to a dspace dublin

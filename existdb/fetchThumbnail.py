@@ -1,9 +1,9 @@
 from _elementtree import Element
 from pgmagick import Image
 import urllib
-import io
 from contextlib import contextmanager
 
+from analyzer import ExistAnalyzer
 from existDbFields import ExistDbFields
 
 class FetchThumbnailImage:
@@ -18,7 +18,9 @@ class FetchThumbnailImage:
         finally:
             thing.close()
 
-    def __init__(self):
+    def __init__(self, analyzer):
+        assert isinstance(analyzer, ExistAnalyzer), "%r is not a print queue" % analyzer
+        self.analyzer = analyzer
         self.mets_fields = ExistDbFields()
 
     def convert_file(self, file_name, collection, item_id, out_dir):
@@ -28,18 +30,22 @@ class FetchThumbnailImage:
         with self.closing(urllib.urlopen(URL)) as url:
             with open('temp.jpg', 'wb') as f:
                 f.write(url.read())
-        im = Image('temp.jpg')
-        im.quality(50)
-        im.scale('200x200')
-        im.write(out_dir + '/thumb.jpg')
-        self.write_contents(out_dir)
-
-    def write_contents(self, out_dir):
         try:
-            print 'write'
+            im = Image('temp.jpg')
+            im.quality(50)
+            im.scale('200x200')
+            im.write(out_dir + '/thumb.jpg')
+            self.write_contents(out_dir)
+        except:
+            print('An error occurred concerting image for %s: %s.' % (out_dir, URL))
+            self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)
+
+    @staticmethod
+    def write_contents(out_dir):
+        try:
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
-                contents.write('thumb.jpg')
+                contents.write('thumb.jpg\n')
                 contents.close()
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))

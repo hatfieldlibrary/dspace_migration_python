@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import urllib
 import time
@@ -33,30 +32,6 @@ class FetchBitstreams:
         else:
             content_file.write('\n' + filename)
             content_file.close()
-
-
-    # @staticmethod
-    # def __fetch_thumbnail(outfile, link, doc_title, error_count):
-    #     # type: (str, str, str, int) -> int
-    #     """
-    #     Fetches the thumbnail file and writes to the saf item directory.
-    #     :param outfile: full path for the file to be written.
-    #     :param link: link used to retrieve the file from contentdm.
-    #     :param doc_title: the title of the current document (for error logging).
-    #     :param error_count: the current error count.
-    #     :return: the error count.
-    #     """
-    #     if link is not None:
-    #         try:
-    #             urllib.urlretrieve(link, outfile)
-    #         except IOError as err:
-    #             print('An error occured retriveing thumbnail for: %s' % doc_title)
-    #             print('IO Error: {0}'.format(err))
-    #         except:
-    #             error_count += 1
-    #             print('An error occurred retrieving thumbnail for: %s' % doc_title)
-    #
-    #         return error_count
 
     @staticmethod
     def __fetch_bitstream(outfile, link):
@@ -210,12 +185,6 @@ class FetchBitstreams:
     def fetch_single_bitstream(cdmid_el, current_dir, record, collection):
 
         cdmfile_el = record.find(FetchBitstreams.cdm_struc['filename'])
-
-        # NOTE: This test may need to be modified or removed if eventually
-        # we need to treat some cpd files as image records with multiple
-        # bitstreams.
-        # if cdmfile_el.text.find('cpd') != -1:
-        #    raise RuntimeError('ERROR: Requesting bitstreams for a compound object.')
 
         thumb_url_el = record.find(FetchBitstreams.cdm_struc['thumbnail'])
         FetchBitstreams.add_bitstream(cdmid_el, cdmfile_el.text, current_dir, collection, 0)

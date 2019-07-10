@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 from fields import Fields
 
@@ -18,7 +17,7 @@ class FieldMaps:
     dspace_dc_field = Fields.dspace_dc_field
     dspace_local_field = Fields.dspace_local_field
 
-    # This dictionary maps cdm to dspace DUBLIN CORE.
+    # Maps cdm fields to dspace dublin core fields.
 
     dc_field_map = {
 
@@ -31,18 +30,31 @@ class FieldMaps:
             'qualifier': dspace_dc_field['title_alt_qualifier']
         },
         cdm_dc_field['creator']: {
-            'element': dspace_dc_field['creator'],
-            'qualifier': None
+            'element': dspace_dc_field['contributor'],
+            'qualifier': dspace_dc_field['contributor_author_qualifier']
+        },
+        cdm_dc_field['contributor']: {
+            'element': dspace_dc_field['contributor'],
+            'qualifier': dspace_dc_field['contributor_author_qualifier']
         },
         cdm_dc_field['description']: {
             'element': dspace_dc_field['description'],
             'qualifier': None
         },
-        cdm_dc_field['date']: {
-            'element': dspace_dc_field['date'],
-            'qualifier': None
+        # Dspace creates it's own description.provenance at import.
+        cdm_dc_field['provenance']: {
+            'element': dspace_dc_field['description'],
+            'qualifier': dspace_dc_field['description_provenance_qualifier']
+        },
+        cdm_dc_field['relation_is_referenced_by']: {
+            'element': dspace_dc_field['description'],
+            'qualifier': dspace_dc_field['description_sponsorship_qualifier']
         },
         cdm_dc_field['date_created']: {
+            'element': dspace_dc_field['date'],
+            'qualifier': dspace_dc_field['date_created_qualifier']
+        },
+        cdm_structural_elements['date_created']: {
             'element': dspace_dc_field['date'],
             'qualifier': dspace_dc_field['date_created_qualifier']
         },
@@ -50,26 +62,36 @@ class FieldMaps:
             'element': dspace_dc_field['coverage'],
             'qualifier': dspace_dc_field['coverage_spatial_qualifier']
         },
+        cdm_dc_field['coverage_temporal']: {
+            'element': dspace_dc_field['coverage'],
+            'qualifier': dspace_dc_field['coverage_temporal_qualifier']
+        },
         cdm_dc_field['subject']: {
             'element': dspace_dc_field['subject'],
             'qualifier': None
         },
-        # From archives_images: <relation>http://archiveswest.orbiscascade.org/ark:/80444/xv81204</relation>
-        # Could be mapped to dspace relation.uri. If that's what we need, then cdm field mapping should
-        # be changed so we can easily identify the field after export.
         cdm_dc_field['relation']: {
             'element': dspace_dc_field['relation'],
-            'qualifier': None
+            'qualifier': dspace_dc_field['relation_isreferencedby_qualifer']
         },
-        cdm_dc_field['relation_ispartof']: {
+        cdm_dc_field['relation_is_part_of']: {
             'element': dspace_dc_field['relation'],
             'qualifier': dspace_dc_field['relation_ispartof_qualifier']
         },
+        cdm_dc_field['relation_is_format_of']: {
+            'element': dspace_dc_field['relation'],
+            'qualifier': dspace_dc_field['relation_isformatof_qualifier']
+        },
         cdm_dc_field['language']: {
             'element': dspace_dc_field['language'],
-            'qualifier': None
+            'qualifier': dspace_dc_field['language_iso_qualifier']
         },
         cdm_dc_field['identifier']: {
+            'element': dspace_dc_field['identifier'],
+            'qualifier': dspace_dc_field['identifier_other_qualifier']
+        },
+        # This is the doi field.
+        cdm_dc_field['instruction_method']: {
             'element': dspace_dc_field['identifier'],
             'qualifier': None
         },
@@ -77,14 +99,13 @@ class FieldMaps:
             'element': dspace_dc_field['publisher'],
             'qualifier': None
         },
-        cdm_dc_field['rights']: {
+        cdm_dc_field['rights_license']: {
             'element': dspace_dc_field['rights'],
             'qualifier': None
         },
-        # Dspace creates it's own decription.provenance at import.
-        cdm_dc_field['provenance']: {
-            'element': dspace_dc_field['description'],
-            'qualifier': dspace_dc_field['description_provenance_qualifier']
+        cdm_dc_field['rights']: {
+            'element': dspace_dc_field['rights'],
+            'qualifier': dspace_dc_field['rights_uri_qualifier']
         },
         cdm_dc_field['type']: {
             'element': dspace_dc_field['type'],
@@ -108,15 +129,15 @@ class FieldMaps:
         }
     }
 
-    # This dictionary maps cdm to dspace LOCAL metadata.
+    # Maps cdm fields to dspace local metadata fields.
 
     local_field_map = {
+
         cdm_structural_elements['preservation_location']: {
             'element': dspace_local_field['preservation_location'],
             'qualifier': None
         },
-        # Currently exported from cdm as unmapped.
-        cdm_dc_field['unmapped']: {
+        cdm_dc_field['relation_is_required_by']: {
             'element': dspace_local_field['eadid'],
             'qualifier': None
         },
@@ -125,6 +146,61 @@ class FieldMaps:
         dspace_local_field['mets_identifier']: {
             'element': dspace_local_field['mets_identifier'],
             'qualifier': None
+        },
+        cdm_dc_field['identifier_bibliographic_citation']: {
+            'element': dspace_local_field['transcription'],
+            'qualifier': None
+        },
+        cdm_dc_field['description_table_of_contents']: {
+            'element': dspace_local_field['addressee'],
+            'qualifier': None
+        },
+        cdm_dc_field['date_issued']: {
+            'element': dspace_local_field['postmark'],
+            'qualifier': None
+        },
+        cdm_dc_field['date_valid']: {
+            'element': dspace_local_field['browse_date'],
+            'qualifier': None
+        },
+        cdm_dc_field['audience_mediator']: {
+            'element': dspace_local_field['personal_name'],
+            'qualifier': None
+        },
+        cdm_dc_field['coverage']: {
+            'element': dspace_local_field['location_gps'],
+            'qualifier': None
+        },
+        cdm_dc_field['date']: {
+            'element': dspace_local_field['date'],
+            'qualifier': None
+        },
+        cdm_dc_field['date_submitted']: {
+            'element': dspace_local_field['interviewer'],
+            'qualifier': None
+        },
+        cdm_dc_field['date_copyrighted']: {
+            'element': dspace_local_field['interviewee'],
+            'qualifier': None
+        },
+        cdm_dc_field['relation_conforms_to']: {
+            'element': dspace_local_field['aat'],
+            'qualifier': None
+        },
+        cdm_dc_field['relation_references']: {
+            'element': dspace_local_field['order_number'],
+            'qualifier': None
+        },
+        cdm_dc_field['relation_has_part']: {
+            'element': dspace_local_field['load_number'],
+            'qualifier': None
+        },
+        cdm_dc_field['audience']: {
+            'element': dspace_local_field['culture'],
+            'qualifier': None
+        },
+        cdm_dc_field['audience_level']: {
+            'element': dspace_local_field['geo_name'],
+            'qualifier': None
         }
-
     }

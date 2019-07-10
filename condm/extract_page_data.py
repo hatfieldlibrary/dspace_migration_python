@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import xml.etree.ElementTree as ET
 from xml.etree.ElementTree import Element
@@ -54,6 +53,6 @@ class ExtractPageData:
             page_el = page.find(cdm_struc['compound_object_page_text'])
             if page_el is not None:
                 if page_el.text is not None:
-                    page_el = Utils.correct_text_encoding(page_el)
-                    fulltext += page_el.text
+                    page_text = Utils.correct_text_encoding(page_el.text)
+                    fulltext += page_text
         return fulltext

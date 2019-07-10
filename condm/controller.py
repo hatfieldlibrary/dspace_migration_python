@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import os
 import xml.etree.ElementTree as ET
@@ -82,18 +81,25 @@ class ContentdmController:
         for record in records:
 
             collection_field_value_el = record.find(cdm_collection['field_name'])
-            collection_field_value = collection_field_value_el.text
-            if collection_field_value in collection_map:
-                processor = collection_map[collection_field_value]['processor']
-                if collection_map[collection_field_value]['load']:
-                    processor.process_record(record)
-                if self.dry_run:
-                    self.analyzer.sub_collection(collection_field_value)
+            if collection_field_value_el is not None:
+                collection_field_value = collection_field_value_el.text
+                if collection_field_value in collection_map:
+                    processor = collection_map[collection_field_value]['processor']
+                    if collection_map[collection_field_value]['load']:
+                        processor.process_record(record)
+                    if self.dry_run:
+                        self.analyzer.sub_collection(collection_field_value)
+                else:
+                    base_processor.process_record(record)
+                    if self.dry_run:
+                        self.analyzer.unprocessed_collection(collection_field_value)
             else:
+                # This gets a bit messy.  The problem is that some collections export without a collection field.
+                # So in addition to checking for a configured collection processor based on the collection
+                # field value, we also need to run the base processor if the collection field is missing.
                 base_processor.process_record(record)
                 if self.dry_run:
-                    self.analyzer.unprocessed_collection(collection_field_value)
-
+                    self.analyzer.unprocessed_collection("base")
             count += 1
 
         if self.dry_run:

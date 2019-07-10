@@ -1,5 +1,4 @@
 
-
 class Analyzer:
 
     sub_collections = {}

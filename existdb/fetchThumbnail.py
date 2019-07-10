@@ -27,6 +27,7 @@ class FetchThumbnailImage:
 
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
         print URL
+        # write the file to a temporary on disk location.
         with self.closing(urllib.urlopen(URL)) as url:
             with open('temp.jpg', 'wb') as f:
                 f.write(url.read())

@@ -1,5 +1,4 @@
 
-
 class CollectionConfig:
 
     # This class is for collection level configuration.
@@ -7,8 +6,12 @@ class CollectionConfig:
     def __init__(self):
         pass
 
-    # Collections that contain contentdm compound objects that should be loaded
-    # into dspace as single records with more than one bitstream (e.g. Postcard Collection).
+    # Defines sub-collections that include compound objects that should be loaded
+    # into dspace as single records, with more than one bitstream (e.g. the Postcard Collection).
+    # Use the field_values array to define sub-collections. If no sub-collections exist
+    # you can specify the 'allSubCollections' field_name (e.g. the art collection contains
+    # no sub-collections).  To force compound objects to be processed as documents just
+    # provide a normal field_name with an empty field_values array.
     collections_to_omit_compound_objects = {
         'aphotos': {
             'field_name': 'source',
@@ -26,11 +29,22 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': [
                 'Jim Shull Works by Northwest Artists Slide Collection; Pacific Northwest Artists Archive'
-
             ]
         },
         'glee': {
             'field_name': 'source',
+            'field_values': []
+        },
+        'rare': {
+            'field_name': 'source',
+            'field_values': []
+        },
+        'hfma': {
+            'field_name': 'source',
+            'field_values': []
+        },
+        'art': {
+            'field_name': 'allSubCollections',
             'field_values': []
         }
     }
@@ -38,7 +52,7 @@ class CollectionConfig:
     # Maps contentdm collection names to saf directories.
     # If the load value is False, the collection will not
     # be processed to an saf directory for that collection.
-    # However, it will be processed into the "base" saf
+    # Instead, it will be processed into the "base" saf
     # directory so its metadata can be reviewed.
     sub_collection_mapping = {
         'aphotos': {
@@ -209,6 +223,18 @@ class CollectionConfig:
                     'load': False
                 },
             ]
+        },
+        'rare': {
+            'field_name': 'source',
+            'field_values': []
+        },
+        'hfma': {
+            'field_name': 'source',
+            'field_values': []
+        },
+        'art': {
+            'field_name': 'source',
+            'field_values': []
         }
 
     }

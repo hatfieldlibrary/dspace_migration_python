@@ -3,9 +3,9 @@ import re
 import xml.etree.ElementTree as ET
 
 from analyzer import Analyzer
-from extractMetadata import ExtractMetadata
-from fetchBitstreams import FetchBitstreams
-from extractPageData import ExtractPageData
+from extract_metadata import ExtractMetadata
+from fetch_bitstreams import FetchBitstreams
+from extract_page_data import ExtractPageData
 from shared.utils import Utils
 
 
@@ -137,7 +137,7 @@ class CollectionProcessor:
         current_dir = Utils.int_saf_sub_directory(self.working_dir, self.counter)
 
         # Capture dc metadata and write to archive
-        dc_metadata = metadata_extractor.extract_metadata(record, self.parent_collection)
+        dc_metadata = metadata_extractor.extract_metadata(record)
 
         tree = ET.ElementTree(dc_metadata)
         tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
@@ -161,6 +161,7 @@ class CollectionProcessor:
                 print('Exception: {0}'.format(err))
 
         elif metadata_extractor.should_process_compound_as_single(record, self.parent_collection):
+
             # This is a compound object that will be processed as a single item.
             try:
                 FetchBitstreams.fetch_bit_streams(current_dir, record, self.parent_collection, True)
@@ -183,13 +184,13 @@ class CollectionProcessor:
                 # Appends to the saf contents file after bitstreams have been added.
                 self.append_contents_file(current_dir, doc_title)
         else:
+
             # This is a compound object.
             # Extract full text and add it to saf directory
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
                 # Writes to first line of saf contents file before the thumbnail is retrieved.
                 self.write_contents_file(current_dir, doc_title)
-
             # Get a thumbnail image.
             try:
                 # This should be called after the full-text file has been added.
@@ -207,7 +208,7 @@ class CollectionProcessor:
 
         self.counter += 1
 
-        # Extract and write metadata to be imported via our local dspace schema.
+        # Extract and write metadata to be imported into our local metadata fields.
         local_metadata = metadata_extractor.extract_local_metadata(record, self.parent_collection)
         tree = ET.ElementTree(local_metadata)
 
@@ -231,6 +232,8 @@ class CollectionProcessor:
             elif metadata_extractor.should_process_compound_as_single(record, self.parent_collection):
                 self.analyzer.add_multiple_item_record()
             else:
+                el = record.find("title")
+                print el.text
                 self.analyzer.add_compound_object()
         else:
             self.generate_saf(record)

@@ -1,7 +1,5 @@
-#!/usr/bin/env python
 
 import os
-from _elementtree import Element
 
 
 class Utils:
@@ -24,7 +22,7 @@ class Utils:
 
     @staticmethod
     def init_sub_collection_directory(outdir):
-        # type: (str, str) -> None
+        # type: (str) -> None
         """
         Creates a sub-collection directory
         :param outdir: the full path to the sub-collection directory
@@ -90,23 +88,35 @@ class Utils:
             return ((batch - 1) * 1000) + counter
 
     @staticmethod
-    def correct_text_encoding(element):
-        # type: (Element) -> object
+    def correct_text_encoding(text_content):
+        # type: (str) -> str
         """
-        CONTENTdm is sometimes exporting encoded characters that DSpace does not
-        convert properly. If that problem can't be fixed in the software, use this
-        function to make substitutions before importing to DSpace.
+        CONTENTdm export does not encode special characters correctly
+        or consistently. This method cleans up the problem. Pass all
+        strings from text elements through this filter.
 
-        :param element: The etree element
-        :return: The etree element after substitution
+        :param text_content: The element's text value
+        :return: Updated text
         """
+        # Some contentdm transcriptions include html markup for line break
+        text_content = text_content.replace('lt;br gt;', '')
+        # apostrophe (allowed in XML text)
+        text_content = text_content.replace('&amp;#x27', '\'')
+        text_content = text_content.replace('&#x27;', '\'')
+        text_content = text_content.replace('&amp;apos;', '\'')
+        text_content = text_content.replace('&apos;', '\'')
+        # quote (allowed in XML text)
+        text_content = text_content.replace('&amp;quot;', '"')
+        text_content = text_content.replace('&quot;', '"')
+        # brackets (encode these correctly)
+        text_content = text_content.replace('&amp;gt;', '&gt')
+        text_content = text_content.replace('&amp;lt;', '&lt')
+        # When importing into DSpace as Simple Archive Format, the ampersand special character
+        # is imported without decoding. It's not valid xml (I think) ... but here we need to convert the
+        # &amp; to a literal ampersand (&).
+        text_content = text_content.replace('&amp;', '&')
+        # remove ending semicolons from the metatdata
+        if text_content.endswith(';'):
+            text_content = text_content[:-1]
 
-        # apostrophe
-        element.text = element.text.replace('&amp;#x27', '&apos;')
-
-        element.text = element.text.replace('&#x27;', '&apos;')
-
-        # some contentdm transcriptions include html markup for line breaks
-        element.text = element.text.replace('lt;br gt;', '')
-
-        return element
+        return text_content

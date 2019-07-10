@@ -125,15 +125,12 @@ class ExtractMetadata:
         metadata_local = ET.Element('dublin_core')
         metadata_local.set('schema', 'local')
 
-        # Process page data from preservation_location (this is for non-compound objects)
-        full_resolution = record.iterfind(cdm_structure['preservation_location'])
-        self.__process_iterable_map(metadata_local, full_resolution, dspace_local_map)
-        # Process dublin core fields for local metadata
+        # Process metadata for dspace local fields (will include the preservation copy for single items)
         self.__process_iterable_map(metadata_local, record, dspace_local_map)
+        # Add custom local metadata fields for compound objects.
+        self.add_compound_object_local_metadata(record, collection, metadata_local)
         # Extract preservation data from compound object page elements.
         self.extract_page.add_page_admin_data(metadata_local, record)
-        # Add compound object local metadata fields.
-        self.add_compound_object_local_metadata(record, collection, metadata_local)
 
         return metadata_local
 

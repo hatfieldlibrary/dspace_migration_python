@@ -50,11 +50,7 @@ class FieldMaps:
             'element': dspace_dc_field['description'],
             'qualifier': dspace_dc_field['description_sponsorship_qualifier']
         },
-        cdm_dc_field['date_created']: {
-            'element': dspace_dc_field['date'],
-            'qualifier': dspace_dc_field['date_created_qualifier']
-        },
-        cdm_structural_elements['date_created']: {
+        cdm_dc_field['date']: {
             'element': dspace_dc_field['date'],
             'qualifier': dspace_dc_field['date_created_qualifier']
         },
@@ -163,16 +159,16 @@ class FieldMaps:
             'element': dspace_local_field['browse_date'],
             'qualifier': None
         },
+        cdm_dc_field['date_created']: {
+            'element': dspace_local_field['date'],
+            'qualifier': None
+        },
         cdm_dc_field['audience_mediator']: {
             'element': dspace_local_field['personal_name'],
             'qualifier': None
         },
         cdm_dc_field['coverage']: {
             'element': dspace_local_field['location_gps'],
-            'qualifier': None
-        },
-        cdm_dc_field['date']: {
-            'element': dspace_local_field['date'],
             'qualifier': None
         },
         cdm_dc_field['date_submitted']: {

@@ -6,6 +6,7 @@ from contextlib import contextmanager
 from analyzer import ExistAnalyzer
 from existDbFields import ExistDbFields
 
+
 class FetchThumbnailImage:
 
     ns = {'mets': 'http://www.loc.gov/METS/',

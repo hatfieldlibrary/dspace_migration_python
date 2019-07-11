@@ -43,6 +43,10 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': []
         },
+        'hfma_exhibits': {
+            'field_name': 'source',
+            'field_values': []
+        },
         'art': {
             'field_name': 'allSubCollections',
             'field_values': []
@@ -229,6 +233,10 @@ class CollectionConfig:
             'field_values': []
         },
         'hfma': {
+            'field_name': 'source',
+            'field_values': []
+        },
+        'hfma_exhibits': {
             'field_name': 'source',
             'field_values': []
         },

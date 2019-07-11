@@ -1,5 +1,6 @@
 
 import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import Element
 
 
 class CustomFormatField:
@@ -8,6 +9,11 @@ class CustomFormatField:
 
     def __init__(self):
         pass
+
+    @staticmethod
+    def append_to_dimension(dimen):
+        if len(dimen) > 0:
+            return dimen + ' x '
 
     def add_format(self, key, value):
         # type: (str, str) -> None
@@ -26,18 +32,27 @@ class CustomFormatField:
 
         :param tree: The parent Dublin Core element tree.
         """
-        text = ""
-        if len(self.format_fields) == 4:
-            text = self.format_fields['width'] + ' x ' \
-                   + self.format_fields['height'] \
-                   + ' x ' + self.format_fields['depth'] \
-                   + ' ' + self.format_fields['units']
-        elif len(self.format_fields) == 3:
-            text = self.format_fields['width'] + ' x ' \
-                   + self.format_fields['height'] + ' ' \
-                   + self.format_fields['units']
+        text = ''
+        fields = len(self.format_fields)
+        if 'height' in self.format_fields:
+            text += self.format_fields['height']
+            if fields - 1 > 1:
+                text += ' x '
+                fields -= 1
+        if 'width' in self.format_fields:
+            text += self.format_fields['width']
+            if fields - 1 > 1:
+                text += ' x '
+                fields -= 1
+        if 'depth' in self.format_fields:
+            text += self.format_fields['depth']
+            if fields - 1 > 1:
+                text += ' x '
+                fields -= 1
+        if 'units' in self.format_fields:
+            text += ' ' + self.format_fields['units']
 
-        if len(self.format_fields) >= 3:
+        if len(text) > 0:
             sub_element = ET.SubElement(tree, 'dcvalue')
             sub_element.set('element', 'format')
             sub_element.set('qualifier', 'extent')

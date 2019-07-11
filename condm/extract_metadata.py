@@ -14,13 +14,31 @@ from shared.utils import Utils
 class ExtractMetadata:
 
     cdm_dc = Fields.cdm_dc_field
+    cdm_struc = Fields.cdm_structural_elements
 
     def __init__(self):
         self.extract_page = ExtractPageData()
         self.custom_format_field = CustomFormatField()
 
-    def __process_iterable_map(self, parent_element, elements, element_map):
-        # type: (Element, Iterable, dict) -> None
+    @staticmethod
+    def add_element(parent_element, element_map, element):
+        """
+        Adds new element to parent
+        :param parent_element:
+        :param element_map:
+        :param element:
+        :return: None
+        """
+        dspace_element = element_map[element.tag]
+        sub_element = ET.SubElement(parent_element, 'dcvalue')
+        sub_element.set('element', dspace_element['element'])
+        if dspace_element['qualifier'] is not None:
+            sub_element.set('qualifier', dspace_element['qualifier'])
+        # correct text encoding before adding to the new element
+        sub_element.text = Utils.correct_text_encoding(element.text)
+
+    def process_iterable_map(self, parent_element, elements, element_map, add_master=False):
+        # type: (Element, Iterable, dict, bool) -> None
         """
         Processes a list of etree elements using
         a CONTENTdm to DSpace field map. This method adds new sub-elements to the
@@ -29,6 +47,8 @@ class ExtractMetadata:
         :param parent_element: the parent etree Element to which sub-elements will be added.
         :param elements: the list of etree elements to read.
         :param element_map: the dictionary for cdm to dspace mapping.
+        :param add_master: (optional) set value to True to process preservation locations (allows you to add fields
+        at end of the list)
         """
         if elements is not None:
             for element in elements:
@@ -36,13 +56,14 @@ class ExtractMetadata:
                     # exclude unmapped fields
                     if element.tag != ExtractMetadata.cdm_dc['unmapped']:
                         if element.tag in element_map:
-                            dspace_element = element_map[element.tag]
-                            sub_element = ET.SubElement(parent_element, 'dcvalue')
-                            sub_element.set('element', dspace_element['element'])
-                            if dspace_element['qualifier'] is not None:
-                                sub_element.set('qualifier', dspace_element['qualifier'])
-                            # correct text encoding before adding to the new element
-                            sub_element.text = Utils.correct_text_encoding(element.text)
+                            if add_master:
+                                # Add preservation location if available.
+                                if element.tag == ExtractMetadata.cdm_struc['preservation_location']:
+                                    self.add_element(parent_element, element_map, element)
+                            else:
+                                # Add all non-preservation metadata.
+                                if element.tag != ExtractMetadata.cdm_struc['preservation_location']:
+                                    self.add_element(parent_element, element_map, element)
                         # process custom format.extent fields
                         if element.tag in Fields.format_extent_fields:
                             self.custom_format_field.add_format(Fields.format_extent_fields[element.tag], element.text)
@@ -112,21 +133,25 @@ class ExtractMetadata:
     def extract_local_metadata(self, record, collection):
         # type: (Element, str) -> Element
         """
-        This method extracts the metadata to add metadata_local.xml in the saf directory.
-        Data fields are mapped to the local metadata registry configured for our dspace instance.
+        This method extracts dspace local metadata.
 
         :param record: etree Element representing the contentdm record.
         :param collection the contentdm collection name
         :return: a new etree Element representing data that will be written to metadata_local.xml.
         """
-        cdm_structure = Fields.cdm_structural_elements
         dspace_local_map = FieldMaps.local_field_map
 
         metadata_local = ET.Element('dublin_core')
         metadata_local.set('schema', 'local')
 
-        # Process metadata for dspace local fields (will include the preservation copy for single items)
-        self.__process_iterable_map(metadata_local, record, dspace_local_map)
+        # Process metadata for dspace local fields (this will include the preservation copy for single items)
+        # Passing the entire record twice. Could be more efficient.
+        # Add all local field except preservation location.
+        self.process_iterable_map(metadata_local, record, dspace_local_map)
+        # Append preservation locations at the end of the field list.
+        # This has no effect on DSpace (display order is determined by the field id number!). But it's nice
+        # to append at the end of the field list for review prior to DSpace import.
+        self.process_iterable_map(metadata_local, record, dspace_local_map, True)
         # Add custom local metadata fields for compound objects.
         self.add_compound_object_local_metadata(record, collection, metadata_local)
         # Extract preservation data from compound object page elements.
@@ -139,21 +164,19 @@ class ExtractMetadata:
         """
         Extracts data that will be added to the dublin_core.xml file in the saf item directory.
 
-        :param record: the etree Element for the contentdm record.
-        :param collection: the contentdm collection name
+        :param record: the etree Element for the CONTENTdm record.
         :return: an etree Element containing dublin core metadata that will be written to the saf dublin_core.xml file.
         """
         dc_field_map = FieldMaps.dc_field_map
         dublin_core = ET.Element('dublin_core')
         dublin_core.set('schema', 'dc')
 
-        # Because this uses sorted keys, the field order is alphabetical.
         cdm_keys = sorted(ExtractMetadata.cdm_dc.keys())
         for key in cdm_keys:
-            if key in dc_field_map:
+            if ExtractMetadata.cdm_dc[key] in dc_field_map:
                 elements = record.iterfind(ExtractMetadata.cdm_dc[key])
-                self.__process_iterable_map(dublin_core, elements, dc_field_map)
-
+                self.process_iterable_map(dublin_core, elements, dc_field_map)
+        # Some records need custom format.extent
         self.custom_format_field.add_custom_format_element(dublin_core)
 
         return dublin_core

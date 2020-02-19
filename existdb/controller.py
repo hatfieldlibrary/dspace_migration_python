@@ -8,6 +8,7 @@ from analyzer import ExistAnalyzer
 from extractMetadata import ExtractMetadata
 from extractExistFullText import ExtractExistFullText
 from fetchThumbnail import FetchThumbnailImage
+from fetchPageImage import FetchPageImages
 from shared.utils import Utils
 
 
@@ -40,12 +41,6 @@ class ExistController:
         to imported classes.
         """
 
-        # NOTE: existdb records are exported without a thumbnail. For
-        # display purposes, we may want to add a default thubmnail image
-        # to the saf subdirectories. In dspace, these thumbnail bitstreams
-        # would create a lot of redundancy (same image over and over) but
-        # it might turn out to be the sanest way to handle UI concerns.
-
         base_directory = os.getcwd()
         # The input mets directory.
         in_dir = base_directory + '/existdb/data/' + self.input + '/mets'
@@ -75,6 +70,7 @@ class ExistController:
             metadata_extractor = ExtractMetadata()
             page_data_extractor = ExtractExistFullText()
             fetch_thumbnail_utility = FetchThumbnailImage(self.analyzer)
+            fetch_page_images = FetchPageImages(self.analyzer)
 
             # Each working directory will contain 1000 items.
             # The working directories are labelled batch_1, batch_2 ...
@@ -113,9 +109,6 @@ class ExistController:
             dc_metadata = metadata_extractor.extract_metadata(root, item_id)
             # Extract the full text
             fulltext = page_data_extractor.extract_text(os.path.join(text_dir + '/' + item))
-            # For the image path, remove only the xml extension.
-            image_path = item[:-4]
-            fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
 
             if not self.dry_run:
                 # Write as xml
@@ -127,7 +120,7 @@ class ExistController:
             try:
                 if not self.dry_run:
                     # Write fulltext
-                    with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
+                    with open(current_dir + '/file_1.txt\n', 'w', encoding='UTF-8') as file2:
                         file2.write(unicode(fulltext))
                         file2.close()
             except IOError as err:
@@ -154,6 +147,14 @@ class ExistController:
                 print('An error occurred writing contents for: %s. See %s' % (doc_title, current_dir))
                 print 'Exception: {0}'.format(err)
 
+            # For the image path, remove only the xml extension.
+            image_path = item[:-4]
+            if not self.dry_run:
+                fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
+
+            if not self.dry_run:
+                fetch_page_images.fetch_images(root, self.collection, image_path, current_dir, self.dry_run)
+
             counter += 1
 
         # Done.
@@ -164,6 +165,6 @@ class ExistController:
         if error_count > 0:
             print'%s errors!' % str(error_count)
 
-        print ('Image processing failed for:')
-        self.analyzer.print_image_encoding_failures()
+        # print ('Image processing failed for:')
+        # self.analyzer.print_image_encoding_failures()
 

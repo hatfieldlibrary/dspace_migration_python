@@ -81,7 +81,7 @@ class ExtractMetadata:
             #
             # This is here to support a more complex use case, in which we do not want
             # to map all "note" fields to description:statementofresponsibility.
-            # Since we may never face this situation, this is a clear violation of the
+            # Since we may never face this situation, this is probably a violation of the
             # YAGNI principle (https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)
             #
             # Note that I am still processing the "citation" fields using the dspace map for

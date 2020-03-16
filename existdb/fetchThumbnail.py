@@ -39,7 +39,7 @@ class FetchThumbnailImage:
             im.write(out_dir + '/thumb.jpg')
             self.write_contents(out_dir)
         except:
-            print('An error occurred concerting image for %s: %s.' % (out_dir, URL))
+            print('An error occurred converting image for %s: %s.' % (out_dir, URL))
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)
 
     @staticmethod

@@ -1,6 +1,7 @@
 
 import urllib
 from contextlib import contextmanager
+from pgmagick import Image
 
 from analyzer import ExistAnalyzer
 from existDbFields import ExistDbFields
@@ -46,11 +47,22 @@ class FetchPageImages:
 
     @staticmethod
     def write_contents(out_dir, file_name, page_count):
+        print('attempting file read: ' + out_dir + '/' + file_name)
+        height = 0
+        width = 0
+        try:
+            with open('temp.jpg', 'r') as f:
+                im = Image('temp.jpg')
+                width = im.columns()
+                height = im.rows()
+        except:
+            print('An error occurred when reading image size.')
         try:
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
                 # Add images to dspace bundle name 'IIIF' and include the page name (based on count).
-                contents.write(file_name + '  bundle:IIIF   description:Page ' + str(page_count) + '\n')
+                contents.write(file_name + '\tbundle:IIIF\tvidescription:Page '
+                               + str(page_count) + '-' + str(width) + '-' + str(height) + '\n')
                 contents.close()
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
@@ -60,7 +72,6 @@ class FetchPageImages:
             print 'Exception: {0}'.format(err)
 
     def fetch_file(self, file_name, collection, item_id, out_dir, page_count):
-
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
         print URL
         # write the file to a temporary on disk location.
@@ -68,7 +79,8 @@ class FetchPageImages:
             with open(out_dir + '/' + file_name, 'wb') as f:
                 f.write(url.read())
         try:
+            out_dir + '/' + file_name
             self.write_contents(out_dir, file_name, page_count)
         except:
-            print('An error occurred concerting image for %s: %s.' % (out_dir, URL))
+            print('An error occurred writing to content file for %s: %s.' % (out_dir, URL))
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)

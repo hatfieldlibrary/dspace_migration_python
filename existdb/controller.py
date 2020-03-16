@@ -120,7 +120,7 @@ class ExistController:
             try:
                 if not self.dry_run:
                     # Write fulltext
-                    with open(current_dir + '/file_1.txt\n', 'w', encoding='UTF-8') as file2:
+                    with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
                         file2.write(unicode(fulltext))
                         file2.close()
             except IOError as err:
@@ -136,7 +136,7 @@ class ExistController:
                 if not self.dry_run:
                     # Add text file to the saf contents file.
                     with open(current_dir + '/contents', 'a') as file3:
-                        file3.write(unicode('file_1.txt'))
+                        file3.write(unicode('file_1.txt\n'))
                         file3.close()
             except IOError as err:
                 error_count += 1

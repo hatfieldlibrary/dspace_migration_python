@@ -4,11 +4,11 @@ import os
 import xml.etree.ElementTree as ET
 from io import open
 
-from analyzer import ExistAnalyzer
-from extractMetadata import ExtractMetadata
-from extractExistFullText import ExtractExistFullText
-from fetchThumbnail import FetchThumbnailImage
-from fetchPageImage import FetchPageImages
+from .analyzer import ExistAnalyzer
+from .extractMetadata import ExtractMetadata
+from .extractExistFullText import ExtractExistFullText
+from .fetchThumbnail import FetchThumbnailImage
+from .fetchPageImage import FetchPageImages
 from shared.utils import Utils
 
 
@@ -130,13 +130,13 @@ class ExistController:
             except AssertionError as err:
                 error_count += 1
                 print('An error occurred writing full text for: %s. See %s' % (doc_title, current_dir))
-                print 'AssertionError: {0}'.format(err)
+                print('AssertionError: {0}'.format(err))
 
             try:
                 if not self.dry_run:
                     # Add text file to the saf contents file.
                     with open(current_dir + '/contents', 'a') as file3:
-                        file3.write(unicode('file_1.txt\n'))
+                        file3.write(str('file_1.txt\n'))
                         file3.close()
             except IOError as err:
                 error_count += 1
@@ -145,7 +145,7 @@ class ExistController:
             except Exception as err:
                 error_count += 1
                 print('An error occurred writing contents for: %s. See %s' % (doc_title, current_dir))
-                print 'Exception: {0}'.format(err)
+                print('Exception: {0}'.format(err))
 
             # For the image path, remove only the xml extension.
             image_path = item[:-4]
@@ -163,7 +163,7 @@ class ExistController:
         print('%s records loaded' % str(final_count))
 
         if error_count > 0:
-            print'%s errors!' % str(error_count)
+            print('%s errors!' % str(error_count))
 
         # print ('Image processing failed for:')
         # self.analyzer.print_image_encoding_failures()

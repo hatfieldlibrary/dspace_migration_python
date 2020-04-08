@@ -11,4 +11,4 @@ class ExistAnalyzer:
 
     def print_image_encoding_failures(self):
         for failure in self.image_encoding_failures:
-            print failure
+            print(failure)

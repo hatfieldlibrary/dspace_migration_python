@@ -3,8 +3,8 @@ import urllib
 from contextlib import contextmanager
 from pgmagick import Image
 
-from analyzer import ExistAnalyzer
-from existDbFields import ExistDbFields
+from .analyzer import ExistAnalyzer
+from .existDbFields import ExistDbFields
 
 
 class FetchPageImages:
@@ -27,7 +27,7 @@ class FetchPageImages:
     def fetch_images(self, element, collection, item_id, out_dir, dry_run):
         # type: (Element) -> None
         if element is None:
-            print 'missing root'
+            print('missing root')
         # the file section
         page_sec = element.find(self.mets_fields.mets_structural_elements['file_section'], self.ns)
         # the file groups
@@ -69,11 +69,11 @@ class FetchPageImages:
             print('IO Error: {0}'.format(err))
         except Exception as err:
             print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg', out_dir))
-            print 'Exception: {0}'.format(err)
+            print('Exception: {0}'.format(err))
 
     def fetch_file(self, file_name, collection, item_id, out_dir, page_count):
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
-        print URL
+        print(URL)
         # write the file to a temporary on disk location.
         with self.closing(urllib.urlopen(URL)) as url:
             with open(out_dir + '/' + file_name, 'wb') as f:

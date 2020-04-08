@@ -2,10 +2,10 @@
 import re
 import xml.etree.ElementTree as ET
 
-from analyzer import Analyzer
-from extract_metadata import ExtractMetadata
-from fetch_bitstreams import FetchBitstreams
-from extract_page_data import ExtractPageData
+from .analyzer import Analyzer
+from .extract_metadata import ExtractMetadata
+from .fetch_bitstreams import FetchBitstreams
+from .extract_page_data import ExtractPageData
 from shared.utils import Utils
 
 
@@ -233,7 +233,7 @@ class CollectionProcessor:
                 self.analyzer.add_multiple_item_record()
             else:
                 el = record.find("title")
-                print el.text
+                print(el.text)
                 self.analyzer.add_compound_object()
         else:
             self.generate_saf(record)

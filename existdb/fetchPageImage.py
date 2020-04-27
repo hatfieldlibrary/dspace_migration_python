@@ -1,5 +1,5 @@
 
-import urllib
+import urllib.request
 from contextlib import contextmanager
 from pgmagick import Image
 
@@ -61,7 +61,7 @@ class FetchPageImages:
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
                 # Add images to dspace bundle name 'IIIF' and include the page name (based on count).
-                contents.write(file_name + '\tbundle:IIIF\tvidescription:Page '
+                contents.write(file_name + '\tbundle:IIIF\tdescription:Page '
                                + str(page_count) + '-' + str(width) + '-' + str(height) + '\n')
                 contents.close()
         except IOError as err:
@@ -75,7 +75,7 @@ class FetchPageImages:
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
         print(URL)
         # write the file to a temporary on disk location.
-        with self.closing(urllib.urlopen(URL)) as url:
+        with self.closing(urllib.request.urlopen(URL)) as url:
             with open(out_dir + '/' + file_name, 'wb') as f:
                 f.write(url.read())
         try:

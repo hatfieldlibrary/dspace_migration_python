@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from existDbFields import ExistDbFields
+from .existDbFields import ExistDbFields
 
 
 class ExistDbFieldMaps:

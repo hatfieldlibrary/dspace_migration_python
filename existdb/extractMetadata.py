@@ -4,10 +4,10 @@ import xml.etree.ElementTree as ET
 from collections import Iterable
 from xml.etree.ElementTree import Element
 
-from extractExistFullText import ExtractExistFullText
-from existDbFields import ExistDbFields
-from existDbFieldMaps import ExistDbFieldMaps
-from existDbFieldDefaults import DefaultFieldValueMap
+from .extractExistFullText import ExtractExistFullText
+from .existDbFields import ExistDbFields
+from .existDbFieldMaps import ExistDbFieldMaps
+from .existDbFieldDefaults import DefaultFieldValueMap
 
 
 class ExtractMetadata:
@@ -59,7 +59,7 @@ class ExtractMetadata:
             if citation_type == 'edition':
                 self.citation += ' edition ' + element[0].text
         else:
-            print ('Missing citation for %s in: %s'%(citation_type, self.item_title_attrib))
+            print('Missing citation for %s in: %s'%(citation_type, self.item_title_attrib))
 
     def __process_iterable_map(self, parent_element, elements, element_map):
         # type: (Element, Iterable, dict) -> None

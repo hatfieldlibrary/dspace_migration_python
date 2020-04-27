@@ -3,11 +3,11 @@ import xml.etree.ElementTree as ET
 from collections import Iterable
 from xml.etree.ElementTree import Element
 
-from extract_page_data import ExtractPageData
-from custom_format_field import CustomFormatField
-from fields import Fields
-from collection_config import CollectionConfig
-from fieldMaps import FieldMaps
+from .extract_page_data import ExtractPageData
+from .custom_format_field import CustomFormatField
+from .fields import Fields
+from .collection_config import CollectionConfig
+from .fieldMaps import FieldMaps
 from shared.utils import Utils
 
 

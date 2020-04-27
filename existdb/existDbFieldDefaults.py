@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from existDbFields import ExistDbFields
-from existDbFieldMaps import ExistDbFieldMaps
-
+from .existDbFields import ExistDbFields
+from .existDbFieldMaps import ExistDbFieldMaps
 
 class DefaultFieldValueMap:
 

@@ -121,7 +121,7 @@ class ExistController:
                 if not self.dry_run:
                     # Write fulltext
                     with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
-                        file2.write(unicode(fulltext))
+                        file2.write(fulltext)
                         file2.close()
             except IOError as err:
                 error_count += 1

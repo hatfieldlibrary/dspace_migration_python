@@ -3,7 +3,7 @@ import urllib
 import time
 from xml.etree.ElementTree import Element
 
-from fields import Fields
+from .fields import Fields
 
 
 class FetchBitstreams:

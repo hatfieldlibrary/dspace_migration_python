@@ -1,5 +1,5 @@
 
-from fields import Fields
+from .fields import Fields
 
 
 class FieldMaps:

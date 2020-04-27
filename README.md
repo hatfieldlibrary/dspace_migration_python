@@ -112,3 +112,10 @@ metadata registry (also configured in `FieldMaps`).
 Items can be loaded into DSpace collections as show here:
 https://wiki.duraspace.org/display/DSDOC6x/Importing+and+Exporting+Items+via+Simple+Archive+Format#ImportingandExportingItemsviaSimpleArchiveFormat-ImportingItems
 
+## IIIF Considerations
+IIIF items are loaded into a DSpace bundle called "IIIF" Note that this is hard-coded.  It's not a command-line input parameter currently. 
+
+In most cases during the migration to DSpace from CONTENTdm and eXist we will need to use the IIIF bundle.  However, if we use the python/SAF import procedure for PDF or other file format, note that these files must NOT go into the IIIF bundle.
+
+We haven't yet considered the case in which both an IIIF viewer and a PDF download option are desired for the item. 
+

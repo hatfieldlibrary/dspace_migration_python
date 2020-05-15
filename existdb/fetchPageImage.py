@@ -62,7 +62,7 @@ class FetchPageImages:
             with open(out_dir + '/contents', 'a') as contents:
                 # Add images to dspace bundle name 'IIIF' and include the page name (based on count).
                 contents.write(file_name + '\tbundle:IIIF\tdescription:Page '
-                               + str(page_count) + '-' + str(width) + '-' + str(height) + '\n')
+                               + str(page_count) + '|' + str(width) + '|' + str(height) + '\n')
                 contents.close()
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))

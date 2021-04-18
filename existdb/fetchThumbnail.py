@@ -1,5 +1,5 @@
 from _elementtree import Element
-from pgmagick import Image
+from wand.image import Image
 import urllib.request
 from contextlib import contextmanager
 
@@ -28,16 +28,19 @@ class FetchThumbnailImage:
 
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
         print(URL)
+        response = urllib.request.urlopen(URL)
         # write the file to a temporary on disk location.
         with self.closing(urllib.request.urlopen(URL)) as url:
-            with open('temp.jpg', 'wb') as f:
-                f.write(url.read())
+            print('test url read')
+            with Image(file=response) as f:
+                f.save(filename='temp.jpg')
         try:
-            im = Image('temp.jpg')
-            im.quality(50)
-            im.scale('200x200')
-            im.write(out_dir + '/thumb.jpg')
-            self.write_contents(out_dir)
+            print('thumb processing')
+            with Image(filename='temp.jpg') as f:
+                f.quality(50)
+                f.resize(200, 200)
+                f.save(out_dir + '/thumb.jpg')
+                self.write_contents(out_dir)
         except:
             print('An error occurred converting image for %s: %s.' % (out_dir, URL))
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)

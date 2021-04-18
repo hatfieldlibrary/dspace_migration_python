@@ -1,0 +1,16 @@
+<relationships>
+    <type>
+        <leftType>VisualMedia</leftType>
+        <rightType>VisualMediaRelation</rightType>
+        <leftwardType>VisualMediaType</leftwardType>
+        <rightwardType>VisualRelationPlaceHolder</rightwardType>
+        <leftCardinality>
+            <min>0</min>
+            <max>0</max>
+        </leftCardinality>
+        <rightCardinality>
+            <min>0</min>
+            <max>0</max>
+        </rightCardinality>
+    </type>
+</relationships>

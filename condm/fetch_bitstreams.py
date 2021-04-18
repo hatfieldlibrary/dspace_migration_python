@@ -1,5 +1,5 @@
 
-import urllib
+from urllib.request import urlretrieve
 import time
 from xml.etree.ElementTree import Element
 
@@ -14,6 +14,17 @@ class FetchBitstreams:
     def __init__(self):
         pass
 
+        # initialize info dict
+        self.info = {
+            "globalDefaults": {
+                "activated": False,
+                "label": "",
+                "width": 0,
+                "height": 0
+            },
+            "canvases": [],
+            "structures": []
+        }
     @staticmethod
     def append_to_contents(current_dir, filename, line):
         # type: (str, str, int) -> None
@@ -27,7 +38,7 @@ class FetchBitstreams:
         content_file = open(contents_out, 'a')
         if line == 0:
             # this is the first write to the contents file.
-            content_file.write(filename)
+            content_file.write(filename + '\tbundle:IIIF\n')
             content_file.close()
         else:
             content_file.write('\n' + filename)
@@ -40,7 +51,7 @@ class FetchBitstreams:
         Fetches single bitstream and writes to saf directory.
         Note that bitstream file names need not be unique in dspace
         because DSpace 6.x stores the name of a bitstream in the "dc.title" metadata field attached to the bitstream.
-        However, they probably will be unique in all cases whene in our contentdm
+        However, they probably will be unique in all cases when in our contentdm
         exports, since the file name is derived from the exported xml.
         :param outfile: the file name and output path for the bitstream
         :param link: the url to retrieve the bitstream
@@ -49,7 +60,7 @@ class FetchBitstreams:
         :return: the error count, incremented if an error encountered
         """
         if link is not None:
-            urllib.urlretrieve(link, outfile)
+            urlretrieve(link, outfile)
 
 
     @staticmethod

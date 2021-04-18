@@ -10,7 +10,7 @@ from existdb.controller import ExistController
 # command line arguments
 # process.py <repo> <collection> <source_file or directory> <outputdirectory>
 #
-# example1 ./process.py cdm manuscripts archives_manuscripts.xml archives_manuscripts dry_run
+# example1 ./process.py cdm manuscripts archives_manuscripts.xml archives_manuscripts --dry-run
 # example2 ./process.py exist collegian collegian collegian
 #
 # example1 uses a source file; example2 uses a source directory.

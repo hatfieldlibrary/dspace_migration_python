@@ -101,9 +101,11 @@ class ExtractMetadata:
             colls = CollectionConfig.collections_to_omit_compound_objects[collection]['field_values']
             els = record.findall(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name'])
             for element in els:
-                collection_field_list = filter(lambda x: x == element.text, iter(colls))
-                if len(collection_field_list) > 0:
-                    return bool(1)
+                collection_field_filter = filter(lambda x: x == element.text, iter(colls))
+                if collection_field_filter is not None:
+                    collection_field_list = list(collection_field_filter)
+                    if len(collection_field_list) > 0:
+                        return bool(1)
         return bool(0)
 
     def add_compound_object_local_metadata(self, record, collection, local):

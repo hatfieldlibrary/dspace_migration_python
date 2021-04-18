@@ -2,142 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44d688cc-d368-4e01-8a14-1483107adcc3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/dspace-entity.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/cdmToDspace.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cdmToDspace.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/extractMetadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/extractMetadata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/fetchBitstreams.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/fetchBitstreams.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/fields.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/fields.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/fulltext/1961050101.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/fulltext/196301.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/fulltext/NormaPaulusScrapbook0501.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/mets/1961050101.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/mets/196301.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/data/collegian/mets/NormaPaulusScrapbook0501.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/dummy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/dummy.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/existDbFieldDefaults.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/existDbFieldDefaults.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/existDbFieldMaps.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/existDbFieldMaps.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/existDbFields.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/existDbFields.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/extractMetadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/extractMetadata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/condm/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/condm/collection_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/collection_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/condm/extract_metadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/extract_metadata.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/condm/fetch_bitstreams.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/fetch_bitstreams.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/existdb/fetchPageImage.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/fetchPageImage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/existdb/fetchThumbnail.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/fetchThumbnail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/process.py" beforeDir="false" afterPath="$PROJECT_DIR$/process.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/existdb/existDbFieldMaps.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="665">
-              <caret line="52" column="61" lean-forward="true" selection-start-line="52" selection-start-column="61" selection-end-line="52" selection-end-column="61" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/existdb/existDbFields.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="439">
-              <caret line="131" column="30" selection-start-line="131" selection-start-column="9" selection-end-line="131" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/existdb/extractExistFullText.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="39" selection-start-line="23" selection-start-column="39" selection-end-line="23" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/existdb/existDbFieldDefaults.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="31" lean-forward="true" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-              <folding>
-                <element signature="e#23#62#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/existdb/extractMetadata.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="122" column="62" lean-forward="true" selection-start-line="122" selection-start-column="62" selection-end-line="122" selection-end-column="62" />
-              <folding>
-                <element signature="e#23#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/process.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
-              <folding>
-                <element signature="e#23#33#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dummy.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="519">
-              <caret line="36" column="97" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="100" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/existdb/controller.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-868">
-              <caret line="35" column="28" lean-forward="true" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
-              <folding>
-                <element signature="e#23#32#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/condm/extractPageData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
-              <caret line="40" column="35" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
-              <folding>
-                <element signature="e#23#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/condm/fetchBitstreams.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="159" column="27" selection-start-line="159" selection-start-column="27" selection-end-line="159" selection-end-column="27" />
-              <folding>
-                <element signature="e#23#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -146,71 +34,8 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>appendToContents</find>
-      <find>writeBitstream</find>
-      <find>extractLocalMetadata</find>
-      <find>addPageData</find>
-      <find>open</find>
-      <find>unma</find>
-      <find>correct_text_encoding</find>
-      <find>processor_mods_elements</find>
-      <find>processor</find>
-      <find>ds_field_map</find>
-      <find>switch_tag</find>
-      <find>edition</find>
-      <find>switch</find>
-      <find>print</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/extractText.py" />
-        <option value="$PROJECT_DIR$/fieldMap.py" />
-        <option value="$PROJECT_DIR$/extractPageData.py" />
-        <option value="$PROJECT_DIR$/extractMetadata.py" />
-        <option value="$PROJECT_DIR$/fetchBitstreams.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
-        <option value="$PROJECT_DIR$/controller.py" />
-        <option value="$PROJECT_DIR$/condm/fieldMap.py" />
-        <option value="$PROJECT_DIR$/condm/utils.py" />
-        <option value="$PROJECT_DIR$/condm/extractPageData.py" />
-        <option value="$PROJECT_DIR$/exist-db/Fields.py" />
-        <option value="$PROJECT_DIR$/exist-db/defaults.py" />
-        <option value="$PROJECT_DIR$/exist-db/fieldMaps.py" />
-        <option value="$PROJECT_DIR$/exist-db/utils.py" />
-        <option value="$PROJECT_DIR$/exist-db/fields.py" />
-        <option value="$PROJECT_DIR$/exist-db/existdbfields.py" />
-        <option value="$PROJECT_DIR$/exist-db/existDbFieldMaps.py" />
-        <option value="$PROJECT_DIR$/exist-db/extractPageData.py" />
-        <option value="$PROJECT_DIR$/condm/fieldMaps.py" />
-        <option value="$PROJECT_DIR$/exist-db/fieldDefaults.py" />
-        <option value="$PROJECT_DIR$/exist-db/dummy.xml" />
-        <option value="$PROJECT_DIR$/exist-db/existDbFields.py" />
-        <option value="$PROJECT_DIR$/exist-db/extractMetadata.py" />
-        <option value="$PROJECT_DIR$/exist-db/controller.py" />
-        <option value="$PROJECT_DIR$/existdb/__init__.py" />
-        <option value="$PROJECT_DIR$/existdb/extractPageData.py" />
-        <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/process.py" />
-        <option value="$PROJECT_DIR$/existdb/extractExistFullText.py" />
-        <option value="$PROJECT_DIR$/condm/fields.py" />
-        <option value="$PROJECT_DIR$/condm/extractMetadata.py" />
-        <option value="$PROJECT_DIR$/condm/controller.py" />
-        <option value="$PROJECT_DIR$/condm/fetchBitstreams.py" />
-        <option value="$PROJECT_DIR$/existdb/existDbFieldDefaults.py" />
-        <option value="$PROJECT_DIR$/existdb/controller.py" />
-        <option value="$PROJECT_DIR$/existdb/existDbFields.py" />
-        <option value="$PROJECT_DIR$/existdb/existDbFieldMaps.py" />
-        <option value="$PROJECT_DIR$/existdb/extractMetadata.py" />
-      </list>
-    </option>
   </component>
   <component name="JsFlowSettings">
     <service-enabled>false</service-enabled>
@@ -218,102 +43,50 @@
     <annotation-enable>false</annotation-enable>
     <other-services-enabled>false</other-services-enabled>
   </component>
-  <component name="PhpServers">
-    <servers />
+  <component name="JupyterTrust" id="b8789f29-5e28-4031-a09e-9c7276caf354" />
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="s4lldt2x" />
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="2560" />
-    <option name="height" value="1440" />
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
   </component>
+  <component name="ProjectId" id="1b8tSazQBgZcsx2mJ2ovkgY8ibD" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="condm" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="existdb" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="existdb" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="existdb" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="collegian" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="existdb" type="462c0819:PsiDirectoryNode" />
-              <item name="saf" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdmToDspace" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdmToDspace" type="462c0819:PsiDirectoryNode" />
-              <item name="shared" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552606544580" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/condm" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/usr/local/Cellar/node/7.4.0/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/existdb/data/collegian/mets" />
-      <recent name="$PROJECT_DIR$/existdb/data/collegian/fulltext" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/shared" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/condm" />
+      <recent name="$PROJECT_DIR$/existdb/data/collegian/mets" />
+      <recent name="$PROJECT_DIR$/existdb/data/collegian/fulltext" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet">
@@ -335,6 +108,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="wallulah" type="PythonConfigurationType" factoryName="Python" temporary="true" show_console_on_std_err="true" show_console_on_std_out="true">
+      <module name="cdmToDspace" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/process.py" />
+      <option name="PARAMETERS" value="exist wallulah wallulah wallulah" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="TestNG">
       <option name="TEST_OBJECT" value="CLASS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -353,6 +148,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.wallulah" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -366,338 +170,66 @@
       <workItem from="1551823702949" duration="48721000" />
       <workItem from="1552506846806" duration="12208000" />
       <workItem from="1552584199438" duration="9167000" />
+      <workItem from="1588025550115" duration="6461000" />
+      <workItem from="1588093849637" duration="599000" />
+      <workItem from="1588109769271" duration="806000" />
+      <workItem from="1589392567650" duration="2393000" />
+      <workItem from="1589577899047" duration="795000" />
+      <workItem from="1590679237980" duration="1194000" />
+      <workItem from="1591201452204" duration="599000" />
+      <workItem from="1591649687632" duration="303000" />
+      <workItem from="1592932226745" duration="853000" />
+      <workItem from="1593194801835" duration="151000" />
+      <workItem from="1593446039249" duration="386000" />
+      <workItem from="1593452597134" duration="225000" />
+      <workItem from="1593452833734" duration="426000" />
+      <workItem from="1593723561629" duration="533000" />
+      <workItem from="1594141085750" duration="299000" />
+      <workItem from="1594494139692" duration="1369000" />
+      <workItem from="1595218704341" duration="92000" />
+      <workItem from="1596127471992" duration="110000" />
+      <workItem from="1596127627548" duration="550000" />
+      <workItem from="1596566899498" duration="176000" />
+      <workItem from="1596906999594" duration="598000" />
+      <workItem from="1597941380619" duration="351000" />
+      <workItem from="1598548387077" duration="282000" />
+      <workItem from="1604011732404" duration="5204000" />
+      <workItem from="1604962200844" duration="977000" />
+      <workItem from="1605034253536" duration="338000" />
+      <workItem from="1605113291258" duration="593000" />
+      <workItem from="1605566467465" duration="206000" />
+      <workItem from="1605635171821" duration="597000" />
+      <workItem from="1605823273981" duration="24000" />
+      <workItem from="1606172211528" duration="1011000" />
+      <workItem from="1606773298410" duration="720000" />
+      <workItem from="1606871342815" duration="705000" />
+      <workItem from="1607026806688" duration="2202000" />
+      <workItem from="1607126955554" duration="164000" />
+      <workItem from="1607131100267" duration="3328000" />
+      <workItem from="1608069247468" duration="622000" />
+      <workItem from="1608146198440" duration="1607000" />
+      <workItem from="1609868542762" duration="1617000" />
+      <workItem from="1610562697512" duration="514000" />
+      <workItem from="1610751780321" duration="105000" />
+      <workItem from="1613866423983" duration="1165000" />
+      <workItem from="1613867738662" duration="19052000" />
+      <workItem from="1614447711149" duration="308000" />
+      <workItem from="1614448048271" duration="7269000" />
+      <workItem from="1615500409403" duration="6539000" />
+      <workItem from="1616360743602" duration="369000" />
+      <workItem from="1616432488391" duration="5154000" />
+      <workItem from="1617315946740" duration="1528000" />
+      <workItem from="1617991342015" duration="598000" />
+      <workItem from="1618004263832" duration="3328000" />
+      <workItem from="1618515091480" duration="1818000" />
+      <workItem from="1618602587164" duration="525000" />
     </task>
     <servers />
   </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120366000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25774425" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Designer" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="Capture Tool" order="4" />
-      <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.329927" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32335767" />
-      <window_info anchor="bottom" id="Docker" order="8" />
-      <window_info anchor="bottom" id="CheckStyle" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Statistic" order="11" />
-      <window_info anchor="bottom" id="Database Changes" order="12" />
-      <window_info anchor="bottom" id="Version Control" order="13" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Maven" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" x="0" y="0" width="590" height="1240" id="Documentation" order="5" side_tool="true" weight="0.32962668" />
-      <window_info anchor="right" id="SciView" order="6" />
-      <window_info anchor="right" id="Database" order="7" />
-      <window_info anchor="right" id="Palette&#9;" order="8" />
-      <window_info anchor="right" id="Theme Preview" order="9" />
-    </layout>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/extractText.py" />
-    <entry file="file://$PROJECT_DIR$/fieldMap.py" />
-    <entry file="file://$PROJECT_DIR$/extractMetadata.py" />
-    <entry file="file://$PROJECT_DIR$/extractPageData.py" />
-    <entry file="file://$PROJECT_DIR$/fetchBitstreams.py" />
-    <entry file="file://$PROJECT_DIR$/utils.py" />
-    <entry file="file://$PROJECT_DIR$/controller.py" />
-    <entry file="file://$PROJECT_DIR$/condm/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/utils.py" />
-    <entry file="file://$PROJECT_DIR$/shared/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1170">
-          <caret line="78" column="49" selection-start-line="78" selection-start-column="49" selection-end-line="78" selection-end-column="49" />
-          <folding>
-            <element signature="e#23#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0001/contents" />
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/fulltext/196301.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/fulltext/NormaPaulusScrapbook0501.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0002/contents" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0001/file_1.txt" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0002/file_1.txt" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="690">
-            <caret line="46" column="66" selection-start-line="46" selection-start-column="66" selection-end-line="46" selection-end-column="66" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/196301.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/NormaPaulusScrapbook0501.xml" />
-    <entry file="file://$PROJECT_DIR$/condm/saf/archives_manuscripts/batch_1/item_0002/dublin_core.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/saf/archives_images/batch_1/item_0001/dublin_core.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0002/dublin_core.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/1961050101.xml" />
-    <entry file="file://$PROJECT_DIR$/condm/saf/archives_images/batch_1/item_0000/dublin_core.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/fulltext/1961050101.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0001/dublin_core.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0000/dublin_core.xml" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0000/contents" />
-    <entry file="file://$PROJECT_DIR$/existdb/saf/collegian/batch_1/item_0000/file_1.txt" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/fulltext/1875090101.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/1875090101.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/1875110101.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/data/collegian/mets/1875120101.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/fieldMaps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="46" column="66" selection-start-line="46" selection-start-column="25" selection-end-line="46" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/fields.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="40" selection-start-line="33" selection-start-column="40" selection-end-line="33" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="11" selection-start-line="36" selection-start-column="11" selection-end-line="36" selection-end-column="11" />
-          <folding>
-            <element signature="e#23#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/extractMetadata.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="89" column="74" selection-start-line="89" selection-start-column="69" selection-end-line="89" selection-end-column="74" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/extractPageData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="40" column="35" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/condm/fetchBitstreams.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="159" column="27" selection-start-line="159" selection-start-column="27" selection-end-line="159" selection-end-column="27" />
-          <folding>
-            <element signature="e#23#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/extractExistFullText.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="39" selection-start-line="23" selection-start-column="39" selection-end-line="23" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="37" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
-          <folding>
-            <element signature="e#23#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-868">
-          <caret line="35" column="28" lean-forward="true" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
-          <folding>
-            <element signature="e#23#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/existDbFieldMaps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="665">
-          <caret line="52" column="61" lean-forward="true" selection-start-line="52" selection-start-column="61" selection-end-line="52" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/existDbFields.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="131" column="30" selection-start-line="131" selection-start-column="9" selection-end-line="131" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/existDbFieldDefaults.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="31" lean-forward="true" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-          <folding>
-            <element signature="e#23#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dummy.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="36" column="97" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/existdb/extractMetadata.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="122" column="62" lean-forward="true" selection-start-line="122" selection-start-column="62" selection-end-line="122" selection-end-column="62" />
-          <folding>
-            <element signature="e#23#57#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>Python (cdmToDspace)|Python</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>Python 2.7 interpreter library</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>Python 2.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>cdmToDspace</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-                <option value="0.6" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/python_saf_processing$process.coverage" NAME="wallulah Coverage Results" MODIFIED="1616109784050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

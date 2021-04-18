@@ -36,7 +36,8 @@ class Analyzer:
         if len(self.unprocessed_collections) > 0:
             print('\nItem counts for all unprocessed collections (these will be added to the "base" saf directory).')
             for name in self.unprocessed_collections:
-                print('{:3d}: {:>10}'.format(self.unprocessed_collections[name], name))
+                if name is not None:
+                    print('{:3d}: {:>10}'.format(self.unprocessed_collections[name], name))
         else:
             print('\nThere were no unprocessed collections.')
 

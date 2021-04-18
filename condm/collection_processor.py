@@ -233,7 +233,6 @@ class CollectionProcessor:
                 self.analyzer.add_multiple_item_record()
             else:
                 el = record.find("title")
-                print(el.text)
                 self.analyzer.add_compound_object()
         else:
             self.generate_saf(record)

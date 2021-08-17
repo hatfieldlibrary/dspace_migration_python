@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="44d688cc-d368-4e01-8a14-1483107adcc3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/dspace-entity.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cdmToDspace.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cdmToDspace.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/collection_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/collection_processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/extract_metadata.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/extract_metadata.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/condm/fetch_bitstreams.py" beforeDir="false" afterPath="$PROJECT_DIR$/condm/fetch_bitstreams.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/fetchPageImage.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/fetchPageImage.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/existdb/fetchThumbnail.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/fetchThumbnail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/process.py" beforeDir="false" afterPath="$PROJECT_DIR$/process.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/existdb/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/controller.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,11 +51,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552606544580" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/condm" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/existdb/saf/scene/batch_1/item_0000" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -78,17 +74,19 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/existdb/saf/scene/batch_1/item_0000" />
+      <recent name="$PROJECT_DIR$/existdb/data/scene_2015_sample/alto" />
+      <recent name="$PROJECT_DIR$/existdb/data/scene_2015_sample/fulltext" />
+      <recent name="$PROJECT_DIR$/existdb/data/scene_2015_sample/mets" />
+      <recent name="$PROJECT_DIR$/existdb/data/scene/alto" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/shared" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/condm" />
-      <recent name="$PROJECT_DIR$/existdb/data/collegian/mets" />
-      <recent name="$PROJECT_DIR$/existdb/data/collegian/fulltext" />
-    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.scene sample">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -107,6 +105,28 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="scene sample" type="PythonConfigurationType" factoryName="Python">
+      <module name="cdmToDspace" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/venv/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/process.py" />
+      <option name="PARAMETERS" value="exist scene scene_2015_sample scene" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="wallulah" type="PythonConfigurationType" factoryName="Python" temporary="true" show_console_on_std_err="true" show_console_on_std_out="true">
       <module name="cdmToDspace" />
@@ -148,6 +168,10 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Python.scene sample" />
+      <item itemvalue="Python.wallulah" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.wallulah" />
@@ -222,14 +246,33 @@
       <workItem from="1617991342015" duration="598000" />
       <workItem from="1618004263832" duration="3328000" />
       <workItem from="1618515091480" duration="1818000" />
-      <workItem from="1618602587164" duration="525000" />
+      <workItem from="1618602587164" duration="2883000" />
+      <workItem from="1619712064038" duration="8052000" />
+      <workItem from="1619884569792" duration="11000" />
+      <workItem from="1620078965600" duration="3245000" />
+      <workItem from="1620159841609" duration="2070000" />
+      <workItem from="1621183215998" duration="14000" />
+      <workItem from="1629145823062" duration="1282000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/python_saf_processing$process.coverage" NAME="wallulah Coverage Results" MODIFIED="1616109784050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/python_saf_processing$scene.coverage" NAME="scene sample Coverage Results" MODIFIED="1619733769518" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/python_saf_processing$scene_sample.coverage" NAME="scene sample Coverage Results" MODIFIED="1620080114334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

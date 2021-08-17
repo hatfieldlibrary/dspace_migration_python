@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os
+import os, shutil
 import xml.etree.ElementTree as ET
 from io import open
 
@@ -39,13 +39,17 @@ class ExistController:
         directory (e.g. saf/collegian/batch_1) and current saf item
         directory (e.g. item_0010/).  Other processing tasks are delegated
         to imported classes.
+
+        TODO: fetch PDF if available and add to ORIGINAL.
         """
 
-        base_directory = os.getcwd()
+        base_directory = os.path.abspath(os.getcwd())
         # The input mets directory.
         in_dir = base_directory + '/existdb/data/' + self.input + '/mets'
         # The input fulltext directory
         text_dir = base_directory + '/existdb/data/' + self.input + '/fulltext'
+        # The input alto directory
+        alto_dir = base_directory + '/existdb/data/' + self.input + '/alto'
         # The parent output directory.
         out_dir = base_directory + '/existdb/saf/' + self.output
 
@@ -55,6 +59,7 @@ class ExistController:
         error_count = 0
 
         metsList = os.listdir(in_dir)
+
         for item in metsList:
             # read each file in the mets directory.
             metsFile = open(os.path.join(in_dir + '/' + item), 'r')
@@ -115,6 +120,21 @@ class ExistController:
                 tree = ET.ElementTree(dc_metadata)
                 tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
+            if not self.dry_run:
+                mets_file_path = metsFile.name
+                shutil.copy(mets_file_path, current_dir)
+                mets_file_name = mets_file_path.replace(os.path.join(in_dir + '/'), '')
+                alto_subdirectory = mets_file_name.replace('.xml', '')
+                # Write alto files to saf directory and update contents file.
+                with open(current_dir + '/contents', 'a') as content1:
+                    content1.write(mets_file_name + '\tbundle:OtherContent\n')
+                    for filename in os.listdir(alto_dir + '/' + alto_subdirectory):
+                        filename_updated = filename[-8:]
+                        filepath = os.path.join(alto_dir, alto_subdirectory, filename)
+                        shutil.copy(filepath, current_dir + '/' + filename_updated)
+                        content1.write(filename_updated + '\tbundle:OtherContent\n')
+                    content1.close()
+
             # For utf-8 output we need to use the io library open function. With python3 this can be done
             # using the default python open func. (I'm using python 2.7)
             try:
@@ -136,7 +156,7 @@ class ExistController:
                 if not self.dry_run:
                     # Add text file to the saf contents file.
                     with open(current_dir + '/contents', 'a') as file3:
-                        file3.write(str('file_1.txt\n'))
+                        file3.write(str('file_1.txt\tbundle:OtherContent\n'))
                         file3.close()
             except IOError as err:
                 error_count += 1

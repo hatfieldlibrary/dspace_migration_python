@@ -39,8 +39,6 @@ class ExistController:
         directory (e.g. saf/collegian/batch_1) and current saf item
         directory (e.g. item_0010/).  Other processing tasks are delegated
         to imported classes.
-
-        TODO: fetch PDF if available and add to ORIGINAL.
         """
 
         base_directory = os.path.abspath(os.getcwd())
@@ -50,6 +48,8 @@ class ExistController:
         text_dir = base_directory + '/existdb/data/' + self.input + '/fulltext'
         # The input alto directory
         alto_dir = base_directory + '/existdb/data/' + self.input + '/alto'
+        # The input pdf directory
+        pdf_dir = base_directory + '/existdb/data/' + self.input + '/pdf'
         # The parent output directory.
         out_dir = base_directory + '/existdb/saf/' + self.output
 
@@ -58,15 +58,16 @@ class ExistController:
         working_dir = ''
         error_count = 0
 
-        metsList = os.listdir(in_dir)
+        mets_list = os.listdir(in_dir)
 
-        for item in metsList:
+        for item in mets_list:
+
             # read each file in the mets directory.
-            metsFile = open(os.path.join(in_dir + '/' + item), 'r')
+            mets_file = open(os.path.join(in_dir + '/' + item), 'r')
 
             # Parse the input file
-            tree = ET.parse(metsFile)
-            root = tree.getroot()
+            mets_tree = ET.parse(mets_file)
+            root = mets_tree.getroot()
 
             # The document title is useful for error messages.
             doc_title = root.attrib['LABEL']
@@ -87,6 +88,7 @@ class ExistController:
 
             current_dir = ''
             if not self.dry_run:
+
                 # Create the working directory
                 current_dir = Utils.int_saf_sub_directory(working_dir, counter)  # type: str
 
@@ -116,20 +118,41 @@ class ExistController:
             fulltext = page_data_extractor.extract_text(os.path.join(text_dir + '/' + item))
 
             if not self.dry_run:
+
                 # Write as xml
-                tree = ET.ElementTree(dc_metadata)
-                tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
+                dc_tree = ET.ElementTree(dc_metadata)
+                dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
             if not self.dry_run:
-                mets_file_path = metsFile.name
+
+                # Add dspace.entity.type - IIIFSearchable
+                metadata_local = ET.Element('dublin_core')
+                metadata_local.set('schema', 'dspace')
+                require_relation = ET.SubElement(metadata_local, 'dcvalue')
+                require_relation.set('element', 'entity.type')
+                require_relation.text = 'IIIFSearchable'
+                dspace_metadata = ET.ElementTree(metadata_local)
+                dspace_metadata.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration="True")
+
+            if not self.dry_run:
+                mets_file_path = mets_file.name
                 shutil.copy(mets_file_path, current_dir)
+                dst_file = os.path.join(current_dir, mets_file_path)
+                new_dst_file_name = os.path.join(current_dir, 'mets.xml')
+                os.rename(dst_file, new_dst_file_name)
+                with open(current_dir + '/contents', 'a') as content2:
+                    content2.write('mets.xml\tbundle:OtherContent\n')
+                    content2.close()
+
+            if not self.dry_run:
+                mets_file_path = mets_file.name
                 mets_file_name = mets_file_path.replace(os.path.join(in_dir + '/'), '')
                 alto_subdirectory = mets_file_name.replace('.xml', '')
                 # Write alto files to saf directory and update contents file.
                 with open(current_dir + '/contents', 'a') as content1:
                     content1.write(mets_file_name + '\tbundle:OtherContent\n')
                     for filename in os.listdir(alto_dir + '/' + alto_subdirectory):
-                        filename_updated = filename[-8:]
+                        filename_updated = filename[-7:]
                         filepath = os.path.join(alto_dir, alto_subdirectory, filename)
                         shutil.copy(filepath, current_dir + '/' + filename_updated)
                         content1.write(filename_updated + '\tbundle:OtherContent\n')
@@ -138,19 +161,29 @@ class ExistController:
             # For utf-8 output we need to use the io library open function. With python3 this can be done
             # using the default python open func. (I'm using python 2.7)
             try:
+
                 if not self.dry_run:
                     # Write fulltext
                     with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
                         file2.write(fulltext)
                         file2.close()
+
             except IOError as err:
                 error_count += 1
-                print('An error occurred writing full text data to saf for: %s. See %s' % (doc_title, current_dir))
+                print('An error occurred writing pdf to saf for: %s. See %s' % (doc_title, current_dir))
                 print('IO Error: {0}'.format(err))
             except AssertionError as err:
                 error_count += 1
-                print('An error occurred writing full text for: %s. See %s' % (doc_title, current_dir))
+                print('An error occurred writing pdf for: %s. See %s' % (doc_title, current_dir))
                 print('AssertionError: {0}'.format(err))
+
+            if not self.dry_run:
+                # Add PDF to ORIGINAL bundle.
+                pdf_dir_list = os.listdir(pdf_dir)
+                for pdf in pdf_dir_list:
+                    # pdf_file = open(os.path.join(pdf_dir + '/' + pdf), 'r')
+                    with open(current_dir + '/contents', 'a') as pdf1:
+                        pdf1.write(str(pdf + '\tbundle:ORIGINAL\n'))
 
             try:
                 if not self.dry_run:

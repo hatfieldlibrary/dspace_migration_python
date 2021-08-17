@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="44d688cc-d368-4e01-8a14-1483107adcc3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/cdmToDspace.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cdmToDspace.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/existdb/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/existdb/controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/pyvenv.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pyvenv.cfg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +33,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/condm/extract_page_data.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/fetch_bitstreams.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/venv/pyvenv.cfg" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/saf/rare/base/batch_1/item_0000/contents" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/saf/rare/base/batch_1/item_0001/contents" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/existdb/analyzer.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/saf/rare/base/batch_1/item_0002/contents" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/saf/rare/base/batch_1/item_0005/contents" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/existdb/controller.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/condm/saf/aphotos/campus_photographs/batch_1/item_0000/contents" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="JsFlowSettings">
     <service-enabled>false</service-enabled>
     <exe-path />
@@ -51,6 +66,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
@@ -68,10 +85,10 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="/usr/local/Cellar/node/7.4.0/bin/node" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="advanced.settings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -82,11 +99,13 @@
       <recent name="$PROJECT_DIR$/existdb/data/scene/alto" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/existdb/data/with_alto/wallulah/alto/196101" />
+      <recent name="$PROJECT_DIR$/existdb/data/with_alto" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/shared" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.scene sample">
+  <component name="RunManager" selected="Python.wallulah_w_alto">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -150,6 +169,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="wallulah_w_alto" type="PythonConfigurationType" factoryName="Python">
+      <module name="cdmToDspace" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../.pyenv/versions/3.9.6/bin/python" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/process.py" />
+      <option name="PARAMETERS" value="exist wallulah with_alto/wallulah wallulah_alto" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="TestNG">
       <option name="TEST_OBJECT" value="CLASS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -170,6 +211,7 @@
     </configuration>
     <list>
       <item itemvalue="Python.scene sample" />
+      <item itemvalue="Python.wallulah_w_alto" />
       <item itemvalue="Python.wallulah" />
     </list>
     <recent_temporary>
@@ -253,6 +295,7 @@
       <workItem from="1620159841609" duration="2070000" />
       <workItem from="1621183215998" duration="14000" />
       <workItem from="1629145823062" duration="1282000" />
+      <workItem from="1629232591297" duration="6579000" />
     </task>
     <servers />
   </component>
@@ -270,7 +313,12 @@
       </default-breakpoints>
     </breakpoint-manager>
   </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/cdmToDspace$wallulah_w_alto.coverage" NAME="wallulah_w_alto Coverage Results" MODIFIED="1629240668489" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python_saf_processing$process.coverage" NAME="wallulah Coverage Results" MODIFIED="1616109784050" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python_saf_processing$scene.coverage" NAME="scene sample Coverage Results" MODIFIED="1619733769518" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python_saf_processing$scene_sample.coverage" NAME="scene sample Coverage Results" MODIFIED="1620080114334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

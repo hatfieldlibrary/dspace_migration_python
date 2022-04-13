@@ -8,6 +8,31 @@ from .analyzer import ExistAnalyzer
 from .existDbFields import ExistDbFields
 
 
+def write_image_contents(out_dir, file_name, page_count):
+    print('attempting file read: ' + out_dir + '/' + file_name)
+    height = 0
+    width = 0
+    try:
+        with Image(filename='temp.jpg') as f:
+            width = f.width
+            height = f.height
+    except:
+        print('An error occurred when reading image size.')
+    try:
+        # self.append_canvas_json(height, width, page_count)
+        # Add text file to the saf contents file.
+        with open(out_dir + '/contents', 'a') as contents:
+            # Add image to dspace bundle name ORIGINAL).
+            contents.write(file_name)
+            contents.close()
+    except IOError as err:
+        print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
+        print('IO Error: {0}'.format(err))
+    except Exception as err:
+        print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg', out_dir))
+        print('Exception: {0}'.format(err))
+
+
 class FetchPageImages:
 
     ns = {'mets': 'http://www.loc.gov/METS/',
@@ -76,30 +101,6 @@ class FetchPageImages:
     #     canvas = {'label': 'Page ' + str(page_count), 'width': width, 'height': height, 'pos': page_count}
     #     self.info['canvases'].append(canvas)
 
-    def write_contents(self, out_dir, file_name, page_count):
-        print('attempting file read: ' + out_dir + '/' + file_name)
-        height = 0
-        width = 0
-        try:
-            with Image(filename='temp.jpg') as f:
-                width = f.width
-                height = f.height
-        except:
-            print('An error occurred when reading image size.')
-        try:
-            # self.append_canvas_json(height, width, page_count)
-            # Add text file to the saf contents file.
-            with open(out_dir + '/contents', 'a') as contents:
-                # Add image to dspace bundle name ORIGINAL).
-                contents.write(file_name)
-                contents.close()
-        except IOError as err:
-            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
-            print('IO Error: {0}'.format(err))
-        except Exception as err:
-            print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg', out_dir))
-            print('Exception: {0}'.format(err))
-
     def fetch_file(self, file_name, collection, item_id, out_dir, page_count):
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
         print(URL)
@@ -109,7 +110,7 @@ class FetchPageImages:
                 f.write(url.read())
         try:
             out_dir + '/' + file_name
-            self.write_contents(out_dir, file_name, page_count)
+            write_image_contents(out_dir, file_name, page_count)
         except:
             print('An error occurred writing to content file for %s: %s.' % (out_dir, URL))
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)

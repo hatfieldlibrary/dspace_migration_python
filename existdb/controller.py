@@ -9,6 +9,7 @@ from .extractMetadata import ExtractMetadata
 from .extractExistFullText import ExtractExistFullText
 from .fetchThumbnail import FetchThumbnailImage
 from .fetchPageImage import FetchPageImages
+from .fetchAltoFiles import FetchAltoFiles
 from shared.utils import Utils
 
 
@@ -77,6 +78,7 @@ class ExistProcessor:
             page_data_extractor = ExtractExistFullText()
             fetch_thumbnail_utility = FetchThumbnailImage(self.analyzer)
             fetch_page_images = FetchPageImages(self.analyzer)
+            fetch_alto_files = FetchAltoFiles(self.analyzer)
 
             # Each working directory will contain 1000 items.
             # The working directories are labelled batch_1, batch_2 ...
@@ -88,7 +90,6 @@ class ExistProcessor:
 
             current_dir = ''
             if not self.dry_run:
-
                 # Create the working directory
                 current_dir = Utils.int_saf_sub_directory(working_dir, counter)  # type: str
 
@@ -144,19 +145,19 @@ class ExistProcessor:
                     content2.write('mets.xml\tbundle:OtherContent\n')
                     content2.close()
 
-            if not self.dry_run:
-                mets_file_path = mets_file.name
-                mets_file_name = mets_file_path.replace(os.path.join(in_dir + '/'), '')
-                alto_subdirectory = mets_file_name.replace('.xml', '')
-                # Write alto files to saf directory and update contents file.
-                with open(current_dir + '/contents', 'a') as content1:
-                    content1.write("mets.xml" + '\tbundle:OtherContent\n')
-                    for filename in os.listdir(alto_dir + '/' + alto_subdirectory):
-                        filename_updated = filename[-7:]
-                        filepath = os.path.join(alto_dir, alto_subdirectory, filename)
-                        shutil.copy(filepath, current_dir + '/' + filename_updated)
-                        content1.write(filename_updated + '\tbundle:OtherContent\n')
-                    content1.close()
+            # if not self.dry_run:
+            #     mets_file_path = mets_file.name
+            #     mets_file_name = mets_file_path.replace(os.path.join(in_dir + '/'), '')
+            #     alto_subdirectory = mets_file_name.replace('.xml', '')
+            #     # Write alto files to saf directory and update contents file.
+            #     with open(current_dir + '/contents', 'a') as content1:
+            #         content1.write("mets.xml" + '\tbundle:OtherContent\n')
+            #         for filename in os.listdir(alto_dir + '/' + alto_subdirectory):
+            #             filename_updated = filename[-7:]
+            #             filepath = os.path.join(alto_dir, alto_subdirectory, filename)
+            #             shutil.copy(filepath, current_dir + '/' + filename_updated)
+            #             content1.write(filename_updated + '\tbundle:OtherContent\n')
+            #         content1.close()
 
             # For utf-8 output we need to use the io library open function. With python3 this can be done
             # using the default python open func. (I'm using python 2.7)
@@ -199,6 +200,9 @@ class ExistProcessor:
                 error_count += 1
                 print('An error occurred writing contents for: %s. See %s' % (doc_title, current_dir))
                 print('Exception: {0}'.format(err))
+
+            if not self.dry_run:
+                fetch_alto_files.fetch_files(root, self.collection, current_dir, self.dry_run)
 
             # For the image path, remove only the xml extension.
             image_path = item[:-4]

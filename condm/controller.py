@@ -8,7 +8,7 @@ from .collection_processor import CollectionProcessor
 from shared.utils import Utils
 
 
-class ContentdmController:
+class ContentdmProcessor:
 
     error_count = 0
     analyzer = None

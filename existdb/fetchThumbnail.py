@@ -39,7 +39,7 @@ class FetchThumbnailImage:
             with Image(filename='temp.jpg') as f:
                 f.quality(50)
                 f.resize(200, 200)
-                f.save(out_dir + '/thumb.jpg')
+                f.save(out_dir + '/thumb.jpg.jpg')
                 self.write_contents(out_dir)
         except:
             print('An error occurred converting image for %s: %s.' % (out_dir, URL))
@@ -50,13 +50,13 @@ class FetchThumbnailImage:
         try:
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
-                contents.write('thumb.jpg\n')
+                contents.write('thumb.jpg.jpg' + '\tbundle:THUMBNAIL\n')
                 contents.close()
         except IOError as err:
-            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
+            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg.jpg', out_dir))
             print('IO Error: {0}'.format(err))
         except Exception as err:
-            print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg', out_dir))
+            print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg.jpg', out_dir))
             print('Exception: {0}'.format(err))
 
     def fetch_thumbnail(self, element, collection, item_id, out_dir, dry_run):

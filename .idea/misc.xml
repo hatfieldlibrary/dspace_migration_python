@@ -7,4 +7,7 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
 </project>

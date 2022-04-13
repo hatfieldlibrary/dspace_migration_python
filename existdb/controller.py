@@ -12,7 +12,7 @@ from .fetchPageImage import FetchPageImages
 from shared.utils import Utils
 
 
-class ExistController:
+class ExistProcessor:
 
     def __init__(self, collection, input_dir, output_directory, dry_run):
         """
@@ -123,16 +123,16 @@ class ExistController:
                 dc_tree = ET.ElementTree(dc_metadata)
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-            if not self.dry_run:
+            # if not self.dry_run:
 
                 # Add dspace.entity.type - IIIFSearchable
-                metadata_local = ET.Element('dublin_core')
-                metadata_local.set('schema', 'dspace')
-                require_relation = ET.SubElement(metadata_local, 'dcvalue')
-                require_relation.set('element', 'entity.type')
-                require_relation.text = 'IIIFSearchable'
-                dspace_metadata = ET.ElementTree(metadata_local)
-                dspace_metadata.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration="True")
+                # metadata_local = ET.Element('dublin_core')
+                # metadata_local.set('schema', 'dspace')
+                # require_relation = ET.SubElement(metadata_local, 'dcvalue')
+                # require_relation.set('element', 'entity.type')
+                # require_relation.text = 'IIIFSearchable'
+                # dspace_metadata = ET.ElementTree(metadata_local)
+                # dspace_metadata.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration="True")
 
             if not self.dry_run:
                 mets_file_path = mets_file.name
@@ -150,7 +150,7 @@ class ExistController:
                 alto_subdirectory = mets_file_name.replace('.xml', '')
                 # Write alto files to saf directory and update contents file.
                 with open(current_dir + '/contents', 'a') as content1:
-                    content1.write(mets_file_name + '\tbundle:OtherContent\n')
+                    content1.write("mets.xml" + '\tbundle:OtherContent\n')
                     for filename in os.listdir(alto_dir + '/' + alto_subdirectory):
                         filename_updated = filename[-7:]
                         filepath = os.path.join(alto_dir, alto_subdirectory, filename)
@@ -164,7 +164,7 @@ class ExistController:
 
                 if not self.dry_run:
                     # Write fulltext
-                    with open(current_dir + '/file_1.txt', 'w', encoding='UTF-8') as file2:
+                    with open(current_dir + '/fulltext_1.txt', 'w', encoding='UTF-8') as file2:
                         file2.write(fulltext)
                         file2.close()
 
@@ -189,7 +189,7 @@ class ExistController:
                 if not self.dry_run:
                     # Add text file to the saf contents file.
                     with open(current_dir + '/contents', 'a') as file3:
-                        file3.write(str('file_1.txt\tbundle:OtherContent\n'))
+                        file3.write(str('fulltext_1.txt\tbundle:OtherContent\n'))
                         file3.close()
             except IOError as err:
                 error_count += 1

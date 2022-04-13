@@ -33,16 +33,16 @@ class FetchPageImages:
             print('missing root')
         print('New Document')
         # initialize info dict
-        self.info = {
-            "globalDefaults": {
-                "activated": False,
-                "label": "",
-                "width": 0,
-                "height": 0
-            },
-            "canvases": [],
-            "structures": []
-        }
+        # self.info = {
+        #     "globalDefaults": {
+        #         "activated": False,
+        #         "label": "",
+        #         "width": 0,
+        #         "height": 0
+        #     },
+        #     "canvases": [],
+        #     "structures": []
+        # }
         # the file section
         page_sec = element.find(self.mets_fields.mets_structural_elements['file_section'], self.ns)
         # the file groups
@@ -61,20 +61,20 @@ class FetchPageImages:
                         self.fetch_file(file_name, collection, item_id, out_dir, page_count)
                         print(str(page_count))
                         page_count += 1
-        self.write_info_json(out_dir)
+        # self.write_info_json(out_dir)
 
-    def write_info_json (self, out_dir):
-        with open(out_dir + '/info.json', 'w') as contents:
-            contents.write(json.dumps(self.info))
-            contents.close()
-        with open(out_dir + '/contents', 'a') as contents:
-            contents.write('info.json' + '\tbundle:IIIF\n')
-            contents.close()
+    # def write_info_json (self, out_dir):
+    #     with open(out_dir + '/info.json', 'w') as contents:
+    #         contents.write(json.dumps(self.info))
+    #         contents.close()
+    #     with open(out_dir + '/contents', 'a') as contents:
+    #         contents.write('info.json' + '\tbundle:IIIF\n')
+    #         contents.close()
 
-    def append_canvas_json(self, height, width, page_count):
-        print('Page ' + str(page_count))
-        canvas = {'label': 'Page ' + str(page_count), 'width': width, 'height': height, 'pos': page_count}
-        self.info['canvases'].append(canvas)
+    # def append_canvas_json(self, height, width, page_count):
+    #     print('Page ' + str(page_count))
+    #     canvas = {'label': 'Page ' + str(page_count), 'width': width, 'height': height, 'pos': page_count}
+    #     self.info['canvases'].append(canvas)
 
     def write_contents(self, out_dir, file_name, page_count):
         print('attempting file read: ' + out_dir + '/' + file_name)
@@ -87,11 +87,11 @@ class FetchPageImages:
         except:
             print('An error occurred when reading image size.')
         try:
-            self.append_canvas_json(height, width, page_count)
+            # self.append_canvas_json(height, width, page_count)
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
-                # Add image to dspace bundle name 'IIIF').
-                contents.write(file_name + '\tbundle:IIIF\n')
+                # Add image to dspace bundle name ORIGINAL).
+                contents.write(file_name)
                 contents.close()
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))

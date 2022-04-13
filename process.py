@@ -2,8 +2,8 @@
 
 import sys
 import argparse
-from condm.controller import ContentdmController
-from existdb.controller import ExistController
+from condm.controller import ContentdmProcessor
+from existdb.controller import ExistProcessor
 
 # Allowed repo names are 'cdm' and 'exist-db'.
 #
@@ -18,7 +18,7 @@ from existdb.controller import ExistController
 # NOTE: You must provide an empty output directory.  E.g. saf/archives_manuscripts.
 #       This directory must be empty.
 #
-# See controller classes for more details.
+# See processor classes for more details.
 
 # The source repository
 
@@ -42,9 +42,9 @@ if args.dry_run:
     dry_run = True
 
 if repo == 'cdm':
-    controller = ContentdmController(args.collection, args.source_file, args.saf_dir, dry_run)
+    controller = ContentdmProcessor(args.collection, args.source_file, args.saf_dir, dry_run)
     controller.process_collections()
 
 if repo == 'exist':
-    controller = ExistController(args.collection, args.source_file, args.saf_dir, dry_run)
+    controller = ExistProcessor(args.collection, args.source_file, args.saf_dir, dry_run)
     controller.process_records()

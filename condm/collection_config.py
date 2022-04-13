@@ -39,11 +39,11 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': []
         },
-        'hfma': {
+        'hfmanw': {
             'field_name': 'source',
             'field_values': []
         },
-        'hfma_exhibits': {
+        'hfmoaevents': {
             'field_name': 'source',
             'field_values': []
         },
@@ -232,11 +232,11 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': []
         },
-        'hfma': {
+        'hfmanw': {
             'field_name': 'source',
             'field_values': []
         },
-        'hfma_exhibits': {
+        'hfmoaevents': {
             'field_name': 'source',
             'field_values': []
         },

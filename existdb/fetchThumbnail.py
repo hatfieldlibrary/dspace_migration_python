@@ -1,10 +1,10 @@
 from _elementtree import Element
-from pgmagick import Image
-import urllib
+from wand.image import Image
+import urllib.request
 from contextlib import contextmanager
 
-from analyzer import ExistAnalyzer
-from existDbFields import ExistDbFields
+from .analyzer import ExistAnalyzer
+from .existDbFields import ExistDbFields
 
 
 class FetchThumbnailImage:
@@ -27,19 +27,20 @@ class FetchThumbnailImage:
     def convert_file(self, file_name, collection, item_id, out_dir):
 
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
-        print URL
+        response = urllib.request.urlopen(URL)
         # write the file to a temporary on disk location.
-        with self.closing(urllib.urlopen(URL)) as url:
-            with open('temp.jpg', 'wb') as f:
-                f.write(url.read())
+        with self.closing(urllib.request.urlopen(URL)):
+            with Image(file=response) as f:
+                f.format = 'jpeg'
+                f.save(filename='temp.jpg')
         try:
-            im = Image('temp.jpg')
-            im.quality(50)
-            im.scale('200x200')
-            im.write(out_dir + '/thumb.jpg')
-            self.write_contents(out_dir)
-        except:
-            print('An error occurred concerting image for %s: %s.' % (out_dir, URL))
+            with Image(filename='temp.jpg') as f:
+                f.resize(200, 200)
+                f.save(filename=out_dir + '/thumb.jpg.jpg')
+                self.write_contents(out_dir)
+        except Exception as err:
+            print('An error occurred converting image for %s: %s.' % (out_dir, URL))
+            print(err)
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)
 
     @staticmethod
@@ -47,19 +48,19 @@ class FetchThumbnailImage:
         try:
             # Add text file to the saf contents file.
             with open(out_dir + '/contents', 'a') as contents:
-                contents.write('thumb.jpg\n')
+                contents.write('thumb.jpg.jpg' + '\tbundle:THUMBNAIL\n')
                 contents.close()
         except IOError as err:
-            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
+            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg.jpg', out_dir))
             print('IO Error: {0}'.format(err))
         except Exception as err:
-            print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg', out_dir))
-            print 'Exception: {0}'.format(err)
+            print('An error occurred writing contents for: %s. See %s' % ('thumb.jpg.jpg', out_dir))
+            print('Exception: {0}'.format(err))
 
     def fetch_thumbnail(self, element, collection, item_id, out_dir, dry_run):
         # type: (Element) -> None
         if element is None:
-            print 'missing root'
+            print('missing root')
         # the file section
         page_sec = element.find(self.mets_fields.mets_structural_elements['file_section'], self.ns)
         # the file groups

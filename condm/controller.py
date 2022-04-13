@@ -2,13 +2,13 @@
 import os
 import xml.etree.ElementTree as ET
 
-from analyzer import Analyzer
-from collection_config import CollectionConfig
-from collection_processor import CollectionProcessor
+from .analyzer import Analyzer
+from .collection_config import CollectionConfig
+from .collection_processor import CollectionProcessor
 from shared.utils import Utils
 
 
-class ContentdmController:
+class ContentdmProcessor:
 
     error_count = 0
     analyzer = None
@@ -103,15 +103,15 @@ class ContentdmController:
             count += 1
 
         if self.dry_run:
-            print '\nSUB-COLLECTIONS'
+            print('\nSUB-COLLECTIONS')
             self.analyzer.print_sub_collection_rpt()
             self.analyzer.print_unprocessed_collection_rpt()
             self.analyzer.print_excluded_collection_rpt()
 
-            print '\nITEM TYPES'
+            print('\nITEM TYPES')
             self.analyzer.print_item_type_report()
             print('\n%s records processed in dry run of %s' % (str(count), self.output))
 
         if not self.dry_run:
             print('\n%s records loaded into %s' % (str(count), self.output))
-            print 'To see more load information use the --dry-run flag.'
+            print('To see more load information use the --dry-run flag.')

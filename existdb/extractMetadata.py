@@ -4,10 +4,10 @@ import xml.etree.ElementTree as ET
 from collections import Iterable
 from xml.etree.ElementTree import Element
 
-from extractExistFullText import ExtractExistFullText
-from existDbFields import ExistDbFields
-from existDbFieldMaps import ExistDbFieldMaps
-from existDbFieldDefaults import DefaultFieldValueMap
+from .extractExistFullText import ExtractExistFullText
+from .existDbFields import ExistDbFields
+from .existDbFieldMaps import ExistDbFieldMaps
+from .existDbFieldDefaults import DefaultFieldValueMap
 
 
 class ExtractMetadata:
@@ -59,7 +59,7 @@ class ExtractMetadata:
             if citation_type == 'edition':
                 self.citation += ' edition ' + element[0].text
         else:
-            print ('Missing citation for %s in: %s'%(citation_type, self.item_title_attrib))
+            print('Missing citation for %s in: %s'%(citation_type, self.item_title_attrib))
 
     def __process_iterable_map(self, parent_element, elements, element_map):
         # type: (Element, Iterable, dict) -> None
@@ -81,7 +81,7 @@ class ExtractMetadata:
             #
             # This is here to support a more complex use case, in which we do not want
             # to map all "note" fields to description:statementofresponsibility.
-            # Since we may never face this situation, this is a clear violation of the
+            # Since we may never face this situation, this is probably a violation of the
             # YAGNI principle (https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)
             #
             # Note that I am still processing the "citation" fields using the dspace map for
@@ -225,9 +225,9 @@ class ExtractMetadata:
 
         # Set the relation:requires field for existdb. (This DC field will tell the application
         # that the item must be retrieved from existdb.)
-        self.add_sub_element(dublin_core,
-                             self.ds_field_map[self.switch_tag['database_relation'].get('id')],
-                             'existdb')
+        # self.add_sub_element(dublin_core,
+        #                      self.ds_field_map[self.switch_tag['database_relation'].get('id')],
+        #                      'existdb')
 
         # The item title from mets header.
         self.item_title_attrib = record.attrib[mets_structural_elements['label_attr']]

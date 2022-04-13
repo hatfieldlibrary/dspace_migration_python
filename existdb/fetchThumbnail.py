@@ -27,22 +27,20 @@ class FetchThumbnailImage:
     def convert_file(self, file_name, collection, item_id, out_dir):
 
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
-        print(URL)
         response = urllib.request.urlopen(URL)
         # write the file to a temporary on disk location.
-        with self.closing(urllib.request.urlopen(URL)) as url:
-            print('test url read')
+        with self.closing(urllib.request.urlopen(URL)):
             with Image(file=response) as f:
+                f.format = 'jpeg'
                 f.save(filename='temp.jpg')
         try:
-            print('thumb processing')
             with Image(filename='temp.jpg') as f:
-                f.quality(50)
                 f.resize(200, 200)
-                f.save(out_dir + '/thumb.jpg.jpg')
+                f.save(filename=out_dir + '/thumb.jpg.jpg')
                 self.write_contents(out_dir)
-        except:
+        except Exception as err:
             print('An error occurred converting image for %s: %s.' % (out_dir, URL))
+            print(err)
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)
 
     @staticmethod

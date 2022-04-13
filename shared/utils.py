@@ -112,7 +112,7 @@ class Utils:
         text_content = text_content.replace('&amp;gt;', '&gt')
         text_content = text_content.replace('&amp;lt;', '&lt')
         # When importing into DSpace as Simple Archive Format, the ampersand special character
-        # is imported without decoding. It's not valid xml (I think) ... but here we need to convert the
+        # is imported without decoding ... but here we need to convert the
         # &amp; to a literal ampersand (&).
         text_content = text_content.replace('&amp;', '&')
         # remove ending semicolons from the metatdata

@@ -1,6 +1,5 @@
 
 import urllib.request
-import json
 from contextlib import contextmanager
 from wand.image import Image
 
@@ -9,21 +8,21 @@ from .existDbFields import ExistDbFields
 
 
 def write_image_contents(out_dir, file_name, page_count):
-    print('attempting file read: ' + out_dir + '/' + file_name)
+    # print('attempting file read: ' + out_dir + '/' + file_name)
     height = 0
     width = 0
-    try:
-        with Image(filename='temp.jpg') as f:
-            width = f.width
-            height = f.height
-    except:
-        print('An error occurred when reading image size.')
+    # try:
+    #     with Image(filename='temp.jpg') as f:
+    #         width = f.width
+    #         height = f.height
+    # except:
+    #     print('An error occurred when reading image size.')
     try:
         # self.append_canvas_json(height, width, page_count)
         # Add text file to the saf contents file.
         with open(out_dir + '/contents', 'a') as contents:
             # Add image to dspace bundle name ORIGINAL).
-            contents.write(file_name)
+            contents.write(file_name + '\n')
             contents.close()
     except IOError as err:
         print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
@@ -56,7 +55,7 @@ class FetchPageImages:
         # type: (Element) -> None
         if element is None:
             print('missing root')
-        print('New Document')
+        # print('New Document')
         # initialize info dict
         # self.info = {
         #     "globalDefaults": {
@@ -81,10 +80,10 @@ class FetchPageImages:
                     location = file.find(self.mets_fields.mets_structural_elements['file_location'], self.ns)
                     # the file name
                     file_name = location.attrib[self.mets_fields.mets_structural_elements['file_href']]
-                    print(file_name)
+                    # print(file_name)
                     if not dry_run:
                         self.fetch_file(file_name, collection, item_id, out_dir, page_count)
-                        print(str(page_count))
+                        # print(str(page_count))
                         page_count += 1
         # self.write_info_json(out_dir)
 
@@ -103,7 +102,7 @@ class FetchPageImages:
 
     def fetch_file(self, file_name, collection, item_id, out_dir, page_count):
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
-        print(URL)
+       #  print(URL)
         # write the file to a temporary on disk location.
         with self.closing(urllib.request.urlopen(URL)) as url:
             with open(out_dir + '/' + file_name, 'wb') as f:

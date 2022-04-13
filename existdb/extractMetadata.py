@@ -225,9 +225,9 @@ class ExtractMetadata:
 
         # Set the relation:requires field for existdb. (This DC field will tell the application
         # that the item must be retrieved from existdb.)
-        self.add_sub_element(dublin_core,
-                             self.ds_field_map[self.switch_tag['database_relation'].get('id')],
-                             'existdb')
+        # self.add_sub_element(dublin_core,
+        #                      self.ds_field_map[self.switch_tag['database_relation'].get('id')],
+        #                      'existdb')
 
         # The item title from mets header.
         self.item_title_attrib = record.attrib[mets_structural_elements['label_attr']]

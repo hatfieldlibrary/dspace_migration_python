@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, shutil
+import os
 import xml.etree.ElementTree as ET
 from io import open
 
@@ -55,12 +55,24 @@ class ExistProcessor:
         # The parent output directory.
         out_dir = base_directory + '/existdb/saf/' + self.output
 
+        # THIS MUST BE SET MANUALLY FOR EACH COLLECTION. It determines whether
+        # OCR files will be added to the Solr index based on bundle order or
+        # the order in METS. This program should guarantee that bundle order and
+        # METS order are identical, but relying on METS when possible is a
+        # further guarantee. METS order will fail, however, when the ocr file names
+        # it the METS file do not sync with the actual ALTO file names. This is
+        # true for several collections in eXist.
+        #
+        # If you decide to index based on bundle order for every collection,
+        # just leave this False.
+        index_with_mets_order = True
+
         counter = 0
         batch = 0
         working_dir = ''
         error_count = 0
 
-        # process each file in the mets directory.
+        # process each file in the mets data directory.
         for item in os.listdir(in_dir):
 
             mets_file = open(os.path.join(in_dir + '/' + item), 'rt')
@@ -75,9 +87,8 @@ class ExistProcessor:
 
             # The document title is useful for error messages.
             doc_title = root.attrib['LABEL']
-            # This is the base for ALTO (and perhaps other) files. Required for retrieving from database.
-            # If using the mets.xml file for indexing order, you'll probably need to modify the file name
-            # using the fetchAltoFiles cut_size.
+
+            # This is the base string for ALTO files. Required for retrieving from eXist database.
             if 'OBJID' in root.attrib:
                 # Used for non-serials (see comment below)
                 obj_id = root.attrib['OBJID']
@@ -137,34 +148,16 @@ class ExistProcessor:
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
             if not self.dry_run:
-                # mets_file_path = mets_file.name
-                # shutil.copy(mets_file_path, current_dir)
-                # mets_dirs = mets_file_path.split("/")
-                # mets_name = mets_dirs[len(mets_dirs) - 1]
-                # dst_file = os.path.join(current_dir, mets_name)
                 original_file_name = mets_file.name
                 dst_file = os.path.join(current_dir, 'mets.xml')
                 os.rename(original_file_name, dst_file)
                 with open(current_dir + '/contents', 'a') as content2:
-                    # content2.write(mets_name + '\tbundle:OtherContent\n')
-                    # Use this whenever possible (file name 'mets.xml')
-                    content2.write('mets.xml\tbundle:OtherContent\n')
+                    if index_with_mets_order:
+                        content2.write('mets.xml\tbundle:OtherContent\n')
+                    else:
+                        content2.write(mets_name + '\tbundle:OtherContent\n')
                     content2.close()
 
-                # try:
-                #     if not self.dry_run:
-                #         # Add text file to the saf contents file.
-                #         with open(current_dir + '/contents', 'a') as file3:
-                #             file3.write(str('fulltext_1.txt\tbundle:OtherContent\n'))
-                #             file3.close()
-                # except IOError as err:
-                #     error_count += 1
-                #     print('An error occurred writing contents to saf for: %s. See %s' % (doc_title, current_dir))
-                #     print('IO Error: {0}'.format(err))
-                # except Exception as err:
-                #     error_count += 1
-                #     print('An error occurred writing contents for: %s. See %s' % (doc_title, current_dir))
-                #     print('Exception: {0}'.format(err))
 
             if not self.dry_run:
                 fetch_alto_files.fetch_files(root, self.collection, obj_id, current_dir, self.dry_run)

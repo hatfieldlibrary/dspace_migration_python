@@ -11,7 +11,7 @@ def write_pdf_to_contents(out_dir, file_name):
     # Add text file to the saf contents file.
     with open(out_dir + '/contents', 'a') as contents:
         # Add Alto to dspace bundle name OtherContent).
-        contents.write(file_name + '\n')
+        contents.write(file_name + '\tprimary:true\n')
         contents.close()
 
 

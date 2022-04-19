@@ -16,6 +16,8 @@ from shared.utils import Utils
 
 class ExistProcessor:
 
+    fetch_pdf = True
+
     def __init__(self, collection, input_dir, output_directory, dry_run):
         """
         Constructor.
@@ -187,10 +189,11 @@ class ExistProcessor:
                 fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
 
             if not self.dry_run:
-                # Watch out for this, collections may vary.
-                pdf_base = mets_name[:-4]
-                pdf_name = pdf_base + '.pdf'
-                fetch_pdf_files.fetch_files(pdf_name, self.collection, current_dir, self.dry_run)
+                if self.fetch_pdf:
+                    # Watch out for this, collections may vary.
+                    pdf_base = mets_name[:-4]
+                    pdf_name = pdf_base + '.pdf'
+                    fetch_pdf_files.fetch_files(pdf_name, self.collection, current_dir, self.dry_run)
 
             if not self.dry_run:
                 fetch_page_images.fetch_images(root, self.collection, image_path, current_dir, self.dry_run)

@@ -13,6 +13,11 @@ from .fetchPageImage import FetchPageImages
 from .fetchAltoFiles import FetchAltoFiles
 from shared.utils import Utils
 
+iiif_enabled = '<?xml version="1.0" encoding="UTF-8"?><dublin_core schema="dspace"><dcvalue element="iiif" ' \
+               'qualifier="enabled">true</dcvalue></dublin_core> '
+
+iiif_search = '<?xml version="1.0" encoding="UTF-8"?><dublin_core schema="iiif"><dcvalue element="search" ' \
+              'qualifier="enabled">true</dcvalue></dublin_core> '
 
 class ExistProcessor:
 
@@ -150,6 +155,13 @@ class ExistProcessor:
                 # Write as xml
                 dc_tree = ET.ElementTree(dc_metadata)
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
+
+            if not self.dry_run:
+                dc_tree = ET.ElementTree(ET.fromstring(iiif_enabled))
+                dc_tree.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration=True)
+                # Existdb items are searchable
+                dc_tree = ET.ElementTree(ET.fromstring(iiif_search))
+                dc_tree.write(current_dir + '/metadata_iiif.xml', encoding="UTF-8", xml_declaration=True)
 
             if not self.dry_run:
                 original_file_name = mets_file.name

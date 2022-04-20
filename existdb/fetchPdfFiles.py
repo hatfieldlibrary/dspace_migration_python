@@ -2,7 +2,7 @@
 from urllib.request import urlopen
 import urllib.error
 from contextlib import contextmanager
-from existDbFields import ExistDbFields
+from .existDbFields import ExistDbFields
 
 
 def write_pdf_to_contents(out_dir, file_name):
@@ -54,6 +54,14 @@ class FetchPdfFiles:
             if pdf_found:
                 out_dir + '/' + file_name
                 write_pdf_to_contents(out_dir, file_name)
+            
+        except Exception as err:
+            print('An error occurred fetching file for %s: %s.' % (URL, err))
+            self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
+
+        try:
+            out_dir + '/' + file_name
+            write_pdf_to_contents(out_dir, file_name)
 
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))

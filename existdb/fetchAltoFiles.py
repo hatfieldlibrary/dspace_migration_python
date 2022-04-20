@@ -1,6 +1,6 @@
 import urllib
 from contextlib import contextmanager
-from existDbFields import ExistDbFields
+from .existDbFields import ExistDbFields
 
 
 def write_alto_to_contents(out_dir, file_name):

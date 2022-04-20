@@ -5,7 +5,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from io import open
 
-from fetchPdfFiles import FetchPdfFiles
+from .fetchPdfFiles import FetchPdfFiles
 from .analyzer import ExistAnalyzer
 from .extractMetadata import ExtractMetadata
 from .extractExistFullText import ExtractExistFullText
@@ -207,7 +207,7 @@ class ExistProcessor:
 
             counter += 1
             mets_file.close()
-            print('.', end='')
+            print(str(counter))
 
         # Done.
         final_count = Utils.get_final_count(batch, counter)

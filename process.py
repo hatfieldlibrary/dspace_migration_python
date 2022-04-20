@@ -23,6 +23,7 @@ from existdb.controller import ExistProcessor
 # The source repository
 
 parser = argparse.ArgumentParser(description='Process exported collection data to saf. The supported repositories are CONTENTdm and the WU eXist-db METS/ALTO collections.')
+
 parser.add_argument('repo', metavar='repo', type=str,
                     help='the repository name (cdm | exist)')
 parser.add_argument('collection', metavar='collection', type=str,
@@ -33,6 +34,7 @@ parser.add_argument('saf_dir', metavar='saf_directory', type=str,
                     help='the parent saf target directory')
 parser.add_argument("-d", "--dry-run", action="store_true",
                     help="Dry run displays collection analytics only. No data is processed.")
+
 args = parser.parse_args()
 
 repo = args.repo

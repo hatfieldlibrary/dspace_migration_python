@@ -153,15 +153,14 @@ class ExistProcessor:
 
             if not self.dry_run:
                 original_file_name = mets_file.name
-                dst_file = os.path.join(current_dir, 'mets.xml')
-                os.rename(original_file_name, dst_file)
+                # dst_file = os.path.join(current_dir, 'mets.xml')
+                # os.rename(original_file_name, dst_file)
                 with open(current_dir + '/contents', 'a') as content2:
                     if index_with_mets_order:
                         content2.write('mets.xml\tbundle:OtherContent\n')
                     else:
-                        content2.write(mets_name + '\tbundle:OtherContent\n')
+                        content2.write(original_file_name + '\tbundle:OtherContent\n')
                     content2.close()
-
 
             if not self.dry_run:
                 fetch_alto_files.fetch_files(root, self.collection, obj_id, current_dir, self.dry_run)

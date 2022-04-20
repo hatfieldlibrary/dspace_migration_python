@@ -38,22 +38,24 @@ class FetchPdfFiles:
     def fetch_file(self, file_name, collection, out_dir):
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/pdf/' + file_name
 
+        pdf_found = False
+
         try:
             with self.closing(urlopen(URL)) as url:
                 with open(out_dir + '/' + file_name, 'wb') as f:
                     f.write(url.read())
+                    pdf_found = True
 
-            out_dir + '/' + file_name
-            write_pdf_to_contents(out_dir, file_name)
-
-        except urllib.error as err:
+        except Exception as err:
             print('An error occurred fetching file for %s: %s.' % (URL, err))
             self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
+
+        try:
+            if pdf_found:
+                out_dir + '/' + file_name
+                write_pdf_to_contents(out_dir, file_name)
 
         except IOError as err:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
             print('IO Error: {0}'.format(err))
             self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
-
-
-

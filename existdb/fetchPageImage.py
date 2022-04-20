@@ -52,22 +52,13 @@ class FetchPageImages:
         self.mets_fields = ExistDbFields()
 
     def fetch_images(self, element, collection, item_id, out_dir, dry_run):
-        # type: (Element) -> None
+        # type: (Element, str, str, str, bool) -> None
+
         if element is None:
-            print('missing root')
-        # print('New Document')
-        # initialize info dict
-        # self.info = {
-        #     "globalDefaults": {
-        #         "activated": False,
-        #         "label": "",
-        #         "width": 0,
-        #         "height": 0
-        #     },
-        #     "canvases": [],
-        #     "structures": []
-        # }
-        # the file section
+            print('Missing XML node for %s' % item_id)
+            print('Cannot retrieve jp2 images for the item.')
+            return
+
         page_sec = element.find(self.mets_fields.mets_structural_elements['file_section'], self.ns)
         # the file groups
         pages = page_sec.findall('.//' + self.mets_fields.mets_structural_elements['file_group'], self.ns)
@@ -85,31 +76,27 @@ class FetchPageImages:
                         self.fetch_file(file_name, collection, item_id, out_dir, page_count)
                         # print(str(page_count))
                         page_count += 1
-        # self.write_info_json(out_dir)
-
-    # def write_info_json (self, out_dir):
-    #     with open(out_dir + '/info.json', 'w') as contents:
-    #         contents.write(json.dumps(self.info))
-    #         contents.close()
-    #     with open(out_dir + '/contents', 'a') as contents:
-    #         contents.write('info.json' + '\tbundle:IIIF\n')
-    #         contents.close()
-
-    # def append_canvas_json(self, height, width, page_count):
-    #     print('Page ' + str(page_count))
-    #     canvas = {'label': 'Page ' + str(page_count), 'width': width, 'height': height, 'pos': page_count}
-    #     self.info['canvases'].append(canvas)
 
     def fetch_file(self, file_name, collection, item_id, out_dir, page_count):
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/images/' + item_id + '/' + file_name
-       #  print(URL)
-        # write the file to a temporary on disk location.
-        with self.closing(urllib.request.urlopen(URL)) as url:
-            with open(out_dir + '/' + file_name, 'wb') as f:
-                f.write(url.read())
+        #  print(URL)
+
+        image_found = False
+
         try:
-            out_dir + '/' + file_name
-            write_image_contents(out_dir, file_name, page_count)
-        except:
-            print('An error occurred writing to content file for %s: %s.' % (out_dir, URL))
+            with self.closing(urllib.request.urlopen(URL)) as url:
+                with open(out_dir + '/' + file_name, 'wb') as f:
+                    f.write(url.read())
+                    image_found = True
+
+        except Exception as err:
+            print('An error occurred fetching image file for %s: %s.' % (URL, err))
+            self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
+
+        try:
+            if image_found:
+                out_dir + '/' + file_name
+                write_image_contents(out_dir, file_name, page_count)
+        except IOError as err:
+            print('An error occurred writing to content file for %s: %s.' % (URL, err))
             self.analyzer.add_image_encoding_failed(out_dir + ': ' + URL)

@@ -87,6 +87,8 @@ class ExistProcessor:
 
             root = mets_tree.getroot()
 
+            mets_file.close()
+
             # The document title is useful for error messages.
             doc_title = root.attrib['LABEL']
 
@@ -203,7 +205,6 @@ class ExistProcessor:
             print('.', end='')
 
         # Done.
-        print(os.stat(in_dir + '/' + item))
         final_count = Utils.get_final_count(batch, counter)
 
         print('\n%s records loaded' % str(final_count))

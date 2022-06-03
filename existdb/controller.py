@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import shutil
 import xml.etree.ElementTree as ET
 from io import open
 
@@ -51,6 +52,20 @@ class ExistProcessor:
         to imported classes.
         """
 
+        # THIS MUST BE SET MANUALLY FOR EACH COLLECTION. It determines whether
+        # OCR files will be added to the Solr index based on bundle order or
+        # the order in METS. This program should guarantee that bundle order and
+        # METS order are identical, but relying on METS when possible is a
+        # further guarantee. METS order will fail, however, when the ocr file names
+        # it the METS file do not sync with the actual ALTO file names. This is
+        # true for several collections in eXist.
+        #
+        # If you decide to index based on bundle order for every collection,
+        # just leave this False.
+        #
+        # This stategy has not been codified in the DSpace indexing CLI process.
+        index_with_mets_order = False
+
         base_directory = os.path.abspath(os.getcwd())
         # The input mets directory.
         in_dir = base_directory + '/existdb/data/' + self.input + '/mets'
@@ -62,18 +77,6 @@ class ExistProcessor:
         pdf_dir = base_directory + '/existdb/data/' + self.input + '/pdf'
         # The parent output directory.
         out_dir = base_directory + '/existdb/saf/' + self.output
-
-        # THIS MUST BE SET MANUALLY FOR EACH COLLECTION. It determines whether
-        # OCR files will be added to the Solr index based on bundle order or
-        # the order in METS. This program should guarantee that bundle order and
-        # METS order are identical, but relying on METS when possible is a
-        # further guarantee. METS order will fail, however, when the ocr file names
-        # it the METS file do not sync with the actual ALTO file names. This is
-        # true for several collections in eXist.
-        #
-        # If you decide to index based on bundle order for every collection,
-        # just leave this False.
-        index_with_mets_order = True
 
         counter = 0
         batch = 0
@@ -93,7 +96,7 @@ class ExistProcessor:
 
             root = mets_tree.getroot()
 
-            mets_file.close()
+            # mets_file.close()
 
             # The document title is useful for error messages.
             doc_title = root.attrib['LABEL']
@@ -157,7 +160,7 @@ class ExistProcessor:
                 dc_tree = ET.ElementTree(dc_metadata)
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-            if not self.dry_run:
+            if not self.dry_run
                 dc_tree = ET.ElementTree(ET.fromstring(iiif_enabled))
                 dc_tree.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration=True)
                 # Existdb items are searchable
@@ -165,14 +168,16 @@ class ExistProcessor:
                 dc_tree.write(current_dir + '/metadata_iiif.xml', encoding="UTF-8", xml_declaration=True)
 
             if not self.dry_run:
-                original_file_name = mets_file.name
-                # dst_file = os.path.join(current_dir, 'mets.xml')
-                # os.rename(original_file_name, dst_file)
+                if index_with_mets_order:
+                    mets_file_name = 'mets.xml'
+                    out_file = os.path.join(current_dir + '/' + 'mets.xml')
+                else:
+                    mets_file_path = mets_file.name.split('/')
+                    mets_file_name = mets_file_path[len(mets_file_path) - 1]
+                    out_file = os.path.join(current_dir + '/' + mets_file_name)
+                shutil.copy(mets_file.name, out_file)
                 with open(current_dir + '/contents', 'a') as content2:
-                    if index_with_mets_order:
-                        content2.write('mets.xml\tbundle:OtherContent\n')
-                    else:
-                        content2.write(original_file_name + '\tbundle:OtherContent\n')
+                    content2.write(mets_file_name + '\tbundle:OtherContent\n')
                     content2.close()
 
             if not self.dry_run:

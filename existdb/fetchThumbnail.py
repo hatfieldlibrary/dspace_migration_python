@@ -19,9 +19,10 @@ class FetchThumbnailImage:
         finally:
             thing.close()
 
-    def __init__(self, analyzer):
+    def __init__(self, analyzer, create_thumbnail):
         assert isinstance(analyzer, ExistAnalyzer), "%r is not a print queue" % analyzer
         self.analyzer = analyzer
+        self.create_thumbnail = create_thumbnail
         self.mets_fields = ExistDbFields()
 
     def convert_file(self, file_name, collection, item_id, out_dir):
@@ -35,7 +36,7 @@ class FetchThumbnailImage:
                 f.save(filename='temp.jpg')
         try:
             with Image(filename='temp.jpg') as f:
-                f.resize(200, 200)
+                f.resize(200)
                 f.save(filename=out_dir + '/thumb.jpg.jpg')
                 self.write_contents(out_dir)
         except Exception as err:
@@ -77,5 +78,5 @@ class FetchThumbnailImage:
                 break
 
         if len(file_name) > 0:
-            if not dry_run:
+            if not dry_run and self.create_thumbnail:
                 self.convert_file(file_name, collection, item_id, out_dir)

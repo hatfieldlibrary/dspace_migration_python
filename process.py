@@ -31,6 +31,8 @@ parser.add_argument('source_file', metavar='source_file', type=str,
                     help='the exported xml data source')
 parser.add_argument('saf_dir', metavar='saf_directory', type=str,
                     help='the parent saf target directory')
+parser.add_argument("-t", "--create-thumbnails", action="store_true",
+                    help='the create new thumbnail images for each bitstream')
 parser.add_argument("-d", "--dry-run", action="store_true",
                     help="Dry run displays collection analytics only. No data is processed.")
 args = parser.parse_args()
@@ -40,11 +42,14 @@ repo = args.repo
 dry_run = False
 if args.dry_run:
     dry_run = True
+create_thumbnails = False
+if args.create_thumbnails:
+    create_thumbnails = True
 
 if repo == 'cdm':
-    controller = ContentdmProcessor(args.collection, args.source_file, args.saf_dir, dry_run)
+    controller = ContentdmProcessor(args.collection, args.source_file, args.saf_dir, create_thumbnails, dry_run)
     controller.process_collections()
 
 if repo == 'exist':
-    controller = ExistProcessor(args.collection, args.source_file, args.saf_dir, dry_run)
+    controller = ExistProcessor(args.collection, args.source_file, args.saf_dir, create_thumbnails, dry_run)
     controller.process_records()

@@ -16,7 +16,7 @@ from shared.utils import Utils
 
 class ExistProcessor:
 
-    def __init__(self, collection, input_dir, output_directory, dry_run):
+    def __init__(self, collection, input_dir, output_directory, create_thumbnails, dry_run):
         """
         Constructor.
 
@@ -30,6 +30,7 @@ class ExistProcessor:
         self.collection = collection
         self.input = input_dir
         self.output = output_directory
+        self.create_thumbnails = create_thumbnails
         self.dry_run = dry_run
         self.analyzer = ExistAnalyzer()
 
@@ -99,7 +100,7 @@ class ExistProcessor:
             # Get extractor instances.
             metadata_extractor = ExtractMetadata()
             page_data_extractor = ExtractExistFullText()
-            fetch_thumbnail_utility = FetchThumbnailImage(self.analyzer)
+            fetch_thumbnail_utility = FetchThumbnailImage(self.analyzer, self.create_thumbnails)
             fetch_page_images = FetchPageImages(self.analyzer)
             fetch_alto_files = FetchAltoFiles(self.analyzer)
             fetch_pdf_files = FetchPdfFiles(self.analyzer)

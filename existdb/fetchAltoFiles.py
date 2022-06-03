@@ -73,15 +73,18 @@ class FetchAltoFiles:
 
         URL = 'http://exist.willamette.edu:8080/exist/rest/db/' + collection + '/alto/' + file_name
        #  print(URL)
+        alto_found = False
         # write the file to a temporary on disk location.
         with self.closing(urllib.request.urlopen(URL)) as url:
             file_name = file_name[-cut_size:]
             with open(out_dir + '/' + file_name, 'wb') as f:
                 f.write(url.read())
+                alto_found = True
 
         try:
-            out_dir + '/' + file_name
-            write_alto_to_contents(out_dir, file_name)
+            if alto_found:
+                out_dir + '/' + file_name
+                write_alto_to_contents(out_dir, file_name)
         except:
             print('An error occurred writing to content file for %s: %s.' % (out_dir, URL))
             self.analyzer.add_alto_processing_failed(out_dir + ': ' + URL)

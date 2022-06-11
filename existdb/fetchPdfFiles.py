@@ -30,7 +30,7 @@ class FetchPdfFiles:
 
     def fetch_files(self, file_name, collection, out_dir, dry_run):
         if not dry_run:
-            self.fetch_file(file_name, collection, out_dir)
+            return self.fetch_file(file_name, collection, out_dir)
 
     # fetch_file assumes that the PDF file is in the eXist-db. This isn't always true. When
     # a file is not found this method will log a 404 error. Generally, this method should not be called
@@ -59,3 +59,5 @@ class FetchPdfFiles:
             print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
             print('IO Error: {0}'.format(err))
             self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
+
+        return pdf_found

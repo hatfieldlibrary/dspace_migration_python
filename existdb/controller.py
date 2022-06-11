@@ -152,7 +152,7 @@ class ExistProcessor:
 
             # Extract metadata
             dc_metadata = metadata_extractor.extract_metadata(root, item_id)
-            # Extract the full text
+            # Extract the text
             fulltext = page_data_extractor.extract_text(os.path.join(text_dir + '/' + item))
 
             if not self.dry_run:
@@ -183,15 +183,32 @@ class ExistProcessor:
             if not self.dry_run:
                 fetch_alto_files.fetch_files(root, self.collection, obj_id, current_dir, self.dry_run)
 
+            # For the image path, remove only the xml extension.
+            image_path = item[:-4]
+            if not self.dry_run:
+                fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
+
+            pdf_found = False
+            if not self.dry_run:
+                if self.fetch_pdf:
+                    # Watch out for this, collections may vary.
+                    pdf_base = mets_name[:-4]
+                    pdf_name = pdf_base + '.pdf'
+                    pdf_found = fetch_pdf_files.fetch_files(pdf_name, self.collection, current_dir, self.dry_run)
+
+            if not self.dry_run:
                 try:
-                    if not self.dry_run:
-                        # Write fulltext
-                        with open(current_dir + '/fulltext_1.txt', 'w', encoding='UTF-8') as file2:
-                            file2.write(fulltext)
-                            file2.close()
-                        with open(current_dir + '/contents', 'a') as content2:
-                            content2.write('fulltext_1.txt\tbundle:OtherContent\n')
-                            content2.close()
+                    # Write fulltext
+                    with open(current_dir + '/fulltext_1.txt', 'w', encoding='UTF-8') as file2:
+                        file2.write(fulltext)
+                        file2.close()
+                    # If pdf not found, put the fulltext file into the ORIGINAL bundle.
+                    fulltext_bundle = ''
+                    if pdf_found:
+                        fulltext_bundle = '\tbundle:OtherContent'
+                    with open(current_dir + '/contents', 'a') as content2:
+                        content2.write('fulltext_1.txt' + fulltext_bundle + '\n')
+                        content2.close()
 
                 except IOError as err:
                     error_count += 1
@@ -201,18 +218,6 @@ class ExistProcessor:
                     error_count += 1
                     print('An error occurred writing fulltext for: %s. See %s' % (doc_title, current_dir))
                     print('AssertionError: {0}'.format(err))
-
-            # For the image path, remove only the xml extension.
-            image_path = item[:-4]
-            if not self.dry_run:
-                fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
-
-            if not self.dry_run:
-                if self.fetch_pdf:
-                    # Watch out for this, collections may vary.
-                    pdf_base = mets_name[:-4]
-                    pdf_name = pdf_base + '.pdf'
-                    fetch_pdf_files.fetch_files(pdf_name, self.collection, current_dir, self.dry_run)
 
             if not self.dry_run:
                 fetch_page_images.fetch_images(root, self.collection, image_path, current_dir, self.dry_run)

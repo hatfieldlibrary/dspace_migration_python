@@ -160,7 +160,7 @@ class ExistProcessor:
                 dc_tree = ET.ElementTree(dc_metadata)
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-            if not self.dry_run
+            if not self.dry_run:
                 dc_tree = ET.ElementTree(ET.fromstring(iiif_enabled))
                 dc_tree.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration=True)
                 # Existdb items are searchable

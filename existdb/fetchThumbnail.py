@@ -36,7 +36,19 @@ class FetchThumbnailImage:
                 f.save(filename='temp.jpg')
         try:
             with Image(filename='temp.jpg') as f:
-                f.resize(200)
+                ratio = float(f.width) / float(f.height)
+                height = f.height
+                width = f.width
+
+                if height > 200:
+                    height = 200
+                    width = int(200.0 * ratio)
+
+                if width > 200:
+                    width = 300
+                    height = int(200.0 / ratio)
+
+                f.resize(width, height)
                 f.save(filename=out_dir + '/thumb.jpg.jpg')
                 self.write_contents(out_dir)
         except Exception as err:

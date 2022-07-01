@@ -59,13 +59,4 @@ class FetchPdfFiles:
             print('An error occurred fetching file for %s: %s.' % (URL, err))
             self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
 
-        try:
-            out_dir + '/' + file_name
-            write_pdf_to_contents(out_dir, file_name)
-
-        except IOError as err:
-            print('An error occurred writing contents to saf for: %s. See %s' % ('thumb.jpg', out_dir))
-            print('IO Error: {0}'.format(err))
-            self.analyzer.add_pdf_processing_failed(out_dir + ': ' + URL)
-
         return pdf_found

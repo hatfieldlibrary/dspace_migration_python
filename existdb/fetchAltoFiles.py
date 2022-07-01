@@ -48,7 +48,7 @@ class FetchAltoFiles:
             files = page.iterfind(self.mets_fields.mets_structural_elements['file'], self.ns)
             for file in files:
                 # the service file
-                if file.attrib['USE'] == 'ocr':
+                if file.attrib['USE'] == 'ocr' or file.attrib['USE'] == 'foldoutocr':
                     location = file.find(self.mets_fields.mets_structural_elements['file_location'], self.ns)
                     # the file name
                     file_name = location.attrib[self.mets_fields.mets_structural_elements['file_href']]

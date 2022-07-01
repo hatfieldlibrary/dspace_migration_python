@@ -48,7 +48,9 @@ class ExistDbFields:
         'file_group': 'mets:fileGrp',
         'file': 'mets:file',
         'file_location': 'mets:FLocat',
-        'file_href': '{http://www.w3.org/1999/xlink}href'
+        'file_href': '{http://www.w3.org/1999/xlink}href',
+        'struct_map': 'mets:structMap',
+        'mets_div': 'mets:div'
     }
 
     # For subsequent processing it's convenient to have a dictionary that excludes the namespace.

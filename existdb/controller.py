@@ -107,7 +107,9 @@ class ExistProcessor:
                 obj_id = root.attrib['OBJID']
             else:
                 # More typical value, based on the file name
-                obj_id = item[:-6]
+                # obj_id = item[:-6]
+                # wallulah
+                obj_id = item[:-8]
 
             # Get extractor instances.
             metadata_extractor = ExtractMetadata()
@@ -119,7 +121,7 @@ class ExistProcessor:
 
             # Each working directory will contain 1000 items.
             # The working directories are labelled batch_1, batch_2 ...
-            if counter % 1000 == 0:
+            if counter % 100 == 0:
                 counter = 0
                 batch += 1
                 if not self.dry_run:
@@ -145,10 +147,11 @@ class ExistProcessor:
             # function.
 
             # removing \d\d.xml
+            # adjust as needed. varies by collection
             item_id = item[:-6]
 
             # Temporary hack for Wallulah processing. Should not be needed with updated fulltext file names.
-            # item = item_id + '.xml'
+            item = item_id + '.xml'
 
             # Extract metadata
             dc_metadata = metadata_extractor.extract_metadata(root, item_id)
@@ -160,7 +163,7 @@ class ExistProcessor:
                 dc_tree = ET.ElementTree(dc_metadata)
                 dc_tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
 
-            if not self.dry_run
+            if not self.dry_run:
                 dc_tree = ET.ElementTree(ET.fromstring(iiif_enabled))
                 dc_tree.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration=True)
                 # Existdb items are searchable
@@ -185,6 +188,8 @@ class ExistProcessor:
 
             # For the image path, remove only the xml extension.
             image_path = item[:-4]
+            # Wallulah hack
+            image_path = item[:-4] + '01'
             if not self.dry_run:
                 fetch_thumbnail_utility.fetch_thumbnail(root, self.collection, image_path, current_dir, self.dry_run)
 

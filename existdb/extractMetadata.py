@@ -105,6 +105,15 @@ class ExtractMetadata:
                         if element[0].text is not None:
                             self.__set_citation(element)
 
+                    # add date.created based on the 1st 4 chars (which will be the year, hopefully)
+                    elif element.tag == processor_field['date_issued_element']:
+                        year = element.text[0:4]
+                        # add the date.created field ...
+                        self.add_sub_element(parent_element, element_map[self.switch_tag['date_created'].get('id')],
+                                             year)
+                        # ... then add date.issued
+                        self.add_sub_element(parent_element, element_map[element.tag], element.text)
+
                     elif element.tag == processor_field['identifier_element_doi']:
                         identifier_type = element.attrib['type']
                         if identifier_type == 'doi':

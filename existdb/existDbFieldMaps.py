@@ -21,6 +21,10 @@ class ExistDbFieldMaps:
             # Apply this to identifier elements that need the "other" qualifier.
             'id': 'identifier_other'
         },
+        'date_created': {
+            # Apply this to identifier elements that need the "other" qualifier.
+            'id': 'date_created'
+        },
         'statement_of_responsibility': {
             # Use this key to lookup DC mapping for statement of responsibility.
             # This is read from the mods:note element in the mets file. It maps
@@ -55,6 +59,10 @@ class ExistDbFieldMaps:
         processor_field['date_issued_element']: {
             'element': dspace_dc_field['date'],
             'qualifier': dspace_dc_field['date_issued_qualifier']
+        },
+        switch_tag['date_created'].get('id'): {
+            'element': dspace_dc_field['date'],
+            'qualifier': dspace_dc_field['date_created_qualifier']
         },
         # Maps the database id (existdb) to relation:requires.
         switch_tag['database_relation'].get('id'): {

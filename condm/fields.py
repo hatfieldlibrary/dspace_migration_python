@@ -98,6 +98,7 @@ class Fields:
         'description_sponsorship_qualifier': 'sponsorship',
         'date': 'date',
         'date_created_qualifier': 'created',
+        'date_issued_qualifier': 'issued',
         'subject': 'subject',
         'source': 'source',
         'relation': 'relation',

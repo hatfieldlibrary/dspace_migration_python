@@ -75,7 +75,7 @@ class CollectionProcessor:
         :param doc_title: title of the record being processed.
         """
         try:
-            FetchBitstreams.append_to_contents(current_dir, 'file_1.txt', 0)
+            FetchBitstreams.append_to_contents(current_dir, doc_title, 'fulltext')
 
         except IOError as err:
             CollectionProcessor.error_count += 1
@@ -86,25 +86,25 @@ class CollectionProcessor:
             print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
             print('Exception: {0}'.format(err))
 
-    @staticmethod
-    def append_contents_file(current_dir, doc_title):
-        # type (str, str) -> None
-        """
-         Appends the full text file name (file_1.txt) to the saf contents file.
-        :param current_dir: output directory
-        :param doc_title: title of the record being processed.
-        """
-        try:
-            FetchBitstreams.append_to_contents(current_dir, 'file_1.txt', 1)
-
-        except IOError as err:
-            CollectionProcessor.error_count += 1
-            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
-            print('IO Error: {0}'.format(err))
-        except Exception as err:
-            CollectionProcessor.error_count += 1
-            print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
-            print('Exception: {0}'.format(err))
+    # @staticmethod
+    # def append_contents_file(current_dir, doc_title):
+    #     # type (str, str) -> None
+    #     """
+    #      Appends the full text file name (file_1.txt) to the saf contents file.
+    #     :param current_dir: output directory
+    #     :param doc_title: title of the record being processed.
+    #     """
+    #     try:
+    #         FetchBitstreams.append_to_contents(current_dir, doc_title, 'fulltext')
+    #
+    #     except IOError as err:
+    #         CollectionProcessor.error_count += 1
+    #         print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+    #         print('IO Error: {0}'.format(err))
+    #     except Exception as err:
+    #         CollectionProcessor.error_count += 1
+    #         print('An error occurred writing the saf contents for: %s. See %s' % (doc_title, current_dir))
+    #         print('Exception: {0}'.format(err))
 
     def generate_saf(self, record):
         """
@@ -125,11 +125,6 @@ class CollectionProcessor:
             self.counter = 0
             self.batch += 1
             self.working_dir = Utils.init_working_directory(self.output, self.batch)
-
-        # TODO as with existdb, we need to add an identifier used to look up compound
-        # objects in exist. Since we haven't yet created existdb records from CONTENTdm
-        # items we don't know how to construct the item identifiers. When we do, that
-        # information will be added to dspace DC identifier:other.
 
         doc_title = record.find('title').text
 
@@ -182,7 +177,7 @@ class CollectionProcessor:
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
                 # Appends to the saf contents file after bitstreams have been added.
-                self.append_contents_file(current_dir, doc_title)
+                self.write_contents_file(current_dir, doc_title)
         else:
 
             # This is a compound object.
@@ -212,8 +207,20 @@ class CollectionProcessor:
         local_metadata = metadata_extractor.extract_local_metadata(record, self.parent_collection)
         tree = ET.ElementTree(local_metadata)
 
+        # Add DSpace IIIF metadata
+        iiif_enabled = '<?xml version="1.0" encoding="UTF-8"?><dublin_core schema="dspace"><dcvalue element="iiif" ' \
+                       'qualifier="enabled">true</dcvalue></dublin_core> '
+        ds_tree = ET.ElementTree(ET.fromstring(iiif_enabled))
+
+        # Set the canvas name prefix to "Image"
+        iiif_naming = '<?xml version="1.0" encoding="UTF-8"?><dublin_core schema="iiif"><dcvalue element="canvas" ' \
+                      'qualifier="naming">Image</dcvalue></dublin_core> '
+        naming_tree = ET.ElementTree(ET.fromstring(iiif_naming))
+
         try:
-            tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration="True")
+            tree.write(current_dir + '/metadata_local.xml', encoding="UTF-8", xml_declaration=True)
+            ds_tree.write(current_dir + '/metadata_dspace.xml', encoding="UTF-8", xml_declaration=True)
+            naming_tree.write(current_dir + '/metadata_iiif.xml', encoding="UTF-8", xml_declaration=True)
 
         except IOError as err:
             self.error_count += 1

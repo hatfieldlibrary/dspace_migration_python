@@ -13,7 +13,7 @@ class ContentdmProcessor:
     error_count = 0
     analyzer = None
 
-    def __init__(self, collection, input_file, output_directory, dry_run):
+    def __init__(self, collection, input_file, output_directory, create_thumbnails, dry_run):
         """
         Constructor.
         :type output_directory: str
@@ -22,6 +22,8 @@ class ContentdmProcessor:
         :param collection: the Contentdm collection name (e.g. aphotos)
         :param input_file: the xml file exported from Contentdm
         :param output_directory: The parent saf output directory
+        :param create_thumbnails: Not used. Create thumbs for all cdm records from jp2
+        :param dry_run: No processing, just report out
         """
         self.collection = collection
         self.input = input_file
@@ -44,7 +46,7 @@ class ContentdmProcessor:
 
         cdm_collection = CollectionConfig.sub_collection_mapping[self.collection]
         sub_collections = cdm_collection['field_values']
-
+        print(cdm_collection)
         # The parent output directory.
         parent_out_dir = base_directory + '/condm/saf/' + self.output
 
@@ -56,6 +58,7 @@ class ContentdmProcessor:
         # Queue up the collection processors.
         collection_map = {}
         for sub_collection in sub_collections:
+            print(sub_collection)
             if sub_collection['load']:
                 out_dir = parent_out_dir + '/' + sub_collection['dspace_out']
                 if not self.dry_run:

@@ -128,9 +128,9 @@ class ExtractMetadata:
             # to control application logic, we should add a new local field --
             # dependency -- and use it to specify the data repository
             # that is hosts the item data. Currently, this is 'existdb'
-            require_relation = ET.SubElement(local, 'dcvalue')
-            require_relation.set('element', dspace_local_map['dependency'])
-            require_relation.text = 'existdb'
+            # require_relation = ET.SubElement(local, 'dcvalue')
+            # require_relation.set('element', dspace_local_map['dependency'])
+            # require_relation.text = 'existdb'
 
     def extract_local_metadata(self, record, collection):
         # type: (Element, str) -> Element

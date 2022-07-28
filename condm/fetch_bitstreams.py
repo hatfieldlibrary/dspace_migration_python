@@ -118,7 +118,7 @@ class FetchBitstreams:
         :return:
         """
         if file_type == 'pdf' or file_type == 'multi_with_pdf':
-            link = self.__create_pdf_link(collection, cdmid_el.text)
+            link = self.__create_pdf_link(collection, cdmfile)
         else:
             link = self.__create_bitstream_link(collection, cdmid_el.text)
         # the output filename for the bitstream.
@@ -211,11 +211,10 @@ class FetchBitstreams:
                 # get the file type and process the access images and thumbnails
                 file_type_el = file.find(self.cdm_struc['compound_object_page_file_type'])
                 # access file
-                print(file_type_el.text)
                 if file_type_el.text == self.cdm_struc['compound_object_access_file']:
                     # append .jp2 extension.
                     image_file = file_el.text + '.jp2'
-                    FetchBitstreams.add_image_bitstream(file_el,
+                    self.add_image_bitstream(file_el,
                                                         image_file,
                                                         current_dir,
                                                         collection,
@@ -240,9 +239,9 @@ class FetchBitstreams:
         print(file_type)
         if file_type:
             if file_type == 'multi_with_pdf' or file_type == 'pdf':
-                path_arr = cdm_path_el.split('/')
+                path_arr = cdm_path_el.text.split('/')
                 # add pdf bitstream
-                self.add_image_bitstream(path_arr[2], current_dir, collection, file_type)
+                self.add_image_bitstream(cdmfile_el, path_arr[3], current_dir, collection, file_type)
 
     def determine_file_type(self, record, cdmfile_el, cdm_path_el):
         """

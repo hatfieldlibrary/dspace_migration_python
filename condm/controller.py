@@ -64,10 +64,12 @@ class ContentdmProcessor:
                 if not self.dry_run:
                     Utils.init_sub_collection_directory(out_dir)
                 collection_processor = CollectionProcessor(self.collection, out_dir, self.analyzer, self.dry_run)
+                print(sub_collection['cdm_collection'])
                 collection_map[sub_collection['cdm_collection']] = {
                     'processor': collection_processor,
                     'load': sub_collection['load']
                 }
+                print(collection_map[sub_collection['cdm_collection']])
             else:
                 if self.dry_run:
                     self.analyzer.excluded_collection(sub_collection['cdm_collection'])
@@ -87,11 +89,13 @@ class ContentdmProcessor:
             if collection_field_value_el is not None:
                 collection_field_value = collection_field_value_el.text
                 if collection_field_value in collection_map:
-                    processor = collection_map[collection_field_value]['processor']
-                    if collection_map[collection_field_value]['load']:
-                        processor.process_record(record)
-                    if self.dry_run:
-                        self.analyzer.sub_collection(collection_field_value)
+                    if collection_field_value == 'Freshman Glee':
+                        processor = collection_map[collection_field_value]['processor']
+                        print(processor)
+                        if collection_map[collection_field_value]['load']:
+                            processor.process_record(record)
+                        if self.dry_run:
+                            self.analyzer.sub_collection(collection_field_value)
                 else:
                     base_processor.process_record(record)
                     if self.dry_run:

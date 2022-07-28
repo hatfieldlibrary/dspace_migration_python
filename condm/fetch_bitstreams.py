@@ -117,6 +117,7 @@ class FetchBitstreams:
         # the output filename for the bitstream.
         outfile = current_dir + '/' + cdmfile
         FetchBitstreams.__fetch_bitstream(outfile, link)
+        print('writing contents to ' + current_dir)
         FetchBitstreams.append_to_contents(current_dir, cdmfile, 'image')
 
     @staticmethod
@@ -133,13 +134,14 @@ class FetchBitstreams:
                 height = f.height
                 width = f.width
 
-                if height > 200:
-                    height = 200
-                    width = int(200.0 * ratio)
-
-                if width > 200:
-                    width = 300
-                    height = int(200.0 / ratio)
+                if height > width:
+                    if height > 175:
+                        height = 175
+                        width = int(175.0 * ratio)
+                else:
+                    if width > 175:
+                        width = 175
+                        height = int(175.0 / ratio)
 
                 f.resize(width, height)
                 f.save(filename=current_dir + '/thumb.jpg.jpg')
@@ -206,6 +208,7 @@ class FetchBitstreams:
                 if file_type_el.text == FetchBitstreams.cdm_struc['compound_object_access_file']:
                     # append .jp2 extension.
                     image_file = file_el.text + '.jp2'
+                    print(image_file)
                     FetchBitstreams.add_image_bitstream(file_el,
                                                         image_file,
                                                         current_dir,

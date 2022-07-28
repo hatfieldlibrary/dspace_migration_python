@@ -17,6 +17,7 @@ class CollectionProcessor:
     working_dir = ''
     dry_run = False
     analyzer = None
+    text_file = 'file_1.txt'
 
     def __init__(self, parent_collection, output_directory, analyzer, dry_run):
         """
@@ -28,12 +29,12 @@ class CollectionProcessor:
         """
         self.parent_collection = parent_collection
         self.output = output_directory
+        print(self.output)
         self.dry_run = dry_run
         assert isinstance(analyzer, Analyzer), "%r is not a print queue" % analyzer
         self.analyzer = analyzer
 
-    @staticmethod
-    def extract_full_text(record, current_dir, doc_title, page_data_extractor):
+    def extract_full_text(self, record, current_dir, doc_title, page_data_extractor):
         # type (Element, str, str, ExtractPageData) -> bool
         """
         Attempts to extract full text from a compound object record and writes
@@ -50,7 +51,7 @@ class CollectionProcessor:
             # Create full-text file for compound object and add to saf directory.
             full_text_data = page_data_extractor.extract_text(record)
             if regex.search(full_text_data) is not None:
-                file2 = open(current_dir + '/file_1.txt', 'w')
+                file2 = open(current_dir + '/' + self.text_file, 'w')
                 file2.write(full_text_data)
                 file2.close()
                 return True
@@ -136,6 +137,7 @@ class CollectionProcessor:
 
         tree = ET.ElementTree(dc_metadata)
         tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
+        print(self.parent_collection)
 
         # This is a single item, not a compound object!
         if metadata_extractor.is_single_item(record):
@@ -176,30 +178,33 @@ class CollectionProcessor:
             # extract full text and add to saf directory
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
+                print('single')
                 # Appends to the saf contents file after bitstreams have been added.
-                self.write_contents_file(current_dir, doc_title)
+                self.write_contents_file(current_dir, self.text_file)
         else:
 
             # This is a compound object.
             # Extract full text and add it to saf directory
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
+                print('compound')
+                print(found_text)
                 # Writes to first line of saf contents file before the thumbnail is retrieved.
-                self.write_contents_file(current_dir, doc_title)
+                self.write_contents_file(current_dir, self.text_file)
             # Get a thumbnail image.
-            try:
+            #try:
                 # This should be called after the full-text file has been added.
                 # It will retrieve the thumbnail for the compound object.
-                FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.parent_collection)
+                # FetchBitstreams.fetch_thumbnail_only(current_dir, record, self.parent_collection)
 
-            except IOError as err:
-                self.error_count += 1
-                print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
-                print('IO Error: {0}'.format(err))
-            except Exception as err:
-                self.error_count += 1
-                print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
-                print('Exception: {0}'.format(err))
+            #except IOError as err:
+            #    self.error_count += 1
+            #    print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
+            #    print('IO Error: {0}'.format(err))
+            #except Exception as err:
+            #    self.error_count += 1
+            #    print('An error occurred retrieving thumbnail for: %s. See %s' % (doc_title, current_dir))
+            #    print('Exception: {0}'.format(err))
 
         self.counter += 1
 

@@ -20,8 +20,7 @@ class ExtractMetadata:
         self.extract_page = ExtractPageData()
         self.custom_format_field = CustomFormatField()
 
-    @staticmethod
-    def add_element(parent_element, element_map, element):
+    def add_elements(self, parent_element, element_map, element):
         """
         Adds new element to parent
         :param parent_element:
@@ -29,6 +28,20 @@ class ExtractMetadata:
         :param element:
         :return: None
         """
+        if element.text == 'Willamette University Archives and Special Collections':
+            element.text = 'Willamette University Archives'
+
+        if element.tag == 'subject' or element.tag == 'level':
+            subjects = element.text.split(';')
+            for subject in subjects:
+                print(subject)
+                element.text = subject
+                self.add_element(parent_element, element_map, element)
+        else:
+            self.add_element(parent_element, element_map, element)
+
+    @staticmethod
+    def add_element(parent_element, element_map, element):
         dspace_element = element_map[element.tag]
         sub_element = ET.SubElement(parent_element, 'dcvalue')
         sub_element.set('element', dspace_element['element'])
@@ -59,11 +72,11 @@ class ExtractMetadata:
                             if add_master:
                                 # Add preservation location if available.
                                 if element.tag == ExtractMetadata.cdm_struc['preservation_location']:
-                                    self.add_element(parent_element, element_map, element)
+                                    self.add_elements(parent_element, element_map, element)
                             else:
                                 # Add all non-preservation metadata.
                                 if element.tag != ExtractMetadata.cdm_struc['preservation_location']:
-                                    self.add_element(parent_element, element_map, element)
+                                    self.add_elements(parent_element, element_map, element)
                         # process custom format.extent fields
                         if element.tag in Fields.format_extent_fields:
                             self.custom_format_field.add_format(Fields.format_extent_fields[element.tag], element.text)
@@ -92,10 +105,12 @@ class ExtractMetadata:
                 array for items that do not need to be loaded as compound objects (e.g. postcards)
         """
         if record.find(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name']) is not None:
+            print(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name'])
             # If the field name is allSubCollections then the entire parent collection should process compound
             # objects as single items.
             if record.find(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name']) == \
                     'allSubCollections':
+                print('process comound')
                 return bool(1)
             # Check check for sub-collections defined in field_values.
             colls = CollectionConfig.collections_to_omit_compound_objects[collection]['field_values']
@@ -106,7 +121,8 @@ class ExtractMetadata:
                     collection_field_list = list(collection_field_filter)
                     if len(collection_field_list) > 0:
                         return bool(1)
-        return bool(0)
+        print('no compound')
+        return bool(1)
 
     def add_compound_object_local_metadata(self, record, collection, local):
         # type: (Element, str, Element) -> None

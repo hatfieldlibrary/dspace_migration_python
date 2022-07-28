@@ -28,6 +28,8 @@ class CollectionConfig:
         'pnaa': {
             'field_name': 'source',
             'field_values': [
+                'Kathleen Gemberling Adkison Collection',
+                'Henk Pander papers',
                 'Jim Shull Works by Northwest Artists Slide Collection; Pacific Northwest Artists Archive'
             ]
         },
@@ -47,7 +49,7 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': []
         },
-        'art': {
+        'aoc': {
             'field_name': 'allSubCollections',
             'field_values': []
         }
@@ -75,16 +77,6 @@ class CollectionConfig:
                 {
                     'cdm_collection': 'Campus Photographs',
                     'dspace_out': 'campus_photographs',
-                    'load': True
-                },
-                {
-                    'cdm_collection': 'Kathleen Gemberling Adkison Collection',
-                    'dspace_out': 'k_gemberlilng',
-                    'load': True
-                },
-                {
-                    'cdm_collection': 'Ken Jacobson Photographs',
-                    'dspace_out': 'ken_jacobson',
                     'load': True
                 },
                 {
@@ -217,15 +209,120 @@ class CollectionConfig:
                     'load': True
                 },
                 {
-                    'cdm_collection': 'PNAA',
-                    'dspace_out': '',
-                    'load': False
+                    'cdm_collection': 'Kathleen Gemberling Adkison Collection',
+                    'dspace_out': 'k_gemberlilng',
+                    'load': True
                 },
                 {
-                    'cdm_collection': 'Pacific Northwest Artists Archive',
-                    'dspace_out': '',
-                    'load': False
+                    'cdm_collection': 'Jim Shull Works by Northwest Artists Slide Collection',
+                    'dspace_out': 'j_shull',
+                    'load': True
                 },
+                {
+                    'cdm_collection': 'Nelson and Olive Sandgren Collection',
+                    'dspace_out': 'n_o_sandgren',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Stella Douglas papers',
+                    'dspace_out': 's_douglas',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Tom Hardy papers',
+                    'dspace_out': 't_hardy',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Tom Cramer papers',
+                    'dspace_out': 't_cramer',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Nicholsloy Studio Collection',
+                    'dspace_out': 'nicholsloy',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Henk Pander papers',
+                    'dspace_out': 'h_pander',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Myra Wiggins Papers',
+                    'dspace_out': 'm_wiggins',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Judith and Jan Zach papers',
+                    'dspace_out': 'j_j_zach',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Ken Jacobson Photographs',
+                    'dspace_out': 'ken_jacobson',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Kathleen Gemberling Adkison Collection; Pacific Northwest Artists Archive',
+                    'dspace_out': 'k_gemberlilng-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Nelson and Olive Sandgren Collection; Pacific Northwest Artists Archive',
+                    'dspace_out': 'n_o_sandgren-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Stella Douglas papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 's_douglas-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Tom Hardy papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 't_hardy-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Tom Cramer papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 't_cramer-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Nicholsloy Studio Collection; Pacific Northwest Artists Archive',
+                    'dspace_out': 'nicholsloy-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Henk Pander papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 'h_pander-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Myra Wiggins Papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 'm_wiggins-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Judith and Jan Zach papers; Pacific Northwest Artists Archive',
+                    'dspace_out': 'j_j_zach-2',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Ken Jacobson Photographs; Pacific Northwest Artists Archive',
+                    'dspace_out': 'ken_jacobson-2',
+                    'load': True
+                }
+                # {
+                #     'cdm_collection': 'PNAA',
+                #     'dspace_out': '',
+                #     'load': True
+                # },
+                # {
+                #     'cdm_collection': 'Pacific Northwest Artists Archive',
+                #     'dspace_out': '',
+                #     'load': True
+                # },
             ]
         },
         'rare': {
@@ -234,15 +331,57 @@ class CollectionConfig:
         },
         'hfmanw': {
             'field_name': 'source',
-            'field_values': []
+            'field_values': [
+                 {
+                    'cdm_collection': 'Native American Collection',
+                    'dspace_out': 'native_am',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Crow\'s Shadow Institute of the Arts',
+                    'dspace_out': 'crows',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Northwest Art Collection',
+                    'dspace_out': 'northwest',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Survey Collection',
+                    'dspace_out': 'survey',
+                    'load': True
+                }, 
+                {
+                    'cdm_collection': 'Ancient Art Collection',
+                    'dspace_out': 'ancient',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'European Art Collection',
+                    'dspace_out': 'europe',
+                    'load': True
+                },
+{
+                    'cdm_collection': 'Asian Art Collection',
+                    'dspace_out': 'asian',
+                    'load': True
+                },
+{
+                    'cdm_collection': 'American Art Collection',
+                    'dspace_out': 'american',
+                    'load': True
+                },
+                ]
         },
         'hfmoaevents': {
             'field_name': 'source',
             'field_values': []
         },
-        'art': {
+        'aoc': {
             'field_name': 'source',
             'field_values': []
         }
 
     }
+

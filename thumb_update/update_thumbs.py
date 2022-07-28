@@ -41,7 +41,7 @@ class UpdateThumbs:
 
     def update_thumbs(self):
         base_directory = os.path.abspath(os.getcwd())
-        in_dir = base_directory + '/' + self.repo + '/saf/manuscripts/' + self.saf_directory + '/' + self.batch
+        in_dir = base_directory + '/' + self.repo + '/saf/hfmanw/' + self.saf_directory + '/' + self.batch
 
         for saf_dir in os.listdir(in_dir):
             current_dir = in_dir + '/' + saf_dir

@@ -34,7 +34,7 @@ class CollectionConfig:
             ]
         },
         'glee': {
-            'field_name': 'allSubCollections',
+            'field_name': 'source',
             'field_values': []
         },
         'rare': {
@@ -49,7 +49,7 @@ class CollectionConfig:
             'field_name': 'source',
             'field_values': []
         },
-        'art': {
+        'aoc': {
             'field_name': 'allSubCollections',
             'field_values': []
         }
@@ -244,7 +244,7 @@ class CollectionConfig:
                     'load': True
                 },
                 {
-                    'cdm_collection': ' ',
+                    'cdm_collection': 'Henk Pander papers',
                     'dspace_out': 'h_pander',
                     'load': True
                 },
@@ -313,7 +313,16 @@ class CollectionConfig:
                     'dspace_out': 'ken_jacobson-2',
                     'load': True
                 }
-
+                # {
+                #     'cdm_collection': 'PNAA',
+                #     'dspace_out': '',
+                #     'load': True
+                # },
+                # {
+                #     'cdm_collection': 'Pacific Northwest Artists Archive',
+                #     'dspace_out': '',
+                #     'load': True
+                # },
             ]
         },
         'rare': {
@@ -322,13 +331,54 @@ class CollectionConfig:
         },
         'hfmanw': {
             'field_name': 'source',
-            'field_values': []
+            'field_values': [
+                {
+                    'cdm_collection': 'Native American Collection',
+                    'dspace_out': 'native_am',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Crow\'s Shadow Institute of the Arts',
+                    'dspace_out': 'crows',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Northwest Art Collection',
+                    'dspace_out': 'northwest',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Survey Collection',
+                    'dspace_out': 'survey',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Ancient Art Collection',
+                    'dspace_out': 'ancient',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'European Art Collection',
+                    'dspace_out': 'europe',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'Asian Art Collection',
+                    'dspace_out': 'asian',
+                    'load': True
+                },
+                {
+                    'cdm_collection': 'American Art Collection',
+                    'dspace_out': 'american',
+                    'load': True
+                },
+            ]
         },
         'hfmoaevents': {
             'field_name': 'source',
             'field_values': []
         },
-        'art': {
+        'aoc': {
             'field_name': 'source',
             'field_values': []
         }

@@ -104,10 +104,12 @@ class ExtractMetadata:
                 array for items that do not need to be loaded as compound objects (e.g. postcards)
         """
         if record.find(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name']) is not None:
+            print(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name'])
             # If the field name is allSubCollections then the entire parent collection should process compound
             # objects as single items.
             if record.find(CollectionConfig.collections_to_omit_compound_objects[collection]['field_name']) == \
                     'allSubCollections':
+                print('process comound')
                 return bool(1)
             # Check check for sub-collections defined in field_values.
             colls = CollectionConfig.collections_to_omit_compound_objects[collection]['field_values']
@@ -118,7 +120,8 @@ class ExtractMetadata:
                     collection_field_list = list(collection_field_filter)
                     if len(collection_field_list) > 0:
                         return bool(1)
-        return bool(0)
+        print('no compound')
+        return bool(1)
 
     def add_compound_object_local_metadata(self, record, collection, local):
         # type: (Element, str, Element) -> None

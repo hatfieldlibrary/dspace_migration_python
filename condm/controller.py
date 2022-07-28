@@ -88,12 +88,14 @@ class ContentdmProcessor:
             if collection_field_value_el is not None:
                 collection_field_value = collection_field_value_el.text
                 if collection_field_value in collection_map:
-                    processor = collection_map[collection_field_value]['processor']
-
-                    if collection_map[collection_field_value]['load']:
-                        processor.process_record(record)
-                    if self.dry_run:
-                        self.analyzer.sub_collection(collection_field_value)
+                    # This limits processing to single collection. Remove is you need to process multiple.
+                    if collection_field_value == 'Freshman Glee':
+                        processor = collection_map[collection_field_value]['processor']
+                        print(processor)
+                        if collection_map[collection_field_value]['load']:
+                            processor.process_record(record)
+                        if self.dry_run:
+                            self.analyzer.sub_collection(collection_field_value)
                 else:
                     base_processor.process_record(record)
                     if self.dry_run:

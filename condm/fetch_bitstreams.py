@@ -137,9 +137,10 @@ class FetchBitstreams:
             print('An error occurred when creating temp file: %s' % err)
         try:
             with Image(filename='temp.jpg') as f:
+                ratio = float(f.width) / float(f.height)
                 height = f.height
                 width = f.width
-                ratio = float(f.width) / float(f.height)
+
                 if height > width:
                     if height > 175:
                         height = 175
@@ -214,8 +215,7 @@ class FetchBitstreams:
                 if file_type_el.text == self.cdm_struc['compound_object_access_file']:
                     # append .jp2 extension.
                     image_file = file_el.text + '.jp2'
-                    # add image bitstream
-                    self.add_image_bitstream(file_el,
+                    FetchBitstreams.add_image_bitstream(file_el,
                                                         image_file,
                                                         current_dir,
                                                         collection,

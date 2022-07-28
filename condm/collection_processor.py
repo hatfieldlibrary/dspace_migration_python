@@ -29,6 +29,7 @@ class CollectionProcessor:
         """
         self.parent_collection = parent_collection
         self.output = output_directory
+        print(self.output)
         self.dry_run = dry_run
         assert isinstance(analyzer, Analyzer), "%r is not a print queue" % analyzer
         self.analyzer = analyzer
@@ -137,6 +138,7 @@ class CollectionProcessor:
 
         tree = ET.ElementTree(dc_metadata)
         tree.write(current_dir + '/dublin_core.xml', encoding="UTF-8", xml_declaration="True")
+
         # This is a single item, not a compound object!
         if metadata_extractor.is_single_item(record):
             print('single record')
@@ -177,6 +179,7 @@ class CollectionProcessor:
             # extract full text and add to saf directory
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
+                print('single')
                 # Appends to the saf contents file after bitstreams have been added.
                 self.write_contents_file(current_dir, self.text_file)
         else:
@@ -185,9 +188,12 @@ class CollectionProcessor:
             # Extract full text and add it to saf directory
             found_text = self.extract_full_text(record, current_dir, doc_title, page_data_extractor)
             if found_text:
+                print('compound')
+                print(found_text)
                 # Writes to first line of saf contents file before the thumbnail is retrieved.
                 self.write_contents_file(current_dir, self.text_file)
             # Get a thumbnail image.
+
             # try:
             #     # This should be called after the full-text file has been added.
             #     # It will retrieve the thumbnail for the compound object.

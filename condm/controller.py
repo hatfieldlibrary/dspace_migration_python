@@ -58,16 +58,17 @@ class ContentdmProcessor:
         # Queue up the collection processors.
         collection_map = {}
         for sub_collection in sub_collections:
-            print(sub_collection)
             if sub_collection['load']:
                 out_dir = parent_out_dir + '/' + sub_collection['dspace_out']
                 if not self.dry_run:
                     Utils.init_sub_collection_directory(out_dir)
                 collection_processor = CollectionProcessor(self.collection, out_dir, self.analyzer, self.dry_run)
+                print(sub_collection['cdm_collection'])
                 collection_map[sub_collection['cdm_collection']] = {
                     'processor': collection_processor,
                     'load': sub_collection['load']
                 }
+                print(collection_map[sub_collection['cdm_collection']])
             else:
                 if self.dry_run:
                     self.analyzer.excluded_collection(sub_collection['cdm_collection'])
@@ -88,6 +89,7 @@ class ContentdmProcessor:
                 collection_field_value = collection_field_value_el.text
                 if collection_field_value in collection_map:
                     processor = collection_map[collection_field_value]['processor']
+
                     if collection_map[collection_field_value]['load']:
                         processor.process_record(record)
                     if self.dry_run:

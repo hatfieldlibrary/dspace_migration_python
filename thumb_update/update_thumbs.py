@@ -50,3 +50,6 @@ class UpdateThumbs:
                     create_thumbnail(current_dir, file)
                     break
 
+
+
+

@@ -75,6 +75,11 @@ class FetchBitstreams:
         # type: (str, str) -> str
         return 'http://condm.willamette.edu:81/cgi-bin/showfile.exe?CISOROOT=/' + collection + '&CISOPTR=' + cdmid
 
+    @staticmethod
+    def __create_pdf_link(collection, cdmid):
+        # type: (str, str) -> str
+        return 'http://condm.willamette.edu/utils/getfile/collection/' + collection + '/id/' + cdmid + '/filename/print/page/download/fparams/forcedownload'
+
     # @staticmethod
     # def fetch_thumbnail_only(current_dir, record, collection):
     #     # type: (str, Element, str) -> None
@@ -101,8 +106,7 @@ class FetchBitstreams:
     #         FetchBitstreams.__fetch_bitstream(outfile, link)
     #         FetchBitstreams.append_to_contents(current_dir, thumbname, 'thumbnail')
 
-    @staticmethod
-    def add_image_bitstream(cdmid_el, cdmfile, current_dir, collection, page_count):
+    def add_image_bitstream(self, cdmid_el, cdmfile, current_dir, collection, file_type):
         # type (Element, str, str, str, int) -> None
         """
         Adds a bitstream to the saf directory
@@ -113,11 +117,15 @@ class FetchBitstreams:
         :param page_count: indicates when to add line break to the contents file
         :return:
         """
-        link = FetchBitstreams.__create_bitstream_link(collection, cdmid_el.text)
+        if file_type == 'pdf' or file_type == 'multi_with_pdf':
+            link = self.__create_pdf_link(collection, cdmid_el.text)
+        else:
+            link = self.__create_bitstream_link(collection, cdmid_el.text)
         # the output filename for the bitstream.
         outfile = current_dir + '/' + cdmfile
-        FetchBitstreams.__fetch_bitstream(outfile, link)
-        FetchBitstreams.append_to_contents(current_dir, cdmfile, 'image')
+        self.__fetch_bitstream(outfile, link)
+        print('writing contents to ' + current_dir)
+        self.append_to_contents(current_dir, cdmfile, 'image')
 
     @staticmethod
     def create_thumbnail(current_dir, cdm_file):
@@ -129,17 +137,17 @@ class FetchBitstreams:
             print('An error occurred when creating temp file: %s' % err)
         try:
             with Image(filename='temp.jpg') as f:
-                ratio = float(f.width) / float(f.height)
                 height = f.height
                 width = f.width
-
-                if height > 200:
-                    height = 200
-                    width = int(200.0 * ratio)
-
-                if width > 200:
-                    width = 300
-                    height = int(200.0 / ratio)
+                ratio = float(f.width) / float(f.height)
+                if height > width:
+                    if height > 175:
+                        height = 175
+                        width = int(175.0 * ratio)
+                else:
+                    if width > 175:
+                        width = 175
+                        height = int(175.0 / ratio)
 
                 f.resize(width, height)
                 f.save(filename=current_dir + '/thumb.jpg.jpg')
@@ -171,8 +179,7 @@ class FetchBitstreams:
     #         FetchBitstreams.__fetch_bitstream(outfile, link)
     #         FetchBitstreams.append_to_contents(current_dir, thumbname, 'thumbnail')
 
-    @staticmethod
-    def fetch_multiple_bitsteams(cdmid_el, current_dir, record, collection):
+    def fetch_multiple_bitsteams(self, cdmid_el, current_dir, record, collection):
         # type (Element, str, str, str) -> None
         """
         This function is used to request multiple files from a compound object
@@ -188,29 +195,31 @@ class FetchBitstreams:
         :return:
         """
         # the structure element contains pages
-        structure = record.find(FetchBitstreams.cdm_struc['compound_object_container'])
+        structure = record.find(self.cdm_struc['compound_object_container'])
         # get all pages.
-        pages = structure.findall('.//' + FetchBitstreams.cdm_struc['compound_object_page'])
+        pages = structure.findall('.//' + self.cdm_struc['compound_object_page'])
         page_count = 0
         thumb_created = False
         for page in pages:
             # get the cdm pointer for the page
-            file_el = page.find(FetchBitstreams.cdm_struc['compound_object_page_pointer'])
+            file_el = page.find(self.cdm_struc['compound_object_page_pointer'])
             # get the files information for the page
-            files = page.findall('.//' + FetchBitstreams.cdm_struc['compound_object_page_file'])
+            files = page.findall('.//' + self.cdm_struc['compound_object_page_file'])
 
             for file in files:
                 # get the file type and process the access images and thumbnails
-                file_type_el = file.find(FetchBitstreams.cdm_struc['compound_object_page_file_type'])
+                file_type_el = file.find(self.cdm_struc['compound_object_page_file_type'])
                 # access file
-                if file_type_el.text == FetchBitstreams.cdm_struc['compound_object_access_file']:
+                print(file_type_el.text)
+                if file_type_el.text == self.cdm_struc['compound_object_access_file']:
                     # append .jp2 extension.
                     image_file = file_el.text + '.jp2'
-                    FetchBitstreams.add_image_bitstream(file_el,
+                    # add image bitstream
+                    self.add_image_bitstream(file_el,
                                                         image_file,
                                                         current_dir,
                                                         collection,
-                                                        page_count)
+                                                        'image')
                     if not thumb_created:
                         FetchBitstreams.create_thumbnail(current_dir, image_file)
                         thumb_created = True
@@ -222,19 +231,61 @@ class FetchBitstreams:
                 #     FetchBitstreams.create_thumbnail(current_dir, file_name)
 
                 page_count += 1
+        # after loading page images in record, do pdf file (if needed)
+        cdmfile_el = record.find(self.cdm_struc['filename'])
+        print(cdmfile_el.text)
+        cdm_path_el = record.find(self.cdm_struc['filepath'])
+        print(cdm_path_el.text)
+        file_type = self.determine_file_type(record, cdmfile_el, cdm_path_el)
+        print(file_type)
+        if file_type:
+            if file_type == 'multi_with_pdf' or file_type == 'pdf':
+                path_arr = cdm_path_el.split('/')
+                # add pdf bitstream
+                self.add_image_bitstream(path_arr[2], current_dir, collection, file_type)
 
-    @staticmethod
-    def fetch_single_bitstream(cdmid_el, current_dir, record, collection):
+    def determine_file_type(self, record, cdmfile_el, cdm_path_el):
+        """
+        Determines the file type based on multiple metadata elements. This method
+        was added to process the Glee collection. This collection has a crazy number
+        of file types, including metadata only files that we should skip.
+        :param record:
+        :param cdmfile_el:
+        :param cdm_path_el:
+        :return: the file type
+        """
+        if cdm_path_el.text:
+            if '.pdf' in cdm_path_el.text and '.cpd' in cdmfile_el.text:
+                print('multi with pdf')
+                return 'multi_with_pdf'
+            if '.pdf' in cdmfile_el.text:
+                print('return pdf')
+                return 'pdf'
 
-        cdmfile_el = record.find(FetchBitstreams.cdm_struc['filename'])
+        cdm_conforms_to = record.find(self.cdm_dc['relation_conforms_to'])
+        if cdm_conforms_to:
+            if 'Video' in cdm_conforms_to.text:
+                return 'video'
 
-        # thumb_url_el = record.find(FetchBitstreams.cdm_struc['thumbnail'])
-        FetchBitstreams.add_image_bitstream(cdmid_el, cdmfile_el.text, current_dir, collection, 0)
-        FetchBitstreams.create_thumbnail(current_dir, cdmfile_el.text)
+        cdm_has_part = record.find(self.cdm_dc['relation_has_part'])
+        if cdm_has_part:
+            if "NOVIDEO" in cdm_has_part:
+                return 'skipfile'
+
+        return 'image'
+
+    def fetch_single_bitstream(self, cdmid_el, current_dir, record, collection):
+
+        cdmfile_el = record.find(self.cdm_struc['filename'])
+        cdm_path_el = record.find(self.cdm_struc['filepath'])
+        file_type = self.determine_file_type(record, cdmfile_el, cdm_path_el)
+
+        if not file_type == 'skipfile':
+            self.add_image_bitstream(cdmid_el, cdmfile_el.text, current_dir, collection, file_type)
+            FetchBitstreams.create_thumbnail(current_dir, cdmfile_el.text)
         # FetchBitstreams.add_thumbnail(cdmid_el.text, cdmfile_el.text, thumb_url_el, current_dir, collection, 1)
 
-    @staticmethod
-    def fetch_bit_streams(current_dir, record, collection, multiple):
+    def fetch_bit_streams(self, current_dir, record, collection, multiple):
         # type: (str, Element, str, bool) -> None
         """
         Extract the bitstream url from metadata, fetch the bitstream, and add to simple archive format entry.
@@ -247,17 +298,19 @@ class FetchBitstreams:
         """
         cdm_struc = Fields.cdm_structural_elements
         cdmid_el = record.find(cdm_struc['id'])
+        file_path = record.find(cdm_struc['filepath'])
         if cdmid_el is None:
             print('Error: no cdmid found')
         else:
             if cdmid_el is not None:
+                print(multiple)
                 if multiple:
                     # process the compound object data and add multiple bitstreams to the saf directory
-                    FetchBitstreams.fetch_multiple_bitsteams(cdmid_el, current_dir, record, collection)
+                    self.fetch_multiple_bitsteams(cdmid_el, current_dir, record, collection)
                 else:
                     # process as a single item record (compound object bitstreams will be a single thumbnail
                     # image and the full text transcription.
-                    FetchBitstreams.fetch_single_bitstream(cdmid_el, current_dir, record, collection)
+                    self.fetch_single_bitstream(cdmid_el, current_dir, record, collection)
 
                 # being nice, but this also works running full speed ahead.
                 time.sleep(.200)

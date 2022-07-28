@@ -118,7 +118,7 @@ class FieldMaps:
         },
         cdm_dc_field['source']: {
             'element': dspace_dc_field['relation'],
-            'qualifier': dspace_dc_field['relation_isformatof_qualifier']
+            'qualifier': dspace_dc_field['relation_ispartof_qualifier']
         },
         cdm_dc_field['format']: {
             'element': dspace_dc_field['format'],
@@ -157,10 +157,10 @@ class FieldMaps:
         #     'qualifier': None
         # },
         # Might need this. But if only a few, better to add as fulltext file.
-        # cdm_dc_field['identifier_bibliographic_citation']: {
-        #     'element': dspace_local_field['transcription'],
-        #     'qualifier': None
-        # },
+        cdm_dc_field['identifier_bibliographic_citation']: {
+            'element': dspace_local_field['transcription'],
+            'qualifier': None
+        },
         cdm_dc_field['description_table_of_contents']: {
             'element': dspace_local_field['addressee'],
             'qualifier': None

@@ -1,4 +1,3 @@
-
 import xml.etree.ElementTree as ET
 from collections import Iterable
 from xml.etree.ElementTree import Element
@@ -12,7 +11,6 @@ from shared.utils import Utils
 
 
 class ExtractMetadata:
-
     cdm_dc = Fields.cdm_dc_field
     cdm_struc = Fields.cdm_structural_elements
 
@@ -20,8 +18,7 @@ class ExtractMetadata:
         self.extract_page = ExtractPageData()
         self.custom_format_field = CustomFormatField()
 
-    @staticmethod
-    def add_element(parent_element, element_map, element):
+    def add_elements(self, parent_element, element_map, element):
         """
         Adds new element to parent
         :param parent_element:
@@ -29,6 +26,19 @@ class ExtractMetadata:
         :param element:
         :return: None
         """
+        if element.text == 'Willamette University Archives and Special Collections':
+            element.text = 'Willamette University Archives'
+
+        if element.tag == 'subject' or element.tag == 'level':
+            subjects = element.text.split(';')
+            for subject in subjects:
+                element.text = subject
+                self.add_element(parent_element, element_map, element)
+        else:
+            self.add_element(parent_element, element_map, element)
+
+    @staticmethod
+    def add_element(parent_element, element_map, element):
         dspace_element = element_map[element.tag]
         sub_element = ET.SubElement(parent_element, 'dcvalue')
         sub_element.set('element', dspace_element['element'])
@@ -55,15 +65,17 @@ class ExtractMetadata:
                 if element.text is not None:
                     # exclude unmapped fields
                     if element.tag != ExtractMetadata.cdm_dc['unmapped']:
+                        if element.tag == 'title':
+                            print(element.text)
                         if element.tag in element_map:
                             if add_master:
                                 # Add preservation location if available.
                                 if element.tag == ExtractMetadata.cdm_struc['preservation_location']:
-                                    self.add_element(parent_element, element_map, element)
+                                    self.add_elements(parent_element, element_map, element)
                             else:
                                 # Add all non-preservation metadata.
                                 if element.tag != ExtractMetadata.cdm_struc['preservation_location']:
-                                    self.add_element(parent_element, element_map, element)
+                                    self.add_elements(parent_element, element_map, element)
                         # process custom format.extent fields
                         if element.tag in Fields.format_extent_fields:
                             self.custom_format_field.add_format(Fields.format_extent_fields[element.tag], element.text)

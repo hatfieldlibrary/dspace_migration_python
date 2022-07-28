@@ -71,6 +71,7 @@ class Fields:
     cdm_structural_elements = {
         'id': 'cdmid',
         'filename': 'cdmfile',
+        'filepath': 'cdmpath',
         'date_created': 'cdmcreated',
         'thumbnail': 'thumbnailURL',
         'preservation_location': 'fullResolution',
